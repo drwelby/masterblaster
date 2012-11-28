@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}{{bmap.name}}{% endblock %}
+
+{% block mapcss %}
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4.5/leaflet.css" />
+<!--[if lte IE 8]><link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4.5/leaflet.ie.css" /><![endif]-->
+{% endblock %}
+
+{% block content %}
+<!--[if lt IE 8]>
+    <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+<![endif]-->
+<div class="container">
+    <h1>{{ bmap.name }}</h1>
+    <p class="lead">{{ bmap.notes }}</p>
+</div>
+
+<div class="container">
+<div class="row main-row">
+    <div class="span12">
+        <div class="row">
+            <div id="data" class="span3 pull-left">
+                <div class="overview">
+                        <a href="#" class="btn btn-large btn-danger" rel="popover" data-content="And here's some amazing content. It's very engaging. right?" data-original-title="A Title">Popover</a>
+                        <a href="#" class="btn" rel="popover" data-placement="top" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." data-original-title="Popover on top">Popover</a>
+                        <a href="javascript:void(0)" rel="tooltip" data-placement="bottom" data-original-title="Tooltip on bottom.">Tooltip</a>
+                    </p>
+                </div>
+            </div>
+            <div id="map-area" class="span9 pull-right">
+                <div id="map"></div>
+            </div>
+        </div>
+    </div><!-- end of main row -->
+</div>
+{% endblock %}
+
+
+{% block mapjs %}
+<script type="text/javascript">
+    var mapstate = {{ bmap.state|safe }};
+</script>
+<script src="//cdn.leafletjs.com/leaflet-0.4.5/leaflet.js"></script>
+<script src="{{ STATIC_PREFIX }}masterblaster/map.js"></script>
+{% endblock %}
+
