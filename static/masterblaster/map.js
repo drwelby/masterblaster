@@ -26,8 +26,12 @@ var selectedStyle = {
 };
 
 // Set up the map
-    zoom = mapstate.zoom || 14;
-    center = [mapstate.lat, mapstate.lon] || [40.681,-122.364]; 
+    zoom = mapstate.zoom || 15;
+    if (mapstate.lat) {
+        center = [mapstate.lat, mapstate.lon];
+    }else{
+        center = [40.681,-122.364]; 
+    }
 
     L.tileLayer('http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/998/256/{z}/{x}/{y}.png', {
         attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>'
@@ -174,7 +178,7 @@ function bufferButtonClick() {
 }
 
 function labelButtonClick() {
-    alert('Hey Labels!');
+    window.open(window.location.href.replace("/map/","/labels/"));
 }
 // map click handlers
 

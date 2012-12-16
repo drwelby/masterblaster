@@ -23,3 +23,8 @@ html, body {
     border: 1px solid #E5E5E5;
     border-radius: 6px;
 }
+
+textarea#id_notes {
+    width: 500px;
+    height: 5em;
+}

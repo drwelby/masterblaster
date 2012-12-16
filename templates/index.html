@@ -1,5 +1,26 @@
-<ul>
+{% extends "base.html" %}
+
+{% block title %}Master Blaster{% endblock %}
+
+{% block content %}
+<div class="container">
+<div class="row">
+<h2>Notification Tool</h2>
+
+<a class="btn btn-primary pull-right" href="/new">Start a new project &raquo;</a>
+</div>
+<div class="row">
+<h3 class="offset1">Recent Projects</h3>
+<dl class="span8 dl-horizontal">
     {% for map in maps %}
-    <li>{{ map.name }}</li>
+    <dt>{{ map.name }}</dt>
+    <dd>{% firstof map.notes "<em>(no desc.)</em>" %}
+        <a class="small" href="/map/{{ map.slug }}">map&raquo;</a>
+        <a class="small" href="/labels/{{ map.slug }}">labels&raquo;</a>
+    </dd>
     {% endfor %}
-</ul>
+</dl>
+</div>
+</div>
+{% endblock %}
+

@@ -1,6 +1,56 @@
-<ul>
-    {% for parcel in parcels %}
-    <li>{{parcel.apn}} - {{parcel.owner}}</li>
-    {% endfor %}
-</ul>
+{% extends "base.html" %}
 
+{% block title %}{{bmap.name}}{% endblock %}
+{% block mapcss %}
+<link rel="stylesheet" href="{{ STATIC_PREFIX }}css/labels.css" />
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="span12">
+            <h2>Labels for {{bmap.name}}</h2>
+            <form class="form">
+                <label class="radio inline">
+                      <input type="radio" name="optionsRadios" id="optionsMail" value="option2" checked>
+                      Use Mailing Address
+                </label>
+                <label class="radio inline">
+                      <input type="radio" name="optionsRadios" id="optionsSitus" value="option1">
+                      Use Situs Address
+                </label>
+                <label class="checkbox">
+                    <input type="checkbox" id="apnbox" checked>Show APNs</input>
+                </label>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="span3">
+            <a class="btn-block btn btn-info" href="/labels/{{bmap.slug}}?filetype=pdf">Get labels as Adobe PDF</a>
+        </div>
+        <div class="span3">
+            <a class="btn-block btn btn-info" href="/labels/{{bmap.slug}}?filetype=doc">Get addresses as Microsoft Excel</a>
+        </div>
+    </div>
+    <div class="row">
+        <h3 class="span12">Sample labels:</h3>
+    </div>
+    <div class="row">
+        {% for parcel in parcels %}
+        <div class="span3">
+            <div class="small well">
+                <span class="mlabel apn">{{parcel.apn}}</br></span>
+                <span class="mlabel owner">{{parcel.owner}}</br></span>
+                <span class="mlabel situs">{{parcel.situs1|default:""}}<br>{{parcel.situs2|default:""}}<br></span>
+                <span class="mlabel mail">{{parcel.mail1}}<br>{{parcel.mail2}}</br></span>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
+
+{% block mapjs %}
+<script src="{{ STATIC_PREFIX }}masterblaster/labels.js"></script>
+{% endblock %}
