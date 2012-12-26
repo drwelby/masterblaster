@@ -22,7 +22,7 @@
         <div class="row fill">
             <div id="data" class="span3">
                 <div class="overview">
-                        <a href="#" id="selectButton" class="btn btn-large btn-block" rel="popover" data-content="" data-original-title="">Select Parcels to Buffer</a>
+                        <a href="#" id="selectButton" class="btn btn-block btn-large "> Click Parcels to Select</span></a>
                         <p>Click on a parcel to select it. To deselect it, click on it again.</p>
                         <a href="#" id="bufferButton" class="btn btn-large btn-block disabled" rel="popover" data-placement="top" data-content="" data-original-title="">Buffer and Refine</a>
                         <p>Click on a buffered parcel to remove it from the labels. Click on any other parcel to add it to the buffered parcels.</p>
@@ -31,6 +31,7 @@
                 </div>
             </div>
             <div id="map-area" class="span9">
+                <div id="info-overlay"><span>...</span></div>
                 <div id="search-box"></div>
                 <div id="map"></div>
             </div>
@@ -42,7 +43,7 @@
 
 {% block mapjs %}
 <script type="text/javascript">
-    var mapstate = {{ bmap.state|safe }};
+    var mapstate = {{ bmap.state|safe }}['mapstate'];
 </script>
 <script src="//cdn.leafletjs.com/leaflet-0.4.5/leaflet.js"></script>
 <script src="{{ STATIC_PREFIX }}masterblaster/map.js"></script>

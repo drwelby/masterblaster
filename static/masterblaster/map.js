@@ -7,6 +7,7 @@ var clickAction = function(e) {return};
 var selectedLayer, selectionLayer, bufferLayer;
 var allLayers = L.layerGroup();
 var init = true;
+var lastLatLng;
 
 var bufferStyle = {
     "color": "#ff0000",
@@ -34,11 +35,10 @@ var selectedStyle = {
     }
 
     L.tileLayer('http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/998/256/{z}/{x}/{y}.png', {
-        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>'
+        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
     }).addTo(map);
     L.tileLayer('http://old.enplan.com/cgi-bin/tilecache.cgi/1.0.0/pv/{z}/{x}/{y}.png?type=google').addTo(map);
 
-    map.invalidateSize();
     map.setView(center,zoom);
     // draw the map state
     updateMapState();
@@ -48,7 +48,23 @@ var selectedStyle = {
     // Map Events
     map.on('click', onMapClick);
     map.on('moveend', viewChange);
+    map.on('mousemove', function(e) {
+        lastLatLng = e.latlng;
+        setTimeout(function(){hover(e)},750);
+    });
+   map.on('mouseout', function(){
+       $('#info-overlay').hide();
+   });
+   map.on('mouseover', function(){
+       $('#info-overlay').show().html('...');
+   });
 
+
+function hover(e) {
+    if (e.latlng.equals(lastLatLng)) {
+        infoClick(e);
+    }
+}
 
 function onMapClick(e) {
     if (e.originalEvent.altKey) {
@@ -131,8 +147,14 @@ function sendAction(data){
 
 function handleAjax(data) {
     console.log(data);
-    mapstate = data;
-    updateMapState();
+    if (data.mapstate) {
+        mapstate = data.mapstate;
+        updateMapState();
+    }
+    if (data.get_feature) {
+        ft = data.get_feature;
+        $('#info-overlay').html(ft.slice(0,2).join(' - '));
+    }
 }
 
 

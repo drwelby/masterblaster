@@ -8,44 +8,90 @@
 <div class="container">
     <div class="row">
         <div class="span12">
-            <h2>Labels for {{bmap.name}}</h2>
-            <form class="form">
-                <label class="radio inline">
-                      <input type="radio" name="optionsRadios" id="optionsMail" value="option2" checked>
-                      Use Mailing Address
-                </label>
-                <label class="radio inline">
-                      <input type="radio" name="optionsRadios" id="optionsSitus" value="option1">
-                      Use Situs Address
-                </label>
-                <label class="checkbox">
-                    <input type="checkbox" id="apnbox" checked>Show APNs</input>
-                </label>
-            </form>
+            <h2>Results for {{bmap.name}}</h2>
         </div>
     </div>
     <div class="row">
-        <div class="span3">
-            <a class="btn-block btn btn-info" href="/labels/{{bmap.slug}}?filetype=pdf" target="_blank">Get labels as Adobe PDF</a>
-        </div>
-        <div class="span3">
-            <a class="btn-block btn btn-info" href="/labels/{{bmap.slug}}?filetype=xls">Get addresses as Microsoft Excel</a>
-        </div>
-    </div>
-    <div class="row">
-        <h3 class="span12">Sample labels:</h3>
-    </div>
-    <div class="row">
-        {% for parcel in parcels %}
-        <div class="span3">
-            <div class="small well">
-                <span class="mlabel apn">{{parcel.apn}}</br></span>
-                <span class="mlabel owner">{{parcel.owner}}</br></span>
-                <span class="mlabel situs">{{parcel.situs1|default:""}}<br>{{parcel.situs2|default:""}}<br></span>
-                <span class="mlabel mail">{{parcel.mail1}}<br>{{parcel.mail2}}</br></span>
+        <div class="span12">
+            <ul class="nav nav-tabs" id="myTab">
+                <li class="active"><a href="#data" data-toggle="tab">Data</a></li>
+                <li><a href="#labels" data-toggle="tab">Labels</a></li>
+            </ul>
+            <div class="tab-content ">
+                <div class="tab-pane active " id="data">
+                    <div class="row">
+                        <div class="span3">
+                            <a class="btn-block btn btn-info" href="/labels/{{bmap.slug}}?filetype=xls">Get data as Microsoft Excel</a>
+                        </div>
+                        <div class="span3">
+                            <a class="btn-block btn btn-info" href="/labels/{{bmap.slug}}?filetype=csv">Get data as .csv</a>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                            <table class="span12 table table-striped">
+                                <tr>
+                                    <th>APN</th>
+                                    <th>Owner</th>
+                                    <th>Situs Address</th>
+                                    <th>Mailing Address</th>
+                                </tr>
+                                {% for parcel in parcels %}
+                                <tr>
+                                    <td class="mlabel apn">{{parcel.apn}}</td>
+                                    <td class="mlabel owner">{{parcel.owner|default:""}}</td>
+                                    <td class="mlabel situs">{{parcel.situs1|default:""}} {{parcel.situs2|default:""}}</td>
+                                    <td class="mlabel mail">{{parcel.mail1|default:""}} {{parcel.mail2|default:""}}</td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                    </div>
+                </div>
+        
+                <div class="tab-pane" id="labels">
+                    <div class="row">
+                        <div class="span11">
+                            <form class="form">
+                                <label class="radio inline">
+                                      <input type="radio" name="optionsRadios" id="optionsMail" value="mail" checked>
+                                      Use Mailing Address&nbsp;&nbsp;
+                                </label>
+                                <label class="radio inline">
+                                      <input type="radio" name="optionsRadios" id="optionsSitus" value="situs">
+                                      Use Situs Address&nbsp;&nbsp;
+                                </label>
+                                <label class="radio inline">
+                                      <input type="radio" name="optionsRadios" id="optionsBoth" value="both">
+                                      Use Both (if different)
+                                </label>
+                                <label class="checkbox">
+                                    <input type="checkbox" id="uniquebox">Skip Duplicate Mailing Addresses</input>
+                                </label>
+                                <label class="checkbox">
+                                    <input type="checkbox" id="apnbox" checked >Show APNs</input>
+                                </label>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <h3 class="span12">Sample label:</h3>
+                    </div>
+                    <div class="row">
+                        <div class="span3 small well">
+                            <span class="mlabel apn">{{parcels.0.apn}}</br></span>
+                            <span class="mlabel owner">{{parcels.0.owner|default:""}}</br></span>
+                            <span class="mlabel situs">{{parcels.0.situs1|default:""}}<br>{{parcels.0.situs2|default:""}}<br></span>
+                            <span class="mlabel mail">{{parcels.0.mail1|default:""}}<br>{{parcels.0.mail2|default:""}}</br></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="span3">
+                            <a class="btn-block btn btn-info" id="pdflink" href="/labels/{{bmap.slug}}?filetype=pdf&apn=1&address=mail&unique=0" target="_blank">Get labels as Adobe PDF</a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        {% endfor %}
     </div>
 </div>
 
