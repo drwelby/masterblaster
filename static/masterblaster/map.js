@@ -12,6 +12,7 @@ var lastLatLng;
 var bufferStyle = {
     "color": "#ff0000",
     "weight": 3,
+    "opacity":1,
     "fillOpacity": 0
 };
 var selectionStyle = {
@@ -34,11 +35,18 @@ var selectedStyle = {
         center = [40.681,-122.364]; 
     }
 
-    L.tileLayer('http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/998/256/{z}/{x}/{y}.png', {
-        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
-    }).addTo(map);
-    L.tileLayer('http://old.enplan.com/cgi-bin/tilecache.cgi/1.0.0/pv/{z}/{x}/{y}.png?type=google').addTo(map);
+    //L.tileLayer('http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/998/256/{z}/{x}/{y}.png', {
 
+    L.tileLayer('http://otile1.mqcdn.com/tiles/1.0.0/sat/{z}/{x}/{y}.jpg', {
+        attribution: 'Tiles courtesy MapQuest, NASA/JPL-Caltech and USDA Farm Service Agency',
+        opacity: 0.8
+    }).addTo(map);
+
+    //L.tileLayer('http://old.enplan.com/cgi-bin/tilecache.cgi/1.0.0/pv/{z}/{x}/{y}.png?type=google').addTo(map);
+    L.tileLayer.wms('http://50.56.215.16:8888/geoserver/wms?', {
+            layers: 'counties:shastaco_parcels_owners',
+            format: 'image/png',
+            transparent: true}).addTo(map);
     map.setView(center,zoom);
     // draw the map state
     updateMapState();
