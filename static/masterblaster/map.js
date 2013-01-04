@@ -246,6 +246,7 @@ function toggleClick(e) {
 }
 
 function infoClick(e) {
+    $('#info-overlay').show().html('...');
     var data = {
         'action': 'get_feature',
         'lat': e.latlng.lat,
