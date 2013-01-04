@@ -68,13 +68,13 @@ var selectedStyle = {
    map.on('mouseover', function(){
        $('#info-overlay').show().html('...');
    });
-   map.on('mouseup', function(){
-       console.log('mouseup');
+   L.DomEvent.addListener(map,'touchend', function(){
+       console.log('touchend');
          clearTimeout(pressTimer)
          return false;
          });
-   map.on('mousedown', function(e) {
-       console.log('mousedown');
+   L.DomEvent.addListener(map,'touchstart', function(e) {
+       console.log('touchstart');
         lastLatLng = e.latlng;
         pressTimer = window.setTimeout(function() { 
             console.log('longclick');
@@ -85,7 +85,6 @@ var selectedStyle = {
         e.returnValue = false;
         return false; 
         });
-
 
 function hover(e) {
     if (e.latlng.equals(lastLatLng)) {
