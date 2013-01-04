@@ -1,5 +1,7 @@
 
 var map;
+var presstimer;
+
 $(document).ready(function () {
 
 map = L.map('map');
@@ -66,6 +68,15 @@ var selectedStyle = {
    map.on('mouseover', function(){
        $('#info-overlay').show().html('...');
    });
+   map.on('mouseup', function(){
+         clearTimeout(pressTimer)
+         return false;
+         });
+   map.on('mousedown', function(e) {
+        lastLatLng = e.latlng;
+        pressTimer = window.setTimeout(function() { hover(e) },1000)
+        return false; 
+        });
 
 
 function hover(e) {
