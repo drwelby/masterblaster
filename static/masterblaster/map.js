@@ -75,6 +75,10 @@ var selectedStyle = {
    map.on('mousedown', function(e) {
         lastLatLng = e.latlng;
         pressTimer = window.setTimeout(function() { hover(e) },1000)
+        e.preventDefault && e.preventDefault();
+        e.stopPropagation && e.stopPropagation();
+        e.cancelBubble = true;
+        e.returnValue = false;
         return false; 
         });
 
