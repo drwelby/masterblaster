@@ -69,12 +69,16 @@ var selectedStyle = {
        $('#info-overlay').show().html('...');
    });
    map.on('mouseup', function(){
+       console.log('mouseup');
          clearTimeout(pressTimer)
          return false;
          });
    map.on('mousedown', function(e) {
+       console.log('mousedown');
         lastLatLng = e.latlng;
-        pressTimer = window.setTimeout(function() { hover(e) },1000)
+        pressTimer = window.setTimeout(function() { 
+            console.log('longclick');
+            hover(e) },1000);
         e.preventDefault && e.preventDefault();
         e.stopPropagation && e.stopPropagation();
         e.cancelBubble = true;
