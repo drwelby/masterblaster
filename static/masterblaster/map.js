@@ -50,6 +50,21 @@ var selectedStyle = {
             format: 'image/png',
             transparent: true}).addTo(map);
     map.setView(center,zoom);
+
+    var drawControl = new L.Control.Draw({
+            polygon: {
+                allowIntersection: false,
+                shapeOptions: {
+                    color: '#ff0000'
+                },
+            circle:false,
+            marker:false,
+            polyline:false,
+            rectangge:false
+            }
+        });
+        map.addControl(drawControl);
+
     // draw the map state
     updateMapState();
 
@@ -147,8 +162,10 @@ function updateMapState() {
     // if the map has a buffer selections, enable label button
     if (mapstate.selected.length > 0 ){
         $('#labelButton.disabled').on('click', labelButtonClick).removeClass('disabled');
+        $('#lassoButton.disabled').on('click', lassoButtonClick).removeClass('disabled');
     } else {
         $('#labelButton:not(.disabled)').off('click').addClass('disabled');
+        $('#lassoButton:not(.disabled)').off('click').addClass('disabled');
     }
 
 }
@@ -186,6 +203,14 @@ function handleAjax(data) {
 
 // button handlers
 
+function lassoButtonClick() {
+    clickAction = lassoClick;
+    drawControl.handlers.polygon.enable();
+    $('#lassoButton').addClass('btn-primary');
+    $('#bufferButton').removeClass('btn-primary');
+    $('#selectButton').removeClass('btn-primary');
+}
+
 function selectButtonClick() {
     //if there's already a buffer selecting this will reset everything
     if (mapstate.buffer.geometry) {
@@ -200,13 +225,17 @@ function selectButtonClick() {
     }
     $('#selectButton').addClass('btn-primary');
     $('#bufferButton').removeClass('btn-primary');
+    $('#lassoButton').removeClass('btn-primary');
     clickAction = selectClick;
+    drawControl.handlers.polygon.disable();
 }
 
 function bufferButtonClick() {
     clickAction = toggleClick;
     $('#bufferButton').addClass('btn-primary');
     $('#selectButton').removeClass('btn-primary');
+    $('#lassoButton').removeClass('btn-primary');
+    drawControl.handlers.polygon.disable();
 
     //if there's already a buffer 
     if (mapstate.buffer.geometry) {
@@ -244,9 +273,44 @@ function toggleClick(e) {
         'action': 'toggle',
         'lat': e.latlng.lat,
         'lon': e.latlng.lng
-    }
+    };
     sendAction(data)
 }
+
+function lassoClick(e) {
+    return false;
+}
+
+map.on('draw:poly-created', function(e){
+    lpoly = e.poly.getLatLngs();
+    geojson = '{ "type": "Polygon", "coordinates": [[';
+    points = [];
+    for (var i=0; i < lpoly.length; i++) {
+        point = "[" + lpoly[i].lng;
+        point += ", " + lpoly[i].lat;
+        point += "]";
+        points.push(point);
+    }
+    lastpoint = "[" + lpoly[0].lng;
+    lastpoint += ", " + lpoly[0].lat;
+    lastpoint += "]";
+    points.push(lastpoint);
+    geojson += points.join(',');
+    geojson += ']]}';
+    console.log(geojson)
+    drawControl.handlers.polygon.enable();
+    var data = {
+        'action': 'lasso',
+        'poly': geojson
+    };
+    sendAction(data);
+});
+
+map.on('drawing-disabled', function(){
+    if ($('#lassoButton').hasClass('btn-primary')) {
+            drawControl.handlers.polygon.enable();
+        }
+});
 
 function infoClick(e) {
     $('#info-overlay').show().html('...');

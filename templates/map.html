@@ -4,6 +4,7 @@
 
 {% block mapcss %}
 <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4.5/leaflet.css" />
+<link rel="stylesheet" href="{{ STATIC_PREFIX }}leaflet.draw/leaflet.draw.css" />
 <!--[if lte IE 8]><link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4.5/leaflet.ie.css" /><![endif]-->
 {% endblock %}
 
@@ -26,6 +27,7 @@
                         <p>Click on a parcel to select it. To deselect it, click on it again.</p>
                         <a href="#" id="bufferButton" class="btn btn-large btn-block disabled" rel="popover" data-placement="top" data-content="" data-original-title="">Buffer and Refine</a>
                         <p>Click on a buffered parcel to remove it from the labels. Click on any other parcel to add it to the buffered parcels.</p>
+                        <a href="#" id="lassoButton" class="btn btn-large btn-block disabled" rel="popover" data-placement="top" data-content="" data-original-title="">Lasso</a>
                         <a href="#" id="labelButton" class="btn btn-large btn-block disabled" rel="tooltip" data-placement="bottom" data-original-title="">Get Labels</a>
                     </p>
                 </div>
@@ -47,5 +49,6 @@
 </script>
 <script src="//cdn.leafletjs.com/leaflet-0.4.5/leaflet.js"></script>
 <script src="{{ STATIC_PREFIX }}masterblaster/map.js"></script>
+<script src="{{ STATIC_PREFIX }}leaflet.draw/leaflet.draw.js"></script>
 {% endblock %}
 
