@@ -83,7 +83,7 @@ var selectedStyle = {
    map.on('mouseover', function(){
        $('#info-overlay').show().html('...');
    });
-   L.DomEvent.addListener(map,'touchend', function(){
+   /*L.DomEvent.addListener(map,'touchend', function(){
        console.log('touchend');
          clearTimeout(pressTimer)
          return false;
@@ -100,7 +100,7 @@ var selectedStyle = {
         e.returnValue = false;
         return false; 
         });
-
+    */
 function hover(e) {
     if (e.latlng.equals(lastLatLng)) {
         infoClick(e);
@@ -313,7 +313,7 @@ map.on('drawing-disabled', function(){
 });
 
 function infoClick(e) {
-    $('#info-overlay').show().html('...');
+    //$('#info-overlay').show().html('...');
     var data = {
         'action': 'get_feature',
         'lat': e.latlng.lat,
