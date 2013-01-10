@@ -48,9 +48,10 @@ var selectedStyle = {
 
     //L.tileLayer('http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/998/256/{z}/{x}/{y}.png', {
 
-    L.tileLayer('http://otile1.mqcdn.com/tiles/1.0.0/sat/{z}/{x}/{y}.jpg', {
+    L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/sat/{z}/{x}/{y}.jpg', {
         attribution: 'Tiles courtesy MapQuest, NASA/JPL-Caltech and USDA Farm Service Agency',
-        opacity: 0.8
+        opacity: 0.8,
+        subdomains: "1234"
     }).addTo(map);
 
     //L.tileLayer('http://old.enplan.com/cgi-bin/tilecache.cgi/1.0.0/pv/{z}/{x}/{y}.png?type=google').addTo(map);
