@@ -4,6 +4,15 @@ var presstimer;
 
 $(document).ready(function () {
 
+function setHeight() {
+    windowHt = $('body').height();
+    rowsHt = 0;
+    $('.hrow').each( function() {rowsHt += $(this).height()});
+    $('.maprow').height(windowHt-rowsHt-30);
+}
+setHeight();
+$(window).resize(setHeight);
+
 map = L.map('map');
 var clickAction = function(e) {return};
 var selectedLayer, selectionLayer, bufferLayer;
@@ -69,7 +78,11 @@ var selectedStyle = {
     updateMapState();
 
     //set up the buttons
-    $("#selectButton").click(selectButtonClick);
+    $("#pick,#pickback,#pickmore").click(toggleButtonClick);
+    $("#buffer,#addbuffer").click(selectButtonClick);
+    $("#dobuffer").click(bufferButtonClick);
+    $("#lasso").click(lassoButtonClick);
+
     // Map Events
     map.on('click', onMapClick);
     map.on('moveend', viewChange);
@@ -153,19 +166,12 @@ function updateMapState() {
         allLayers.addLayer(selectionLayer);
     }
     allLayers.addTo(map);
-    // if the map has selections, enable the buffer button
-    if (mapstate.selection.length > 0 ){
-        $('#bufferButton.disabled').on('click', bufferButtonClick).removeClass('disabled');
-    } else {
-        $('#bufferButton:not(.disabled)').off('click').addClass('disabled');
-    }
+    //
     // if the map has a buffer selections, enable label button
     if (mapstate.selected.length > 0 ){
         $('#labelButton.disabled').on('click', labelButtonClick).removeClass('disabled');
-        $('#lassoButton.disabled').on('click', lassoButtonClick).removeClass('disabled');
     } else {
         $('#labelButton:not(.disabled)').off('click').addClass('disabled');
-        $('#lassoButton:not(.disabled)').off('click').addClass('disabled');
     }
 
 }
@@ -206,9 +212,13 @@ function handleAjax(data) {
 function lassoButtonClick() {
     clickAction = lassoClick;
     drawControl.handlers.polygon.enable();
-    $('#lassoButton').addClass('btn-primary');
-    $('#bufferButton').removeClass('btn-primary');
-    $('#selectButton').removeClass('btn-primary');
+    $('#step3').fadeIn().siblings().hide();
+}
+
+function toggleButtonClick() {
+    clickAction = toggleClick;
+    drawControl.handlers.polygon.disable();
+    $('#step2').fadeIn().siblings().hide();
 }
 
 function selectButtonClick() {
@@ -223,18 +233,13 @@ function selectButtonClick() {
             return;
         }
     }
-    $('#selectButton').addClass('btn-primary');
-    $('#bufferButton').removeClass('btn-primary');
-    $('#lassoButton').removeClass('btn-primary');
+    $('#step4').fadeIn().siblings().hide();
     clickAction = selectClick;
     drawControl.handlers.polygon.disable();
 }
 
 function bufferButtonClick() {
     clickAction = toggleClick;
-    $('#bufferButton').addClass('btn-primary');
-    $('#selectButton').removeClass('btn-primary');
-    $('#lassoButton').removeClass('btn-primary');
     drawControl.handlers.polygon.disable();
 
     //if there's already a buffer 

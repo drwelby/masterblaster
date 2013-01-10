@@ -12,27 +12,64 @@
 <!--[if lt IE 8]>
     <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
 <![endif]-->
-<div class="container">
-    <div class="">
-        <h1>{{ bmap.name }}</h1>
-        <a href="/" class="btn pull-right">More Maps &gt;</a>
-        <p class="lead">{{ bmap.notes }}</p>
+   <div class="navbar navbar-inverse navbar-static-top hrow">
+    <div class="navbar-inner">
+        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </a>
+        <a class="brand" href="/">GeoNotice</a>
+        
+        <div class="nav-collapse collapse">
+          <ul class="nav">
+              <li class="divider-vertical"></li>
+              <li><a href="/"><i class="icon-home icon-white"></i> All Maps</a></li>
+              <li><a href="/new"><i class="icon-plus-sign icon-white"></i> New Map</a></li>
+          </ul>
+          <div class="pull-right">
+            <ul class="nav pull-right">
+                <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Account <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/user/preferences"><i class="icon-cog"></i> Preferences</a></li>
+                        <li><a href="/help/support"><i class="icon-envelope"></i> Contact Support</a></li>
+                        <li class="divider"></li>
+                        <li><a href="/auth/logout"><i class="icon-off"></i> Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+          </div>
+        </div>
     </div>
-
-    <div class="span12">
-        <div class="row fill">
-            <div id="data" class="span3">
-                <div class="overview">
-                        <a href="#" id="selectButton" class="btn btn-block btn-large "> Click Parcels to Select</span></a>
-                        <p>Click on a parcel to select it. To deselect it, click on it again.</p>
-                        <a href="#" id="bufferButton" class="btn btn-large btn-block disabled" rel="popover" data-placement="top" data-content="" data-original-title="">Buffer and Refine</a>
-                        <p>Click on a buffered parcel to remove it from the labels. Click on any other parcel to add it to the buffered parcels.</p>
-                        <a href="#" id="lassoButton" class="btn btn-large btn-block disabled" rel="popover" data-placement="top" data-content="" data-original-title="">Lasso</a>
-                        <a href="#" id="labelButton" class="btn btn-large btn-block disabled" rel="tooltip" data-placement="bottom" data-original-title="">Get Labels</a>
-                    </p>
-                </div>
+</div>   
+    <div class="row hrow" id="top">
+        <div class="offset1 span2" >
+            <h1>{{ bmap.name }}</h1>
+        </div>
+        <div class="span1" >
+            <p id="desc">{{ bmap.notes }}</p>
+        </div>
+        <div class="offset6 span2 btn-toolbar">
+            <div class="btn-group pull-right">
+                <button href="/" class="btn disabled"><i class="icon-print"></i> Print Map</button>
+                <button href="/" id="labelButton" class="btn disabled">Get Data and Labels <i class="icon-arrow-right"></i></button>
             </div>
-            <div id="map-area" class="span9">
+        </div>
+    </div>
+    <div class="row hrow">
+        <div class="span11 offset1">
+            <div class="alert alert-info actions">
+                <span id="step1">Let's get started! Do you want to <a href="#" class="action" id="pick">pick specific parcels</a> or <a href="#" class="action" id="buffer">use a buffer around specific parcels</a>?</span>
+                <span id="step2">Click on parcels to select or unselect them. If you need to select many parcels, you can <a href="#" class="action" id="lasso">use a lasso</a>. You can also <a href="#" class="action" id="addbuffer">use a buffer around specific parcels</a>.</span>
+                <span id="step3">Draw a shape around parcels to toggle their selection. When you're done <a href="#" class="action" id="pickback">click here to go back</a>. </span>
+                <span id="step4">Click on the parcels you would like to buffer then <a href="#" class="action" id="dobuffer">click here</a> to select parcels within <input type="text" class="input-mini" id="bufferdist" placeholder="300"> feet. Or you can <a href="#" class="action" id="pickmore">pick specific parcels</a>.</span>
+            </div> 
+
+        </div>
+    </div>
+    <div class="row maprow">
+        <div class="span11 offset1 vstretch">
+            <div id="map-area" >
                 <div id="info-overlay"><span>...</span></div>
                 <div id="search-box"></div>
                 <div id="map"></div>
