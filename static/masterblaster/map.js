@@ -186,7 +186,7 @@ function handleAjax(data) {
     }
     if (data.get_feature) {
         ft = data.get_feature;
-        $('#info-overlay').html(ft.slice(0,2).join(' - '));
+        $('#info-overlay').show().html(ft.slice(0,2).join(' - '));
     }
 }
 
