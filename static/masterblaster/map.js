@@ -82,6 +82,7 @@ var selectedStyle = {
     $("#buffer,#addbuffer").click(selectButtonClick);
     $("#dobuffer").click(bufferButtonClick);
     $("#lasso").click(lassoButtonClick);
+    $("#refresh").click(mapRefresh);
 
     // Map Events
     map.on('click', onMapClick);
@@ -222,41 +223,40 @@ function toggleButtonClick() {
 }
 
 function selectButtonClick() {
-    //if there's already a buffer selecting this will reset everything
+    /* if there's already a buffer selecting this will reset everything
     if (mapstate.buffer.geometry) {
         if (confirm("Selecting new parcels will reset your existing buffer and labels!")) {
             var data = {
             'action': 'reset'
             }
-            sendAction(data); //reset
+            //sendAction(data); //reset
         }else{
             return;
         }
-    }
+    } */
     $('#step4').fadeIn().siblings().hide();
     clickAction = selectClick;
     drawControl.handlers.polygon.disable();
 }
 
 function bufferButtonClick() {
-    clickAction = toggleClick;
+    clickAction = selectClick;
     drawControl.handlers.polygon.disable();
 
-    //if there's already a buffer 
+    /* if there's already a buffer 
     if (mapstate.buffer.geometry) {
-        if (confirm("The map already has a buffer. Press OK to make a new buffer and reset the selection, or press cancel to modify what has already been selected.")) {
-            var data = {
-            'action': 'reset-buffer'
-            }
-            sendAction(data); //reset
+        if (!confirm("The map already has a buffer. Press OK to make a new buffer and reset the selection, or press cancel to modify what has already been selected.")) {
+            toggleButtonClick();
+            return;
         }
-        return;
-    }
-    //otherwise buffer the map
+    }*/
     var data = {
-        'action': 'buffer'
+        'action': 'buffer',
+        'dist': $('#bufferdist').val()
     }
-    sendAction(data)
+    sendAction(data); //reset
+    return;
+
 }
 
 function labelButtonClick() {
@@ -316,6 +316,15 @@ map.on('drawing-disabled', function(){
             drawControl.handlers.polygon.enable();
         }
 });
+
+function mapRefresh() {
+    if (confirm("Reset the map and delete all parcels and buffers?")) {
+        var data = {
+            'action': 'reset',
+        };
+        sendAction(data);
+    }
+}
 
 function infoClick(e) {
     //$('#info-overlay').show().html('...');
