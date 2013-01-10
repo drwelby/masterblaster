@@ -96,7 +96,10 @@ var selectedStyle = {
     map.on('mouseover', function(){
        $('#info-overlay').show().html('...');
     });
-    map.on('contextmenu', infoClick);
+    //map.on('contextmenu', infoClick);
+    map.on('contextmenu', function(){
+        alert('context');
+    });
 
 function hover(e) {
     if (e.latlng.equals(lastLatLng)) {
