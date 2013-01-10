@@ -46,7 +46,6 @@ var selectedStyle = {
         center = [40.681,-122.364]; 
     }
 
-    //L.tileLayer('http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/998/256/{z}/{x}/{y}.png', {
 
     L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/sat/{z}/{x}/{y}.jpg', {
         attribution: 'Tiles courtesy MapQuest, NASA/JPL-Caltech and USDA Farm Service Agency',
@@ -54,7 +53,6 @@ var selectedStyle = {
         subdomains: "1234"
     }).addTo(map);
 
-    //L.tileLayer('http://old.enplan.com/cgi-bin/tilecache.cgi/1.0.0/pv/{z}/{x}/{y}.png?type=google').addTo(map);
     L.tileLayer.wms('http://50.56.215.16:8888/geoserver/wms?', {
             layers: 'counties:shastaco_parcels_owners',
             format: 'image/png',
@@ -90,32 +88,16 @@ var selectedStyle = {
     map.on('moveend', viewChange);
     map.on('mousemove', function(e) {
         lastLatLng = e.latlng;
-        setTimeout(function(){hover(e)},750);
+        setTimeout(function(){hover(e)},300);
     });
-   map.on('mouseout', function(){
+    map.on('mouseout', function(){
        $('#info-overlay').hide();
-   });
-   map.on('mouseover', function(){
+    });
+    map.on('mouseover', function(){
        $('#info-overlay').show().html('...');
-   });
-   /*L.DomEvent.addListener(map,'touchend', function(){
-       console.log('touchend');
-         clearTimeout(pressTimer)
-         return false;
-         });
-   L.DomEvent.addListener(map,'touchstart', function(e) {
-       console.log('touchstart');
-        lastLatLng = e.latlng;
-        pressTimer = window.setTimeout(function() { 
-            console.log('longclick');
-            hover(e) },1000);
-        e.preventDefault && e.preventDefault();
-        e.stopPropagation && e.stopPropagation();
-        e.cancelBubble = true;
-        e.returnValue = false;
-        return false; 
-        });
-    */
+    });
+    map.on('contextmenu', infoClick);
+
 function hover(e) {
     if (e.latlng.equals(lastLatLng)) {
         infoClick(e);
@@ -224,17 +206,6 @@ function toggleButtonClick() {
 }
 
 function selectButtonClick() {
-    /* if there's already a buffer selecting this will reset everything
-    if (mapstate.buffer.geometry) {
-        if (confirm("Selecting new parcels will reset your existing buffer and labels!")) {
-            var data = {
-            'action': 'reset'
-            }
-            //sendAction(data); //reset
-        }else{
-            return;
-        }
-    } */
     $('#step4').fadeIn().siblings().hide();
     clickAction = selectClick;
     drawControl.handlers.polygon.disable();
@@ -243,14 +214,6 @@ function selectButtonClick() {
 function bufferButtonClick() {
     clickAction = selectClick;
     drawControl.handlers.polygon.disable();
-
-    /* if there's already a buffer 
-    if (mapstate.buffer.geometry) {
-        if (!confirm("The map already has a buffer. Press OK to make a new buffer and reset the selection, or press cancel to modify what has already been selected.")) {
-            toggleButtonClick();
-            return;
-        }
-    }*/
     var data = {
         'action': 'buffer',
         'dist': $('#bufferdist').val()
@@ -328,7 +291,6 @@ function mapRefresh() {
 }
 
 function infoClick(e) {
-    //$('#info-overlay').show().html('...');
     var data = {
         'action': 'get_feature',
         'lat': e.latlng.lat,
