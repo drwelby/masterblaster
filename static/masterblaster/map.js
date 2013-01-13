@@ -177,7 +177,6 @@ function sendAction(data){
 }
 
 function handleAjax(data) {
-    console.log(data);
     if (data.mapstate) {
         mapstate = data.mapstate;
         updateMapState();
@@ -202,11 +201,11 @@ function lassoButtonClick() {
 
 function toggleButtonClick() {
     clickAction = toggleClick;
-    drawControl.handlers.polygon.disable();
     $('#pick').addClass('btn-primary');
     $('#lasso').removeClass('btn-primary');
     $('#addbuffer').show();
     $('#fullbuffer').hide();
+    drawControl.handlers.polygon.disable();
 }
 
 function selectButtonClick() {
@@ -283,7 +282,7 @@ map.on('draw:poly-created', function(e){
 });
 
 map.on('drawing-disabled', function(){
-    if ($('#lassoButton').hasClass('btn-primary')) {
+    if ($('#lasso').hasClass('btn-primary')) {
             drawControl.handlers.polygon.enable();
         }
 });
