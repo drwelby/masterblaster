@@ -17,7 +17,6 @@ map = L.map('map');
 var clickAction = function(e) {return};
 var selectedLayer, selectionLayer, bufferLayer;
 var allLayers = L.layerGroup();
-var init = true;
 var lastLatLng;
 
 var bufferStyle = {
@@ -46,6 +45,7 @@ var selectedStyle = {
         center = [40.681,-122.364]; 
     }
 
+    map.setView(center,zoom);
 
     L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/sat/{z}/{x}/{y}.jpg', {
         attribution: 'Tiles courtesy MapQuest, NASA/JPL-Caltech and USDA Farm Service Agency',
@@ -57,7 +57,6 @@ var selectedStyle = {
             layers: 'counties:shastaco_parcels_owners',
             format: 'image/png',
             transparent: true}).addTo(map);
-    map.setView(center,zoom);
 
     var drawControl = new L.Control.Draw({
             polygon: {
@@ -71,14 +70,14 @@ var selectedStyle = {
             rectangge:false
             }
         });
-        map.addControl(drawControl);
+    map.addControl(drawControl);
 
     // draw the map state
     updateMapState();
 
     //set up the buttons
-    $("#pick,#pickback,#pickmore").click(toggleButtonClick);
-    $("#buffer,#addbuffer").click(selectButtonClick);
+    $("#pick").click(toggleButtonClick);
+    $("#addbuffer").click(selectButtonClick);
     $("#dobuffer").click(bufferButtonClick);
     $("#lasso").click(lassoButtonClick);
     $("#refresh").click(mapRefresh);
@@ -97,6 +96,7 @@ var selectedStyle = {
        $('#info-overlay').show().html('...');
     });
     //map.on('contextmenu', infoClick);
+    // need to unhide the info bar here
     map.on('contextmenu', function(){
         alert('context');
     });
@@ -133,13 +133,8 @@ function viewChange(e) {
 
 // handle updates to the map state
 function updateMapState() {
-    // if this isn't the first draw, remove the old layers
-    if (init) {
-            init = false;
-    } else {
-        allLayers.clearLayers();
-    }
     // redraw the layers in leaflet
+    allLayers.clearLayers();
     if (mapstate.selected.length > 0) {
         selectedLayer = L.geoJson(mapstate.selected, {style:selectedStyle, onEachFeature: passClick});
         allLayers.addLayer(selectedLayer);
@@ -175,7 +170,7 @@ function sendAction(data){
         dataType: "json",
         statusCode: {
             200: function(data, textStatus, jqXHR) {handleAjax(data)},
-            304: function(data, textStatus, jqXHR) {return;},
+            304: function(data, textStatus, jqXHR) {console.log('pan')},
             404: function() {alert('Server Error')}
         }
     });
@@ -189,7 +184,7 @@ function handleAjax(data) {
     }
     if (data.get_feature) {
         ft = data.get_feature;
-        $('#info-overlay').show().html(ft.slice(0,2).join(' - '));
+        $('#info-overlay').html(ft.slice(0,2).join(' - '));
     }
 }
 
@@ -199,17 +194,26 @@ function handleAjax(data) {
 function lassoButtonClick() {
     clickAction = lassoClick;
     drawControl.handlers.polygon.enable();
-    $('#step3').fadeIn().siblings().hide();
+    $('#lasso').addClass('btn-primary');
+    $('#pick').removeClass('btn-primary');
+    $('#addbuffer').show();
+    $('#fullbuffer').hide();
 }
 
 function toggleButtonClick() {
     clickAction = toggleClick;
     drawControl.handlers.polygon.disable();
-    $('#step2').fadeIn().siblings().hide();
+    $('#pick').addClass('btn-primary');
+    $('#lasso').removeClass('btn-primary');
+    $('#addbuffer').show();
+    $('#fullbuffer').hide();
 }
 
 function selectButtonClick() {
-    $('#step4').fadeIn().siblings().hide();
+    $('#pick').removeClass('btn-primary');
+    $('#lasso').removeClass('btn-primary');
+    $('#addbuffer').hide();
+    $('#fullbuffer').css('display', 'inline-block');
     clickAction = selectClick;
     drawControl.handlers.polygon.disable();
 }
@@ -219,7 +223,7 @@ function bufferButtonClick() {
     drawControl.handlers.polygon.disable();
     var data = {
         'action': 'buffer',
-        'dist': $('#bufferdist').val()
+        'dist': $('#bufferdist').val() || '300'
     }
     sendAction(data); //reset
     return;

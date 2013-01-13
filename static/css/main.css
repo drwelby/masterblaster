@@ -83,3 +83,48 @@ textarea#id_notes {
     width: 500px;
     height: 5em;
 }
+
+.leaflet-control-draw {display:none;}
+
+.leaflet-top .leaflet-control {
+    margin-top: 60px;
+}
+
+.bump {
+    margin-right:5px;
+}
+.grey {
+    color:grey;
+}
+.add-on.bgwhite {
+    background-color:#fff;
+    color:grey;
+    border-left:0
+}
+.input-mini.hideright {
+    border-right:0;
+    width:3em;
+    text-align:right;
+}
+.ital {
+    font-style:italic;
+}
+
+div#buttons {
+    margin-top:10px;
+    margin-left:10px;
+    position:absolute;
+    top: 0px;
+    left:0px;
+    z-index:1000;
+}
+
+#fullbuffer {
+    display:none;
+}
+
+#button-background {
+    padding: 5px;
+    border-radius: 7px;
+    background: rgba(0, 0, 0, .25);
+}
