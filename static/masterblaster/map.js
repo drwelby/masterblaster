@@ -82,7 +82,6 @@ var selectedStyle = {
     $("#addbuffer").click(selectButtonClick);
     $("#dobuffer").click(bufferButtonClick);
     $("#lasso").click(lassoButtonClick);
-    $("#refresh").click(mapRefresh);
 
    $.fn.editableform.buttons = 
   '<button type="submit" class="btn btn-primary editable-submit btn-mini"><i class="icon-ok icon-white"></i></button>' +
