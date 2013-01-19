@@ -109,9 +109,8 @@ var selectedStyle = {
     });
     //map.on('contextmenu', infoClick);
     // need to unhide the info bar here
-    map.on('contextmenu', function(){
-        alert('context');
-    });
+    map.on('contextmenu', getPopup);
+       
 
 function hover(e) {
     if (e.latlng.equals(lastLatLng)) {
@@ -196,6 +195,24 @@ function handleAjax(data) {
     if (data.get_feature) {
         ft = data.get_feature;
         $('#info-overlay').html(ft.slice(0,2).join(' - '));
+    }
+    if (data.get_popup) {
+        if (data.get_popup.feature) {
+            lat = parseFloat(data.get_popup.lat);
+            lon = parseFloat(data.get_popup.lon);
+            ft = data.get_popup.feature;
+            pstr = "<table class='popup-table'>";
+            pstr += "<tr><td><b>Owner</b>: </td><td>" + ft.owner + "</td></tr>";
+            pstr += "<tr><td><b>Situs</b>: </td><td>" + ft.situs1 + "</td></tr>";
+            pstr += "<tr><td></td><td>" + ft.situs2 + "</td></tr>";
+            pstr += "<tr><td><b>Mailing</b>: </td><td>" + ft.mail1 + "</td></tr>";
+            pstr += "<tr><td></td><td>" + ft.mail2 + "</td></tr>";
+            pstr += "</table>";
+            pstr += '<a href="http://maps.google.com?q=loc:';
+            pstr += data.get_popup.lat + ',' + data.get_popup.lon;
+            pstr += '&z=18&t=h" target="_blank">View in Google Maps</a>';
+            L.popup().setLatLng([lat, lon]).setContent(pstr).openOn(map);
+        }
     }
 }
 
@@ -313,8 +330,17 @@ function infoClick(e) {
         'action': 'get_feature',
         'lat': e.latlng.lat,
         'lon': e.latlng.lng
-    }
+    };
     sendAction(data)
+}
+
+function getPopup(e) {
+    var data = {
+        'action': 'get_popup',
+        'lat': e.latlng.lat,
+        'lon': e.latlng.lng
+    };
+    sendAction(data);
 }
 
 });
