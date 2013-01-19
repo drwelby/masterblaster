@@ -5,6 +5,7 @@
 {% block mapcss %}
 <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4.5/leaflet.css" />
 <link rel="stylesheet" href="{{ STATIC_PREFIX }}leaflet.draw/leaflet.draw.css" />
+<link href="{{ STATIC_PREFIX }}bootstrap-editable/css/bootstrap-editable.css" rel="stylesheet">
 <!--[if lte IE 8]><link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4.5/leaflet.ie.css" /><![endif]-->
 {% endblock %}
 
@@ -12,7 +13,7 @@
 <!--[if lt IE 8]>
     <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
 <![endif]-->
-   <div class="navbar navbar-inverse navbar-static-top hrow">
+   <div class="navbar navbar-static-top hrow">
     <div class="navbar-inner">
         <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
             <span class="icon-bar"></span>
@@ -20,67 +21,47 @@
             <span class="icon-bar"></span>
         </a>
         <a class="brand" href="/">GeoNotice</a>
-        
+        <div id="map-title">
+            <a href="#" id="map-title-editable">{{ bmap.name }}<i class="icon-pencil fade"></i></a>
+        </div>
         <div class="nav-collapse collapse">
-          <ul class="nav">
-              <li class="divider-vertical"></li>
-              <li><a href="/"><i class="icon-home icon-white"></i> All Maps</a></li>
-              <li><a href="/new"><i class="icon-plus-sign icon-white"></i> New Map</a></li>
-              <li><a href="#" id="refresh"><i class="icon-refresh icon-white"></i> Start Over</a></li>
-          </ul>
           <div class="pull-right">
             <ul class="nav pull-right">
-                <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Account <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="/user/preferences"><i class="icon-cog"></i> Preferences</a></li>
-                        <li><a href="/help/support"><i class="icon-envelope"></i> Contact Support</a></li>
-                        <li class="divider"></li>
-                        <li><a href="/auth/logout"><i class="icon-off"></i> Logout</a></li>
-                    </ul>
-                </li>
+              <li><a href="/new"><i class="icon-refresh "></i> Start Over</a></li>
+              <li><a href="/"><i class="icon-list "></i> Saved Maps</a></li>
+              <li><a href="#" id="refresh"><i class="icon-question-sign"></i> Help</a></li>
+              <li><a href="#"><i class="icon-off "></i> Logout</a></li>
             </ul>
           </div>
         </div>
     </div>
 </div>   
-    <div class="row hrow" id="top">
-        <div class="offset1 span2" >
-            <h1>{{ bmap.name }}</h1>
-        </div>
-        <div class="span1" >
-            <p id="desc">{{ bmap.notes }}</p>
-        </div>
-        <div class="offset6 span2 btn-toolbar">
-            <div class="btn-group pull-right">
-                <button href="/" class="btn disabled"><i class="icon-print"></i> Print Map</button>
-                <button href="/" id="labelButton" class="btn disabled">Get Data and Labels <i class="icon-arrow-right"></i></button>
-            </div>
-        </div>
-    </div>
-    <div class="row maprow">
-        <div class="span11 offset1 vstretch">
-            <div id="map-area" >
-                <div id="buttons">
-                    <div id="button-background">
-                        <div class="form-inline"> 
-                            <button id="pick" class="btn bump">Pick</button>
-                            <a id="lasso" class="btn bump ">Lasso</a>
-                            <a id="addbuffer" class="btn">Buffer &raquo;</a>
-                            <div id="fullbuffer" class="input-prepend input-append">
-                                <button id="buffer" class="btn btn-primary" type="button">Buffer</button>
-                                <input id="bufferdist" class="input-mini hideright" id="appendedInputButtons"
-                                type="text" placeholder="300"> <span class="add-on bgwhite ital">feet&nbsp;</span>
-                                <button id="dobuffer" class="btn btn-info" type="button">Run</button>
-                            </div>
-                        </div>
-                    </div>
+<div id="map-area" >
+    <div id="buttons">
+        <div class="button-background">
+            <div class="form-inline"> 
+                <button id="pick" class="btn bump">Single</button>
+                <a id="lasso" class="btn bump ">Lasso</a>
+                <a id="addbuffer" class="btn">Buffer &raquo;</a>
+                <div id="fullbuffer" class="input-prepend input-append">
+                    <button id="buffer" class="btn btn-primary" type="button">Buffer</button>
+                    <input id="bufferdist" class="input-mini hideright" id="appendedInputButtons"
+                    type="text" placeholder="300"> <span class="add-on bgwhite ital">feet&nbsp;</span>
+                    <button id="dobuffer" class="btn btn-info" type="button">Run</button>
                 </div>
-                <div id="info-overlay"><span>...</span></div>
-                <div id="search-box"></div>
-                <div id="map"></div>
             </div>
         </div>
     </div>
+    <div id="rightbuttons">
+        <div class="button-background">
+                <button id="saveButton" class="btn bump disabled">Save</i></button>
+                <button id="labelButton" class="btn bump disabled">Get Data</i></button>
+                <button id="printButton" class="btn disabled"><i class="icon-print"></i> PDF Map</button>
+        </div>
+    </div>
+    <div id="info-overlay"><span>...</span></div>
+    <div id="search-box"></div>
+    <div id="map"></div>
 </div>
 {% endblock %}
 
@@ -92,5 +73,6 @@
 <script src="//cdn.leafletjs.com/leaflet-0.4.5/leaflet.js"></script>
 <script src="{{ STATIC_PREFIX }}masterblaster/map.js"></script>
 <script src="{{ STATIC_PREFIX }}leaflet.draw/leaflet.draw.js"></script>
+<script src="{{ STATIC_PREFIX }}bootstrap-editable/js/bootstrap-editable.js"></script>
 {% endblock %}
 

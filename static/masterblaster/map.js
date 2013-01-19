@@ -27,14 +27,15 @@ var bufferStyle = {
 };
 var selectionStyle = {
     "color": "#ff0000",
-    "weight": 0,
-    "fillOpacity": 0.5
+    "weight": 2,
+    "opacity":1,
+    "fillOpacity": 0
 };
 var selectedStyle = {
     "color": "#0000ff",
     "opacity": 1,
     "weight": 2,
-    "fillOpacity": 0
+    "fillOpacity": 0.25
 };
 
 // Set up the map
@@ -82,6 +83,16 @@ var selectedStyle = {
     $("#dobuffer").click(bufferButtonClick);
     $("#lasso").click(lassoButtonClick);
     $("#refresh").click(mapRefresh);
+
+   $.fn.editableform.buttons = 
+  '<button type="submit" class="btn btn-primary editable-submit btn-mini"><i class="icon-ok icon-white"></i></button>' +
+ '<button type="button" class="btn editable-cancel btn-mini"><i class="icon-remove"></i></button>'; 
+    $("#map-title-editable").editable({
+        type:'text',
+        placement:'bottom',
+        mode:'inline',
+        url: function() {alert("changed")}
+    });
 
     // Map Events
     map.on('click', onMapClick);
