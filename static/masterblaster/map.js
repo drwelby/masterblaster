@@ -201,11 +201,11 @@ function handleAjax(data) {
             lon = parseFloat(data.get_popup.lon);
             ft = data.get_popup.feature;
             pstr = "<table class='popup-table'>";
-            pstr += "<tr><td><b>Owner</b>: </td><td>" + ft.owner + "</td></tr>";
-            pstr += "<tr><td><b>Situs</b>: </td><td>" + ft.situs1 + "</td></tr>";
-            pstr += "<tr><td></td><td>" + ft.situs2 + "</td></tr>";
-            pstr += "<tr><td><b>Mailing</b>: </td><td>" + ft.mail1 + "</td></tr>";
-            pstr += "<tr><td></td><td>" + ft.mail2 + "</td></tr>";
+            pstr += "<tr><td><b>Owner</b>: </td><td>" + (ft.owner || "") + "</td></tr>";
+            pstr += "<tr><td><b>Situs</b>: </td><td>" + (ft.situs1 || "") + "</td></tr>";
+            pstr += "<tr><td></td><td>" + (ft.situs2 || "") + "</td></tr>";
+            pstr += "<tr><td><b>Mailing</b>: </td><td>" + (ft.mail1 || "") + "</td></tr>";
+            pstr += "<tr><td></td><td>" + (ft.mail2 || "") + "</td></tr>";
             pstr += "</table>";
             pstr += '<a href="http://maps.google.com?q=loc:';
             pstr += data.get_popup.lat + ',' + data.get_popup.lon;
