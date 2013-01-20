@@ -1,4 +1,3 @@
-
 var map;
 var presstimer;
 
@@ -69,7 +68,7 @@ var selectedStyle = {
             circle:false,
             marker:false,
             polyline:false,
-            rectangge:false
+            rectangle:false
             }
         });
     map.addControl(drawControl);
@@ -77,22 +76,35 @@ var selectedStyle = {
     // draw the map state
     updateMapState();
 
+
     //set up the buttons
     $("#pick").click(toggleButtonClick);
     $("#addbuffer").click(selectButtonClick);
     $("#dobuffer").click(bufferButtonClick);
     $("#lasso").click(lassoButtonClick);
 
+
    $.fn.editableform.buttons = 
   '<button type="submit" class="btn btn-primary editable-submit btn-mini"><i class="icon-ok icon-white"></i></button>' +
- '<button type="button" class="btn editable-cancel btn-mini"><i class="icon-remove"></i></button>'; 
+  '<button type="button" class="btn editable-cancel btn-mini"><i class="icon-remove"></i></button>'; 
+
     $("#map-title-editable").editable({
         type:'text',
         placement:'bottom',
         mode:'inline',
-        url: function() {alert("changed")}
+        url: function(params) {
+            var data = {'action': 'name_map', 'name': params.value};
+            sendAction(data);
+        },
+        value: ""
     });
 
+    $("#map-title-editable").on('hidden', function(e,reason) {
+        if (reason == 'save') {
+            $('#no-title').html($("#map-title-editable").html()).attr('id', 'map-title');
+        }
+    });
+    
     // Map Events
     map.on('click', onMapClick);
     map.on('moveend', viewChange);
@@ -190,6 +202,10 @@ function handleAjax(data) {
     if (data.mapstate) {
         mapstate = data.mapstate;
         updateMapState();
+    }
+    if (data.name_map) {
+        console.log(data.name_map.slug);
+        //$('#no-title').html(data.name_map.name).attr('id', 'map-title');
     }
     if (data.get_feature) {
         ft = data.get_feature;

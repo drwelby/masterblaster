@@ -1,6 +1,12 @@
 {% extends "base.html" %}
 
-{% block title %}{{bmap.name}}{% endblock %}
+{% block title %}
+    {% if bmap.name %}
+        {{bmap.name}}
+    {% else %}
+        GeoNotice
+    {% endif %}
+{% endblock %}
 
 {% block mapcss %}
 <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4.5/leaflet.css" />
@@ -21,13 +27,18 @@
             <span class="icon-bar"></span>
         </a>
         <a class="brand" href="/">GeoNotice</a>
+            {% if bmap.name %}
         <div id="map-title">
-            <a href="#" id="map-title-editable">{{ bmap.name }}<i class="icon-pencil fade"></i></a>
+            {{ bmap.name }}
+            {% else %}
+        <div id="no-title">
+            <a href="#" id="map-title-editable">(name this map to save it)<i class="icon-pencil fade"></i></a>
+            {% endif %}
         </div>
         <div class="nav-collapse collapse">
           <div class="pull-right">
             <ul class="nav pull-right">
-              <li><a href="/"><i class="icon-refresh "></i> Start Over</a></li>
+              <li><a href="/"><i class="icon-refresh "></i> New Map</a></li>
               <li><a href="/maps"><i class="icon-list "></i> Saved Maps</a></li>
               <li><a href="#"><i class="icon-question-sign"></i> Help</a></li>
               <li><a href="#"><i class="icon-off "></i> Logout</a></li>
@@ -54,7 +65,6 @@
     </div>
     <div id="rightbuttons">
         <div class="button-background">
-                <button id="saveButton" class="btn bump disabled">Save</i></button>
                 <button id="labelButton" class="btn bump disabled">Get Data</i></button>
                 <button id="printButton" class="btn disabled"><i class="icon-print"></i> PDF Map</button>
         </div>

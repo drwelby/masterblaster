@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Master Blaster{% endblock %}
+
+{% block content %}
+   <div class="navbar navbar-static-top hrow">
+    <div class="navbar-inner">
+        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </a>
+        <a class="brand" href="/">GeoNotice</a>
+        <div class="nav-collapse collapse">
+          <div class="pull-right">
+            <ul class="nav pull-right">
+              <li><a href="/"><i class="icon-refresh "></i> New Map</a></li>
+              <li><a href="/maps"><i class="icon-list "></i> Saved Maps</a></li>
+              <li><a href="#"><i class="icon-question-sign"></i> Help</a></li>
+              <li><a href="#"><i class="icon-off "></i> Logout</a></li>
+            </ul>
+          </div>
+        </div>
+    </div>
+</div>   
+<div class="row">
+<h3 class="offset1">Recent Projects</h3>
+<table class="offset1 span8 table table-striped">
+    {% for map in maps %}
+    <tr>
+        <td>{{map.edit_date|date:'m-d-Y'}}</td>
+        <td>{{ map.name }}</td>
+        <td>
+            <a class="small" href="/map/{{ map.slug }}">map&raquo;</a>
+            <a class="small" href="/labels/{{ map.slug }}">labels&raquo;</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
+

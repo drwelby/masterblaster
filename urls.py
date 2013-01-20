@@ -7,8 +7,8 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     # Examples:
-    url(r'^$', 'slc.views.startpage', name='start'),
-    url(r'^new/$', 'slc.views.newmap', name='new'),
+    url(r'^maps/$', 'slc.views.allmaps', name='all'),
+    url(r'^$', 'slc.views.newmap', name='new'),
     url(r'^map/([\w-]+)/$', 'slc.views.map_handler', name='map'),
     url(r'^labels/([\w-]+)/$', 'slc.views.labels', name='labels'),
     # url(r'^masterblaster/', include('masterblaster.foo.urls')),
