@@ -43,6 +43,8 @@ L.tileLayer.wms('http://50.56.215.16:8888/geoserver/wms?', {
         format: 'image/png',
         transparent: true}).addTo(map);
 
+console.log(mapstate);
+
 updateMapState();
 
 // handle updates to the map state

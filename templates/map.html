@@ -63,8 +63,8 @@
     </div>
     <div id="rightbuttons">
         <div class="button-background">
-                <button id="labelButton" class="btn bump disabled">Get Data</i></button>
-                <button id="printButton" class="btn disabled"><i class="icon-print"></i> PDF Map</button>
+                <button id="dataButton" class="btn bump disabled">Get Data</i></button>
+                <button id="printButton" class="btn"><i class="icon-print"></i> PDF Map</button>
         </div>
     </div>
     <div id="info-overlay"><span>...</span></div>
@@ -76,12 +76,12 @@
 
 {% block pagejs %}
 <script type="text/javascript">
-    var mapstate = {{ bmap.state|safe }};
+    var mapstate = {{ bmap.state|safe }}['mapstate'];
 </script>
 <script src="//cdn.leafletjs.com/leaflet-0.4.5/leaflet.js"></script>
 <script src="{{ STATIC_PREFIX }}masterblaster/map-base.js"></script>
-<script src="{{ STATIC_PREFIX }}masterblaster/map-ui.js"></script>
 <script src="{{ STATIC_PREFIX }}leaflet.draw/leaflet.draw.js"></script>
 <script src="{{ STATIC_PREFIX }}bootstrap-editable/js/bootstrap-editable.js"></script>
+<script src="{{ STATIC_PREFIX }}masterblaster/map-ui.js"></script>
 {% endblock %}
 

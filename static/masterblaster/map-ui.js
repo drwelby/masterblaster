@@ -1,4 +1,5 @@
-var presstimer, lastLatLng
+var presstimer;
+var lastLatLng;
 
 var clickAction = function(e) {return};
 
@@ -24,6 +25,7 @@ $("#pick").click(toggleButtonClick);
 $("#addbuffer").click(selectButtonClick);
 $("#dobuffer").click(bufferButtonClick);
 $("#lasso").click(lassoButtonClick);
+$("#printButton").click(printButtonClick);
 
 $.fn.editableform.buttons = 
 '<button type="submit" class="btn btn-primary editable-submit btn-mini"><i class="icon-ok icon-white"></i></button>' +
@@ -46,6 +48,8 @@ $("#map-title-editable").on('hidden', function(e,reason) {
     }
 });
     
+updatePageState();
+
 // Map Events
 map.on('click', onMapClick);
 map.on('moveend', viewChange);
@@ -90,10 +94,11 @@ function viewChange(e) {
 function updatePageState() {
     updateMapState();
     if (mapstate.selected.length > 0 ){
-        $('#labelButton.disabled').on('click', labelButtonClick).removeClass('disabled');
+        $('#dataButton.disabled').on('click', dataButtonClick).removeClass('disabled');
     } else {
-        $('#labelButton:not(.disabled)').off('click').addClass('disabled');
+        $('#dataButton:not(.disabled)').off('click').addClass('disabled');
     }
+}
 
 
 // api handler
@@ -187,8 +192,12 @@ function bufferButtonClick() {
 
 }
 
-function labelButtonClick() {
-    window.open(window.location.href.replace("/map/","/labels/"));
+function dataButtonClick() {
+    window.open(window.location.href.replace("/map/","/data/"));
+}
+
+function printButtonClick() {
+    window.open(window.location.href.replace("/map/","/print/"));
 }
 // map click handlers
 
@@ -271,4 +280,3 @@ function getPopup(e) {
     };
     sendAction(data);
 }
-
