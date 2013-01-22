@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {% firstof bmap.name "GeoNotice" %}
+{% endblock %}
+
+{% block pagecss %}
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4.5/leaflet.css" />
+<link rel="stylesheet" href="{{ STATIC_PREFIX }}css/print.css">
+{% endblock %}
+
+{% block content %}
+<div id="print-map-title"> {% firstof bmap.name "GeoNotice" %} </div>
+<div id="print-map-date"> {{ bmap.edit_date|date }} </div>
+<div id="map-area" >
+    <div id="map"></div>
+</div>
+{% endblock %}
+
+
+{% block pagejs %}
+<script type="text/javascript">
+    var mapstate = {{ bmap.state|safe }}['mapstate'];
+</script>
+<script src="//cdn.leafletjs.com/leaflet-0.4.5/leaflet.js"></script>
+<script src="{{ STATIC_PREFIX }}masterblaster/map-base.js"></script>
+{% endblock %}
+

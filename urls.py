@@ -12,6 +12,7 @@ urlpatterns = patterns('',
     url(r'^map/([\w-]+)/$', 'slc.views.map_handler', name='map'),
     url(r'^labels/([\w-]+)/$', 'slc.views.labels', name='labels'),
     url(r'^data/([\w-]+)/$', 'slc.views.data', name='data'),
+    url(r'^print/([\w-]+)/$', 'slc.views.print_map', name='print'),
     # url(r'^masterblaster/', include('masterblaster.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
