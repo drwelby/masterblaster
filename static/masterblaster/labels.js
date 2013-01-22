@@ -20,6 +20,14 @@ $('#uniquebox').click(function() {
     }
 });
 
+var labelopts = $("#label-opts").html()
+
+$('#popuplink').clickover({
+    content : labelopts,
+    placement: 'bottom',
+    html: true,
+});
+
 $('#optionsSitus').click(function() {
         $('span.mail').hide();
         $('span.situs').show();

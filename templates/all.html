@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Master Blaster{% endblock %}
+{% block title %}GeoNotice{% endblock %}
 
 {% block content %}
    <div class="navbar navbar-static-top hrow">
@@ -24,16 +24,14 @@
     </div>
 </div>   
 <div class="row">
-<h3 class="offset1">Recent Projects</h3>
-<table class="offset1 span8 table table-striped">
+<h3 class="offset3">Recent Maps</h3>
+<table class="offset3 span4 table table-striped">
     {% for map in maps %}
     <tr>
-        <td>{{map.edit_date|date:'m-d-Y'}}</td>
-        <td>{{ map.name }}</td>
-        <td>
-            <a class="small" href="/map/{{ map.slug }}">map&raquo;</a>
-            <a class="small" href="/labels/{{ map.slug }}">labels&raquo;</a>
+        <td style="text-align:center;">
+            <a class="small" href="/map/{{ map.slug }}">{{ map.name }}</a>
         </td>
+        <td style="text-align:center;">{{map.edit_date|date:'m-d-Y'}}</td>
     </tr>
     {% endfor %}
 </table>

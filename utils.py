@@ -66,3 +66,6 @@ def pdf_response(parcels, name, apn=False, address='mail', unique=False, format=
     #response['Content-Disposition'] = 'attachment;filename=%s.pdf' % name
     response.write(pdf.output('','S'))
     return response
+
+def pdf_table(parcels, name):
+    return HttpResponse('Coming Soon')
