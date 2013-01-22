@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}{% firstof bmap.name "GeoNotice" %}{% endblock %}
-{% block mapcss %}
+{% block pagecss %}
 <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/labels.css" />
 {% endblock %}
 {% block content %}
@@ -43,15 +43,15 @@
     </div>
     <div id="label-opts" style="display:none">
         <form class="form">
-            <label class="radio inline">
+            <label class="radio">
                   <input type="radio" name="optionsRadios" id="optionsMail" value="mail" checked>
                   Use Mailing Address&nbsp;&nbsp;
             </label>
-            <label class="radio inline">
+            <label class="radio">
                   <input type="radio" name="optionsRadios" id="optionsSitus" value="situs">
                   Use Situs Address&nbsp;&nbsp;
             </label>
-            <label class="radio inline">
+            <label class="radio">
                   <input type="radio" name="optionsRadios" id="optionsBoth" value="both">
                   Use Both (if different)
             </label>
@@ -63,7 +63,7 @@
             </label>
         </form>
             <a class="btn btn-info" id="pdflink" href="/labels/{{bmap.slug}}?filetype=pdf&apn=1&address=mail&unique=0" target="_blank">Get labels</a>
-            <a class="btn bump" href="#" data-toggle='button' data-dismiss='clickover'>Cancel</a>
+            <a class="btn pull-right" href="#" data-toggle='button' data-dismiss='clickover'>Cancel</a>
     </div>
     <div class="row topspace">
             <table class="span12 table table-striped">
@@ -86,7 +86,7 @@
 
 {% endblock %}
 
-{% block mapjs %}
+{% block pagejs %}
 <script src="{{ STATIC_PREFIX }}bootstrapx-clickover/bootstrapx-clickover.js"></script>
 <script src="{{ STATIC_PREFIX }}masterblaster/labels.js"></script>
 {% endblock %}

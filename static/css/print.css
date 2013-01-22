@@ -1,0 +1,26 @@
+#print-map-title {
+    position:absolute;
+    top: 10px;
+    left: 20px;
+    font-size: 25px;
+}
+
+#print-map-date {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 15px;
+}
+
+#map-area {
+    position: absolute;
+    top:41px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+#map {
+    height: 100%;
+}
+.leaflet-control {display:none;}

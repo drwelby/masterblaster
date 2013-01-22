@@ -24,10 +24,8 @@
         <!-- Modernizr -->
         <script src="{{ STATIC_PREFIX }}modernizr/modernizr-2.6.1-respond-1.1.0.min.js"></script>
 
-        {% block mapcss %}{% endblock %}
-        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4.5/leaflet.css" />
-        <!--[if lte IE 8]><link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4.5/leaflet.ie.css" /><![endif]-->
-        <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/main.css">
+        <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/base.css">
+        {% block pagecss %}{% endblock %}
 
     </head>
 
@@ -38,7 +36,7 @@
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
         <script src="{{ STATIC_PREFIX }}bootstrap/js/bootstrap.min.js"></script>
-        {% block mapjs %}{% endblock %}
+        {% block pagejs %}{% endblock %}
 
         <script>
                 var _gaq = [

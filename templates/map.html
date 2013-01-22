@@ -4,11 +4,13 @@
     {% firstof bmap.name "GeoNotice" %}
 {% endblock %}
 
-{% block mapcss %}
+{% block pagecss %}
 <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4.5/leaflet.css" />
 <link rel="stylesheet" href="{{ STATIC_PREFIX }}leaflet.draw/leaflet.draw.css" />
 <link href="{{ STATIC_PREFIX }}bootstrap-editable/css/bootstrap-editable.css" rel="stylesheet">
 <!--[if lte IE 8]><link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4.5/leaflet.ie.css" /><![endif]-->
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4.5/leaflet.css" />
+<link rel="stylesheet" href="{{ STATIC_PREFIX }}css/map.css">
 {% endblock %}
 
 {% block content %}
@@ -72,12 +74,13 @@
 {% endblock %}
 
 
-{% block mapjs %}
+{% block pagejs %}
 <script type="text/javascript">
-    var mapstate = {{ bmap.state|safe }}['mapstate'];
+    var mapstate = {{ bmap.state|safe }};
 </script>
 <script src="//cdn.leafletjs.com/leaflet-0.4.5/leaflet.js"></script>
-<script src="{{ STATIC_PREFIX }}masterblaster/map.js"></script>
+<script src="{{ STATIC_PREFIX }}masterblaster/map-base.js"></script>
+<script src="{{ STATIC_PREFIX }}masterblaster/map-ui.js"></script>
 <script src="{{ STATIC_PREFIX }}leaflet.draw/leaflet.draw.js"></script>
 <script src="{{ STATIC_PREFIX }}bootstrap-editable/js/bootstrap-editable.js"></script>
 {% endblock %}
