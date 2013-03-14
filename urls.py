@@ -7,12 +7,16 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     # Examples:
-    url(r'^maps/$', 'slc.views.allmaps', name='all'),
-    url(r'^$', 'slc.views.newmap', name='new'),
-    url(r'^map/([\w-]+)/$', 'slc.views.map_handler', name='map'),
-    url(r'^labels/([\w-]+)/$', 'slc.views.labels', name='labels'),
-    url(r'^data/([\w-]+)/$', 'slc.views.data', name='data'),
-    url(r'^print/([\w-]+)/$', 'slc.views.print_map', name='print'),
+    url(r'^$', 'masterblaster.views.newmap', name='new'),
+    url(r'^login/$', 'masterblaster.views.login', name='login'),
+    url(r'^maps/$', 'masterblaster.views.allmaps', name='all'),
+    url(r'^map/(.+)/$', 'slc.views.name_map', name='map'),
+    url(r'^get_feature/$', 'slc.views.get_feature', name='get_feature'),
+    url(r'^save/$', 'masterblaster.views.save', name='save'),
+    url(r'^lasso/$', 'masterblaster.views.lasso', name='lasso'),
+    url(r'^labels/$', 'masterblaster.views.labels', name='labels'),
+    url(r'^data/$', 'masterblaster.views.data', name='data'),
+    url(r'^print/$', 'masterblaster.views.print_map', name='print'),
     # url(r'^masterblaster/', include('masterblaster.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
