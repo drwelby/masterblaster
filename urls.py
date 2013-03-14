@@ -7,11 +7,12 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     # Examples:
-    url(r'^$', 'masterblaster.views.newmap', name='new'),
-    url(r'^login/$', 'masterblaster.views.login', name='login'),
+    url(r'^$', 'masterblaster.views.newmap', name='newmap'),
+    url(r'^accounts/login/$', 'masterblaster.views.site_login', name='site_login'),
     url(r'^maps/$', 'masterblaster.views.allmaps', name='all'),
-    url(r'^map/(.+)/$', 'slc.views.name_map', name='map'),
-    url(r'^get_feature/$', 'slc.views.get_feature', name='get_feature'),
+    url(r'^map/(.+)/$', 'masterblaster.views.name_map', name='map'),
+    url(r'^get_feature/$', 'masterblaster.views.get_feature', name='get_feature'),
+    url(r'^get_popup/$', 'masterblaster.views.get_feature', name='get_feature'),
     url(r'^save/$', 'masterblaster.views.save', name='save'),
     url(r'^lasso/$', 'masterblaster.views.lasso', name='lasso'),
     url(r'^labels/$', 'masterblaster.views.labels', name='labels'),

@@ -3,6 +3,36 @@ var lastLatLng;
 
 var clickAction = function(e) {return};
 
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+var csrftoken = getCookie('csrftoken');
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+$.ajaxSetup({
+    crossDomain: false, // obviates need for sameOrigin test
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type)) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
 
 var drawControl = new L.Control.Draw({
         polygon: {
@@ -105,7 +135,7 @@ function updatePageState() {
 function sendAction(data){
     $.ajax({
         type: "POST",
-        url: window.location.href,
+        url: "/" + data.action + "/",
         // The key needs to match your method's input parameter (case-sensitive).
         data: JSON.stringify({ data: data }),
         contentType: "application/json; charset=utf-8",
@@ -119,34 +149,41 @@ function sendAction(data){
 }
 
 function handleAjax(data) {
-    if (data.mapstate) {
-        mapstate = data.mapstate;
-        updatePageState();
-    }
-    if (data.name_map) {
-        console.log(data.name_map.slug);
-    }
     if (data.get_feature) {
-        ft = data.get_feature;
-        $('#info-overlay').html(ft.slice(0,2).join(' - '));
+        if (data.get_feature.feature) {
+            ftprop = data.get_feature.feature.properties;
+            msg = ftprop.owner + " - " + ftprop.situs1;
+        } else {
+            msg = "...";
+        }
+        $('#info-overlay').html(msg);
+        return;
     }
     if (data.get_popup) {
         if (data.get_popup.feature) {
             lat = parseFloat(data.get_popup.lat);
             lon = parseFloat(data.get_popup.lon);
-            ft = data.get_popup.feature;
+            ftprop = data.get_popup.feature.properties;
             pstr = "<table class='popup-table'>";
-            pstr += "<tr><td><b>Owner</b>: </td><td>" + (ft.owner || "") + "</td></tr>";
-            pstr += "<tr><td><b>Situs</b>: </td><td>" + (ft.situs1 || "") + "</td></tr>";
-            pstr += "<tr><td></td><td>" + (ft.situs2 || "") + "</td></tr>";
-            pstr += "<tr><td><b>Mailing</b>: </td><td>" + (ft.mail1 || "") + "</td></tr>";
-            pstr += "<tr><td></td><td>" + (ft.mail2 || "") + "</td></tr>";
+            pstr += "<tr><td><b>Owner</b>: </td><td>" + (ftprop.owner || "") + "</td></tr>";
+            pstr += "<tr><td><b>Situs</b>: </td><td>" + (ftprop.situs1 || "") + "</td></tr>";
+            pstr += "<tr><td></td><td>" + (ftprop.situs2 || "") + "</td></tr>";
+            pstr += "<tr><td><b>Mailing</b>: </td><td>" + (ftprop.mail1 || "") + "</td></tr>";
+            pstr += "<tr><td></td><td>" + (ftprop.mail2 || "") + "</td></tr>";
+            pstr += "<tr><td><b>Area(ac.)</b>: </td><td>" + (ftprop.area || "") + "</td></tr>";
             pstr += "</table>";
             pstr += '<a href="http://maps.google.com?q=loc:';
             pstr += data.get_popup.lat + ',' + data.get_popup.lon;
             pstr += '&z=18&t=h" target="_blank">View in Google Maps</a>';
             L.popup().setLatLng([lat, lon]).setContent(pstr).openOn(map);
         }
+    }
+    if (data.mapstate) {
+        mapstate = data.mapstate;
+        updatePageState();
+    }
+    if (data.name_map) {
+        console.log(data.name_map.slug);
     }
 }
 

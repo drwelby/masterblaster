@@ -12,14 +12,15 @@ body{
 </head>
 <body>
     {% if error %}
-        {% if error='inactive' %}
+        {% if error == "inactive" %}
             Sorry, that account is no longer active.
         {% endif %}
-        {% if error='invalid' %}
+        {% if error == "invalid" %}
             Sorry, that username or password was invalid.
         {% endif %}
     {% endif %}
-    <form action="/login/" method="post">
+    <form action="{% url site_login %}" method="post">
+        {% csrf_token %}
         {% if next %}
         <input type="hidden" name="next" value="{{ next }}" />
         {% endif %}

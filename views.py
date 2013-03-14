@@ -10,6 +10,7 @@ from django.forms.models import model_to_dict
 from django.contrib.auth import authenticate, login
 from django.template.defaultfilters import slugify
 from masterblaster.utils import xls_response, pdf_response, csv_response, pdf_table
+from masterblaster.models import Map, Parcel, Site
 
 ''' json responses:
 
@@ -38,7 +39,7 @@ from masterblaster.utils import xls_response, pdf_response, csv_response, pdf_ta
         buffer: (buffer multipolygon) 
         }
 '''
-def login(request, errors = None):
+def site_login(request, error = None):
     if request.POST:
         username = request.POST['username']
         password = request.POST['password']
@@ -48,11 +49,11 @@ def login(request, errors = None):
                 login(request, user)
                 return redirect('newmap')
             else:
-                return redirect('login', error = 'inactive')
+                return render_to_response('login.html', {'error':'inactive'}, context_instance=RequestContext(request))
         else:
-            return redirect('login', error = 'invalid')
+            return render_to_response('login.html', {'error':'invalid'}, context_instance=RequestContext(request))
     else:
-        return render_to_response('login.html', {'error':error})
+        return render_to_response('login.html', {'error':error}, context_instance=RequestContext(request))
         
 
 @login_required
@@ -65,30 +66,31 @@ def allmaps(request):
 @login_required
 def newmap(request):
     ''' requests for unsaved/new maps '''
-    site = request.user.sites.all()[0].maps.all()[20]
+    site = request.user.sites.all()[0]
     bmap = Map()
     bmap.name = 'GeoNotice'
-    bmap.state = 'center:%s,zoom:%s' % ( site.center, site.maxzoom + 1)
+    bmap.state = '{center:%s,zoom:%s,selected:{},selection:{},buffer:{}}' % ( site.center, site.maxzoom + 1)
     return render_to_response('map.html', {'bmap':bmap})
 
 @login_required
 def get_feature(request):
     ''' Given a lat and lon returns the containing parcel as json'''
-    data = json.loads(request.body)
+    data = json.loads(request.body)['data']
     site = request.user.sites.all()[0] 
     lat = data['lat']
     lon = data['lon']
+    # should lat/lon return centroid of parcel?
     action = data['action']
     pt = Point(lon,lat)
-    if not site.boundary.contains(pt):
-        return json.dumps({action:{'lat':lat, 'lon':lon, 'result':{}}})
-    Parcel.Meta.db_table = site.table
-    parcel = Parcel.objects.filter(geom__contains=pt)
+    if not site.bounds.prepared.contains(pt):
+        return HttpResponse(json.dumps({action:{'lat':lat, 'lon':lon}}), mimetype="application/json")
+    Parcel._meta.db_table = site.table
+    parcel = Parcel.objects.filter(geom__contains=pt)[0]
     if parcel:
-        data = {action: {'lat':lat, 'lon':lon, 'result': {parcel.apn: parcel.to_pygeojson()} }}
+        data = {action: {'lat':lat, 'lon':lon, 'feature': parcel.to_pygeojson() }}
     else:
-        data = {action:{'lat':lat, 'lon':lon, 'result':{}}}
-    return json.dumps(data)
+        data = {action:{'lat':lat, 'lon':lon}}
+    return HttpResponse(json.dumps(data), mimetype="application/json")
 
 @login_required
 def name_map(request, id_or_slug):
@@ -153,7 +155,7 @@ def data(request):
         return csv_response(parcels, slug)
 
 @login_required
-def save_map(request):
+def save(request):
 
     '''given a mapstate, saves a map'''
 
@@ -173,17 +175,18 @@ def save_map(request):
     return HttpResponse(json.dumps(mapstate), mimetype="application/json")
 
 @login_required
-def lasso_selected(request):
+def lasso(request):
 
     '''Toggles selected parcels with a polygon boundary'''
 
     data = json.loads(request.body)['data']
     mapstate = data['mapstate']
     site = request.user.sites.all()[0] 
-    Parcel.Meta.db_table = site.table
+    bounds = site.bounds.prepared
+    Parcel._meta.db_table = site.table
     newparcels = Parcel.objects.filter(geom__intersects=GEOSGeometry(data['lasso']['geometry']))
     for parcel in newparcels:
-        if not parcel.overlaps(site.boundary):
+        if not bounds.covers(parcel):
             continue
         if parcel.apn in mapstate['selected']:
             del mapstate['selected'][parcel.apn]
@@ -197,12 +200,12 @@ def buffer(request):
     '''Given a mapstate, runs a buffer and returns a new mapstate'''
 
     site = request.user.sites.all()[0] 
-    Parcel.Meta.db_table = site.table
+    Parcel._meta.db_table = site.table
     data = json.loads(request.body)['data']
     dist = float(data['dist'])
     mapstate = data['mapstate']
     # get the old buffer
-    oldbuffer = GEOSGeometry(mapstate['buffer']['geometry'])
+    oldbuffer = GEOSGeometry(mapstate['buffer']['geometry']).prepared
     # deselect all the old buffered parcels
     oldselected = mapstate['selected']
     for sel in oldselected:
@@ -217,7 +220,7 @@ def buffer(request):
     mapstate['buffer'] = {'type':'Feature', 'geometry':json.loads(buffered.geom.json)}
     # select new parcels
     newparcels = Parcel.objects.filter(geom__intersects=buffered)
-    newparcels.filter(geom__intersects=site.boundary)
+    newparcels.filter(geom__intersects=site.bounds)
     for parcel in newparcels:
         if parcel.apn in mapstate.selected:
             continue

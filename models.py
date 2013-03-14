@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from datetime import datetime
 from django.template.defaultfilters import slugify
 from django.forms import ModelForm
+from django.forms.models import model_to_dict
 import json
 import math
 
@@ -20,22 +21,22 @@ class Site(models.Model):
     @property
     def center(self):
         pt = self.bounds.centroid
-        return pt.coord
+        return pt.coords
 
     @property
     def maxzoom(self):
         GLOBE_WIDTH = 256
-        (west, south, east, north) = self.bounds.envelope
+        (west, south, east, north) = self.bounds.extent
         width = east - west;
         if width < 0:
             width += 360;
         height = north - south
         angle = max(height,width)
-        return math.round(math.log(960 * 360 / angle / GLOBE_WIDTH) / math.log(2)) -1
+        return round(math.log(960 * 360 / angle / GLOBE_WIDTH) / math.log(2)) -1
 
     @property
     def panbounds(self):
-        (xmin, ymin, xmax, ymax) = self.bounds.envelope
+        (xmin, ymin, xmax, ymax) = self.bounds.extent
         #5000 feet around 42.5 degrees N
         xmin -= .0137
         xmax += .0137
@@ -120,10 +121,11 @@ class Parcel(models.Model):
         ''' converts model object to dict with better values for nulls '''
         d = model_to_dict(self)
         del d['geom']
-        for k,v in d:
-            if not v:
+        for k in d:
+            if not d[k]:
                 d[k] = "No Data"
+        return d
 
     def to_pygeojson(self):
         ''' returns geojson as python objects '''
-        return {'type':'Feature', 'properties':{self.to_dict()}, 'geometry':json.loads(self.geom.json)}
+        return {'type':'Feature', 'properties':self.to_dict(), 'geometry':json.loads(self.geom.json)}
