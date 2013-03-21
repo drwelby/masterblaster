@@ -2,8 +2,9 @@ import json
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, HttpResponseNotModified, HttpResponseServerError
 from django.shortcuts import render_to_response, redirect
-from django.contrib.gis.geos import Point, GEOSGeometry
+from django.contrib.gis.geos import Point, MultiPolygon, GEOSGeometry
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
+from django.views.decorators.gzip import gzip_page
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from django.forms.models import model_to_dict
@@ -11,21 +12,29 @@ from django.contrib.auth import authenticate, login
 from django.template.defaultfilters import slugify
 from masterblaster.utils import xls_response, pdf_response, csv_response, pdf_table
 from masterblaster.models import Map, Parcel, Site
+from masterblaster.simplesearch import simplesearch
 
 ''' json responses:
 
     to buffer endpoint:
-    {   dist: (buffer distance), 
+    {   action: 'buffer',
+        dist: (buffer distance), 
         mapstate: (mapstate object)
         }
+        
+        returns mapstate
 
     to lasso endpoint:
-    {   lasso: (polygon json of lasso), 
+    {   action: 'lasso',
+        lasso: (polygon json of lasso), 
         mapstate: (mapstate object)
         }
 
+        returns mapstate
+
     to save endpoint:
-    {   lasso: (polygon json of lasso), 
+    {   action: 'save',
+        lasso: (polygon json of lasso), 
         mapstate: (mapstate object)
         }
 
@@ -34,8 +43,8 @@ from masterblaster.models import Map, Parcel, Site
         name: (name),
         center: (x,y)
         zoom: (int)
-        selected: (list of parcel selected keyed by APN)
-        selection: (list of parcels to buffer keyed by APN)
+        selected: (dict of parcel selected keyed by APN)
+        selection: (dict of parcels to buffer keyed by APN)
         buffer: (buffer multipolygon) 
         }
 '''
@@ -69,7 +78,7 @@ def newmap(request):
     site = request.user.sites.all()[0]
     bmap = Map()
     bmap.name = 'GeoNotice'
-    bmap.state = '{center:%s,zoom:%s,selected:{},selection:{},buffer:{}}' % ( site.center, site.maxzoom + 1)
+    bmap.state = '{center:%s,zoom:%s,selected:{},selection:{},buffer:{}}' % ( list(site.center), int(site.maxzoom + 1))
     return render_to_response('map.html', {'bmap':bmap})
 
 @login_required
@@ -86,7 +95,7 @@ def get_feature(request):
         return HttpResponse(json.dumps({action:{'lat':lat, 'lon':lon}}), mimetype="application/json")
     Parcel._meta.db_table = site.table
     parcel = Parcel.objects.filter(geom__contains=pt)[0]
-    if parcel:
+    if parcel and parcel.owner:
         data = {action: {'lat':lat, 'lon':lon, 'feature': parcel.to_pygeojson() }}
     else:
         data = {action:{'lat':lat, 'lon':lon}}
@@ -175,6 +184,7 @@ def save(request):
     return HttpResponse(json.dumps(mapstate), mimetype="application/json")
 
 @login_required
+@gzip_page
 def lasso(request):
 
     '''Toggles selected parcels with a polygon boundary'''
@@ -184,17 +194,21 @@ def lasso(request):
     site = request.user.sites.all()[0] 
     bounds = site.bounds.prepared
     Parcel._meta.db_table = site.table
-    newparcels = Parcel.objects.filter(geom__intersects=GEOSGeometry(data['lasso']['geometry']))
+    newparcels = Parcel.objects.filter(geom__intersects=GEOSGeometry(data['lasso']))
+    print "lasso-ed %s parcels" % (len(newparcels))
     for parcel in newparcels:
-        if not bounds.covers(parcel):
+        if not bounds.covers(parcel.geom):
             continue
         if parcel.apn in mapstate['selected']:
             del mapstate['selected'][parcel.apn]
+            print 'toggling %s' % (parcel.apn)
         else:
             mapstate['selected'][parcel.apn] = parcel.to_pygeojson()
-    return HttpResponse(json.dumps(mapstate), mimetype="application/json")
+            print 'adding %s' % (parcel.apn)
+    return HttpResponse(json.dumps({'mapstate':mapstate}), mimetype="application/json")
 
 @login_required
+@gzip_page
 def buffer(request):
 
     '''Given a mapstate, runs a buffer and returns a new mapstate'''
@@ -204,27 +218,69 @@ def buffer(request):
     data = json.loads(request.body)['data']
     dist = float(data['dist'])
     mapstate = data['mapstate']
-    # get the old buffer
-    oldbuffer = GEOSGeometry(mapstate['buffer']['geometry']).prepared
-    # deselect all the old buffered parcels
-    oldselected = mapstate['selected']
-    for sel in oldselected:
-        if oldbuffer.intersects(GEOSGeometry(sel['geometry'])):
-            del mapstate['selected'][sel.apn]
-    # build new buffer
-    selections = [GEOSGeometry(sel['geometry']) for sel in mapstate['selection']]
-    inputs = selections.unionagg()
-    inputs.transform(2225)
-    buffered = inputs.buffer(dist)
-    buffered.transform(4326)
-    mapstate['buffer'] = {'type':'Feature', 'geometry':json.loads(buffered.geom.json)}
-    # select new parcels
-    newparcels = Parcel.objects.filter(geom__intersects=buffered)
-    newparcels.filter(geom__intersects=site.bounds)
-    for parcel in newparcels:
-        if parcel.apn in mapstate.selected:
-            continue
-        else:
-            mapstate['selected'][parcel.apn] = parcel.to_pygeojson()
+    # get the old buffer, unselect old parcels, and delete old buffer
+    if mapstate['buffer']:
+        oldbuffer = GEOSGeometry(json.dumps(mapstate['buffer']['geometry']))
+        # deselect all the old buffered parcels
+        oldselected = mapstate['selected']
+        duplicates = []
+        for apn in oldselected:
+            oldparcel = GEOSGeometry(json.dumps(oldselected[apn]['geometry']))
+            if oldbuffer.prepared.intersects(oldparcel):
+                duplicates.append(apn)
+        for apn in duplicates:
+            del mapstate['selected'][apn]
+        mapstate['buffer'] = {}
+    # build new buffer and select new parcels
+    if mapstate['selection']:
+        selections = [GEOSGeometry(json.dumps(mapstate['selection'][apn]['geometry'])) for apn in mapstate['selection']]
+        inputs = selections[0]
+        for selection in selections[1:]:
+            inputs = inputs.union(selection)
+        inputs.srid = 4326
+        inputs.transform(2225)
+        buffered = inputs.buffer(dist)
+        buffered.transform(4326)
+        mapstate['buffer'] = {'type':'Feature', 'geometry':json.loads(buffered.json)}
+        # select new parcels
+        newparcels = Parcel.objects.filter(geom__intersects=buffered)
+        newparcels.filter(geom__intersects=site.bounds)
+        for parcel in newparcels:
+            if not parcel.owner:
+                continue
+            if parcel.apn in mapstate['selected']:
+                continue
+            else:
+                mapstate['selected'][parcel.apn] = parcel.to_pygeojson()
     # return json
-    return HttpResponse(json.dumps(mapstate), mimetype="application/json")
+    return HttpResponse(json.dumps({'mapstate':mapstate}), mimetype="application/json")
+
+# @gzip_page
+def search(request):
+    site = request.user.sites.all()[0] 
+    q = ""
+    limit = 10
+    if request.GET:
+        q = request.GET['q']
+        if 'limit' in request.GET:
+            limit = int(request.GET['limit'])
+            print request.GET['limit']
+    if request.POST:
+        q = request.POST['q']
+        if 'limit' in request.POST:
+            limit = int(request.POST['limit'])
+    if len(q) < 3:
+        return HttpResponse(json.dumps({'results':{}}), mimetype="application/json")
+    results = simplesearch(q, site, limit)
+    data = {}
+    for result in results:
+        poly = GEOSGeometry(result['geom'].json)
+        center = poly.centroid.coords
+        del result['geom']
+        for key in result:
+            if result[key]:
+                if q.lower() in result[key].lower():
+                    match = result[key]
+        data[match] = center
+    return HttpResponse(json.dumps({'results':data}), mimetype="application/json")
+        

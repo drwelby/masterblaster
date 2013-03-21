@@ -19,6 +19,10 @@ class Site(models.Model):
     objects = models.GeoManager()
 
     @property
+    def srid(self):
+        return 2225
+
+    @property
     def center(self):
         pt = self.bounds.centroid
         return pt.coords
