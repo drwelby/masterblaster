@@ -10,10 +10,67 @@
 
 #map-area {
     position: absolute;
-    top:41px;
+    top:51px;
     left: 0;
     right: 0;
     bottom: 0;
+}
+
+#data-table {
+    display:none;
+    position:absolute;
+    left: 200px;
+    top: 0px;
+    bottom: 0px;
+    right: 0px;
+}
+
+#data-table table {
+}
+
+#map {
+    position:absolute;
+    left: 200px;
+    top: 0px;
+    bottom: 0px;
+    right: 0px;
+}
+
+#actions {
+    width: 200px;
+    left: 0px;
+    bottom:0px;
+    top:0px;
+    background-color:#dfdfdf;
+    position:absolute;
+}
+.all-actions {
+    background-color:#dfdfdf;
+    padding-top:5px
+}
+
+#map-actions {
+}
+
+#file-actions {
+    display: none;
+}
+
+#output-actions {
+    display: none;
+}
+
+#label-actions {
+    display: none;
+}
+
+input[type="text"].input-actions {
+    width: 100px;
+    -moz-box-shadow: 0;
+    box-shadow: 0;
+    -webkit-box-shadow:0;
+    -webkit-transition: 0;
+    border-right-color: #fff;
 }
 
 #info-overlay {
@@ -29,9 +86,6 @@
     font-weight: bold;
 }
 
-#map {
-    height: 100%;
-}
 
 textarea#id_notes {
     width: 500px;
@@ -41,19 +95,25 @@ textarea#id_notes {
 .leaflet-control-draw {display:none;}
 
 .leaflet-top .leaflet-control {
-    margin-top: 60px;
 }
 
 .bump {
     margin-right:5px;
 }
+
+.btn-top {
+    background-color:#ddd;
+}
+
 .grey {
     color:grey;
 }
 .add-on.bgwhite {
     background-color:#fff;
     color:grey;
-    border-left:0
+    border-left:0;
+    border-top-color:#bbb;
+    border-bottom-color:#bbb;
 }
 .input-mini.hideright {
     border-right:0;

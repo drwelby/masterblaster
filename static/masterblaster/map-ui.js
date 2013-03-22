@@ -49,13 +49,20 @@ var drawControl = new L.Control.Draw({
 map.addControl(drawControl);
 
 
+//set up nav buttons
+$("#nav-pick").click(navPickButtonClick);
+$("#nav-file").click(navFileButtonClick);
+$("#nav-output").click(navOutputButtonClick);
 
-//set up the buttons
+//set up map buttons
 $("#pick").click(toggleButtonClick);
 $("#addbuffer").click(selectButtonClick);
 $("#dobuffer").click(bufferButtonClick);
 $("#lasso").click(lassoButtonClick);
 $("#printButton").click(printButtonClick);
+
+//set up output buttons
+$("#labelButton").click(labelButtonClick);
 
 $.fn.editableform.buttons = 
 '<button type="submit" class="btn btn-primary editable-submit btn-mini"><i class="icon-ok icon-white"></i></button>' +
@@ -82,7 +89,6 @@ updatePageState();
 
 // Map Events
 map.on('click', onMapClick);
-map.on('moveend', viewChange);
 map.on('mousemove', function(e) {
     lastLatLng = e.latlng;
     setTimeout(function(){hover(e)},300);
@@ -108,17 +114,6 @@ function onMapClick(e) {
     }else{
         clickAction(e);
     }
-}
-
-
-function viewChange(e) {
-     data = {
-        'action': 'viewchange',
-        'lat': map.getCenter().lat,
-        'lon': map.getCenter().lng,
-        'zoom': map.getZoom()
-     };
-     sendAction(data);
 }
 
 function updatePageState() {
@@ -177,6 +172,31 @@ function handleAjax(data) {
             pstr += '&z=18&t=h" target="_blank">View in Google Maps</a>';
             L.popup().setLatLng([lat, lon]).setContent(pstr).openOn(map);
         }
+        return;
+    }
+    if (data.toggle) {
+        if (data.toggle.feature) {
+            apn = data.toggle.feature.properties.apn;
+            if (mapstate.selected[apn]) {
+                delete mapstate.selected[apn];
+            }else{
+                mapstate.selected[apn] = data.toggle.feature;
+            }
+            updatePageState();
+        }
+        return;
+    }
+    if (data.select) {
+        if (data.select.feature) {
+            apn = data.select.feature.properties.apn;
+            if (mapstate.selection[apn]) {
+                delete mapstate.selection[apn];
+            }else{
+                mapstate.selection[apn] = data.select.feature;
+            }
+            updatePageState();
+        }
+        return;
     }
     if (data.mapstate) {
         mapstate = data.mapstate;
@@ -187,6 +207,28 @@ function handleAjax(data) {
     }
 }
 
+function updateTable(){
+    for (var apn in mapstate.selected) {
+        $('#data-table table tbody').append('<tr>');
+        p = mapstate.selected[apn].properties;
+        row = $('#data-table table tr:last');
+        row.append($('<td>').text(p.apn));
+        row.append($('<td>').text(p.owner));
+        row.append($('<td>').text(p.situs1));
+        row.append($('<td>').text(p.mail1 + " " + p.mail2));
+    }
+}
+
+function selectionMapState() {
+    msdata = jQuery.extend({},mapstate);
+    delete msdata.selection;
+    delete msdata.buffer;
+    for (var apn in msdata.selected) {
+        delete msdata.selected[apn].geometry;
+        delete msdata.selected[apn].type;
+    }
+    return msdata;
+}
 
 // button handlers
 
@@ -222,7 +264,8 @@ function bufferButtonClick() {
     drawControl.handlers.polygon.disable();
     var data = {
         'action': 'buffer',
-        'dist': $('#bufferdist').val() || '300'
+        'dist': $('#bufferdist').val() || '300',
+        'mapstate': mapstate
     }
     sendAction(data); //reset
     return;
@@ -280,7 +323,8 @@ map.on('draw:poly-created', function(e){
     drawControl.handlers.polygon.enable();
     var data = {
         'action': 'lasso',
-        'poly': geojson
+        'lasso': geojson,
+        'mapstate': mapstate
     };
     sendAction(data);
 });
@@ -316,4 +360,33 @@ function getPopup(e) {
         'lon': e.latlng.lng
     };
     sendAction(data);
+}
+
+function navPickButtonClick() {
+    $('#map-actions').show().siblings().hide();
+    $('#map').show();
+    $('#data-table').hide();
+}
+
+function navFileButtonClick() {
+    $('#file-actions').show().siblings().hide();
+    $('#lasso').removeClass('btn-primary');
+    $('#map').show();
+    $('#data-table').hide();
+    drawControl.handlers.polygon.disable();
+}
+
+function navOutputButtonClick() {
+    $('#output-actions').show().siblings().hide()
+    $('#lasso').removeClass('btn-primary');
+    updateTable();
+    $('#map').hide();
+    $('#data-table').show();
+    drawControl.handlers.polygon.disable();
+}
+
+function labelButtonClick() {
+    $('#label-actions').show().siblings().hide()
+    $('#lasso').removeClass('btn-primary');
+    drawControl.handlers.polygon.disable();
 }

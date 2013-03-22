@@ -76,8 +76,12 @@ var selectedStyle = {
     // draw the map state
     updateMapState();
 
+    //set up nav buttons
+    $("#nav-pick").click(navPickButtonClick);
+    $("#nav-file").click(navFileButtonClick);
+    $("#nav-output").click(navOutputButtonClick);
 
-    //set up the buttons
+    //set up map action buttons
     $("#pick").click(toggleButtonClick);
     $("#addbuffer").click(selectButtonClick);
     $("#dobuffer").click(bufferButtonClick);
@@ -150,7 +154,7 @@ function viewChange(e) {
         'lon': map.getCenter().lng,
         'zoom': map.getZoom()
      };
-     sendAction(data);
+     //sendAction(data);
 }
 
 // handle updates to the map state
@@ -340,22 +344,40 @@ function mapRefresh() {
     }
 }
 
-function infoClick(e) {
-    var data = {
-        'action': 'get_feature',
-        'lat': e.latlng.lat,
-        'lon': e.latlng.lng
-    };
-    sendAction(data)
-}
+    function infoClick(e) {
+        var data = {
+            'action': 'get_feature',
+            'lat': e.latlng.lat,
+            'lon': e.latlng.lng
+        };
+        sendAction(data)
+    }
 
-function getPopup(e) {
-    var data = {
-        'action': 'get_popup',
-        'lat': e.latlng.lat,
-        'lon': e.latlng.lng
-    };
-    sendAction(data);
-}
+    function getPopup(e) {
+        var data = {
+            'action': 'get_popup',
+            'lat': e.latlng.lat,
+            'lon': e.latlng.lng
+        };
+        sendAction(data);
+    }
 
+    function navPickButtonClick() {
+        console.log('nav pick');
+        $('#map-actions').show();
+        $('#file-actions').hide();
+        $('#output-actions').hide();
+    }
+
+    function navFileButtonClick() {
+        $('#map-actions').hide();
+        $('#file-actions').show();
+        $('#output-actions').hide();
+    }
+
+    function navOutputButtonClick() {
+        $('#map-actions').hide();
+        $('#file-actions').hide();
+        $('#output-actions').show();
+    }
 });

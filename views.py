@@ -155,7 +155,10 @@ def labels(request):
 def data(request):
     mapstate = json.loads(request.body)['data']['mapstate']
     parcels = mapstate['selected']
-    slug = slugify(mapstate['name'])
+    if 'name' in mapstate:
+        slug = slugify(mapstate['name'])
+    else:
+        slug = "geonotice"
     if data['filetype'] == 'pdf':
         return pdf_table(parcels, slug )
     elif data['filetype'] == 'xls':

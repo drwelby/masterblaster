@@ -17,7 +17,7 @@
 <!--[if lt IE 8]>
     <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
 <![endif]-->
-   <div class="navbar navbar-static-top hrow">
+   <div class="navbar navbar-inverse navbar-static-top hrow">
     <div class="navbar-inner">
         <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
             <span class="icon-bar"></span>
@@ -36,39 +36,61 @@
         <div class="nav-collapse collapse">
           <div class="pull-right">
             <ul class="nav pull-right">
-              <li><a href="/"><i class="icon-refresh "></i> New Map</a></li>
-              <li><a href="/maps"><i class="icon-list "></i> Saved Maps</a></li>
-              <li><a href="#"><i class="icon-question-sign"></i> Help</a></li>
-              <li><a href="#"><i class="icon-off "></i> Logout</a></li>
+              <li><a id="nav-pick"> Pick </a></li>
+              <li><a id="nav-file"> File </a></li>
+              <li><a id="nav-output"> Output</a></li>
+              <form class="navbar-search" action="">
+                  <input type="text" class="search-query" placeholder="Search">
+              </form>
+              <li><a><i class="icon-question-sign icon-white"></i></a></li>
+              <li><a><i class="icon-cog icon-white"></i></a></li>
             </ul>
           </div>
         </div>
     </div>
 </div>   
 <div id="map-area" >
-    <div id="buttons">
-        <div class="button-background">
-            <div class="form-inline"> 
-                <button id="pick" class="btn bump">Single</button>
-                <a id="lasso" class="btn bump ">Lasso</a>
-                <a id="addbuffer" class="btn">Buffer &raquo;</a>
-                <div id="fullbuffer" class="input-prepend input-append">
-                    <button id="buffer" class="btn btn-primary" type="button">Buffer</button>
-                    <input id="bufferdist" class="input-mini hideright" id="appendedInputButtons"
+    <div id="actions">
+        <div id="map-actions" class="all-actions">
+            <a id="pick" class="btn btn-block">Single</a>
+            <a id="lasso" class="btn btn-block ">Lasso</a>
+            <a id="addbuffer" class="btn btn-block">Buffer &raquo;</a>
+            <div id="fullbuffer" class="btn-block">
+                <button id="buffer" class="btn btn-block btn-primary" type="button">Buffer</button>
+                <div class="input-append btn-block">
+                    <input id="bufferdist" class="hideright input-actions" id="appendedInputButtons"
                     type="text" placeholder="300"> <span class="add-on bgwhite ital">feet&nbsp;</span>
-                    <button id="dobuffer" class="btn btn-info" type="button">Run</button>
+                    <button id="dobuffer" class="btn btn-danger" type="button">Run</button>
                 </div>
             </div>
         </div>
-    </div>
-    <div id="rightbuttons">
-        <div class="button-background">
-                <button id="dataButton" class="btn bump disabled">Get Data</i></button>
-                <button id="printButton" class="btn"><i class="icon-print"></i> PDF Map</button>
+        <div id="file-actions" class="all-actions">
+            <a id="saveButton" class="btn btn-block">Save</i></a>
+            <a id="savedMapsButton" class="btn btn-block">Saved Maps</a>
+            <a id="pdfMapsButton" class="btn btn-block">Save Map as PDF</a>
+        </div>
+        <div id="output-actions" class="all-actions">
+            <a id="labelButton" class="btn btn-block">Labels</a>
+            <a id="tableButton" class="btn btn-block">Table</a>
+            <a id="tableButton" class="btn btn-block">Excel</a>
+            <a id="tableButton" class="btn btn-block">CSV</a>
+        </div>
+        <div id="label-actions" class="all-actions">
+            <a id="labelButton" class="btn btn-block">Labels</a>
         </div>
     </div>
     <div id="info-overlay"><span>...</span></div>
-    <div id="search-box"></div>
+    <div id="data-table">
+        <h2 class="text-center">Data Preview</h2>
+        <table class="table table-striped">
+            <tr>
+                <th class="span2">APN</th>
+                <th>Owner</th>
+                <th>Situs Address</th>
+                <th>Mailing Address</th>
+            </tr>
+        </table>
+    </div>
     <div id="map"></div>
 </div>
 {% endblock %}
