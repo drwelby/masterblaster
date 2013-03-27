@@ -153,17 +153,18 @@ def labels(request):
 
 @login_required
 def data(request):
-    mapstate = json.loads(request.body)['data']['mapstate']
-    parcels = mapstate['selected']
-    if 'name' in mapstate:
+    data = json.loads(request.POST['data'])
+    parcels = data['selected']
+    if 'name' in data:
         slug = slugify(mapstate['name'])
     else:
         slug = "geonotice"
-    if data['filetype'] == 'pdf':
+    filetype = request.POST['filetype']
+    if filetype == 'pdf':
         return pdf_table(parcels, slug )
-    elif data['filetype'] == 'xls':
+    elif filetype == 'xls':
         return xls_response(parcels, slug)
-    elif data['filetype'] == 'csv':
+    elif filetype == 'csv':
         return csv_response(parcels, slug)
 
 @login_required

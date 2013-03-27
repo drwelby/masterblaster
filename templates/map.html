@@ -79,14 +79,19 @@
             <a id="pdfMapsButton" class="btn btn-block">Save Map as PDF</a>
         </div>
         <div id="output-actions" class="all-actions">
+            <form id="dataform" method="post" action="/data/" target="_blank">
+                <input type="hidden" class="csrf" name="csrfmiddlewaretoken" value="">
+                <input type="hidden" class="data" name="data" />
+                <input type="hidden" id="filetype" name="filetype" />
+            </form>
             <a id="labelButton" class="btn btn-block">Labels</a>
             <a id="tableButton" class="btn btn-block">Table</a>
-            <a id="tableButton" class="btn btn-block">Excel</a>
-            <a id="tableButton" class="btn btn-block">CSV</a>
+            <a id="excelButton" class="btn btn-block">Excel</a>
+            <a id="csvButton" class="btn btn-block">CSV</a>
         </div>
         <div id="label-actions" class="all-actions">
             <span class="btn-header btn-block">Label Options</span>
-            <form method="post" action="/labels/">
+            <form method="post" action="/labels/" target="_blank">
                 <label class="radio">
                       <input type="radio" name="optionsRadios" id="optionsMail" value="mail" checked>
                       Use Mailing Address&nbsp;&nbsp;
@@ -105,8 +110,8 @@
                 <label class="checkbox">
                     <input type="checkbox" id="apnbox" checked >Show APNs</input>
                 </label>
-                <input type="hidden" id="csrf" name="csrfmiddlewaretoken" value="">
-                <input type="hidden" id="data" name="data" />
+                <input type="hidden" class="csrf" name="csrfmiddlewaretoken" value="">
+                <input type="hidden" class="data" name="data" />
                 <input type="submit" value="Get Labels" />
             </form>
             <a id="backButton" class="btn btn-block">&laquo; Output</a>

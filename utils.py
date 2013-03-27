@@ -17,7 +17,8 @@ def xls_response(parcels, name):
     for c, txt in enumerate(('APN', 'OWNER', 'MAILING_1', 'MAILING_2', 'SITUS_1', 'SITUS_2')):
         ws.write(0,c,txt)
     r = 1
-    for parcel in parcels:
+    for apn in parcels:
+        parcel = Struct(**parcels[apn]['properties'])
         ws.write(r,0,parcel.apn)
         ws.write(r,1,parcel.owner)
         ws.write(r,2,parcel.mail1)
@@ -32,7 +33,8 @@ def xls_response(parcels, name):
 
 def csv_response(parcels, name):
     csv = "APN,OWNER,MAILING_1,MAILING_2, SITUS_1,SITUS_2\n"
-    for parcel in parcels:
+    for apn in parcels:
+        parcel = Struct(**parcels[apn]['properties'])
         csv += "%s," % parcel.apn
         csv += "%s," % parcel.owner
         csv += "%s," % parcel.mail1
@@ -90,7 +92,8 @@ def pdf_table(parcels, name):
     html += '<th width="20%">SITUS ADDRESS</th>'
     html += '<th width="40%">MAILING ADDRESS</th>'
     html += '</tr></thead><tbody>'
-    for parcel in parcels:
+    for apn in parcels:
+        parcel = Struct(**parcels[apn]['properties'])
         # hack to make ampersands work in table
         parcel.owner = (parcel.owner or "").replace("&", "and")
         if len(parcel.owner) > 35:

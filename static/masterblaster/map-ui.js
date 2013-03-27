@@ -58,10 +58,12 @@ $("#pick").click(toggleButtonClick);
 $("#addbuffer").click(selectButtonClick);
 $("#dobuffer").click(bufferButtonClick);
 $("#lasso").click(lassoButtonClick);
-$("#printButton").click(printButtonClick);
 
 //set up output buttons
 $("#labelButton").click(labelButtonClick);
+$("#tableButton").click(tableButtonClick);
+$("#excelButton").click(excelButtonClick);
+$("#csvButton").click(csvButtonClick);
 
 $.fn.editableform.buttons = 
 '<button type="submit" class="btn btn-primary editable-submit btn-mini"><i class="icon-ok icon-white"></i></button>' +
@@ -271,13 +273,6 @@ function bufferButtonClick() {
 
 }
 
-function dataButtonClick() {
-    window.open(window.location.href.replace("/map/","/data/"));
-}
-
-function printButtonClick() {
-    window.open(window.location.href.replace("/map/","/print/"));
-}
 // map click handlers
 
 function selectClick(e) {
@@ -377,6 +372,8 @@ function navOutputButtonClick() {
     updateTable();
     $('#map').hide();
     $('#data-table').show();
+    $('input[class=csrf]').val(csrftoken);
+    $('input[class=data]').val(JSON.stringify(selectionMapState()));
     drawControl.handlers.polygon.disable();
 }
 
@@ -384,6 +381,21 @@ function labelButtonClick() {
     $('#label-actions').show().siblings().hide()
     $('#lasso').removeClass('btn-primary');
     drawControl.handlers.polygon.disable();
-    $('input[id=data]').val(JSON.stringify(selectionMapState()));
-    $('input[id=csrf]').val(csrftoken);
+}
+
+function tableButtonClick(){
+    getData('pdf');
+}
+
+function csvButtonClick() {
+    getData('csv');
+}
+
+function excelButtonClick() {
+    getData('xls');
+}
+
+function getData(filetype) {
+    $('input[id=filetype]').val(filetype);
+    $('form#dataform').submit();
 }
