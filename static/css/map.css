@@ -25,7 +25,7 @@
 
 #map-area {
     position: absolute;
-    top:90px;
+    top:91px;
     left: 0;
     right: 0;
     bottom: 0;
@@ -70,7 +70,7 @@
 
 .btn-header {
     text-align:center;
-    color: #333;
+    color: #666;
     font-weight: bold;
     text-decoration: underline;
 }
@@ -85,6 +85,11 @@
 
 #label-actions {
     display: none;
+}
+
+#label-actions form {
+    padding: 15px;
+    margin-bottom:0;
 }
 
 input[type="text"].input-actions {

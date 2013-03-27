@@ -4,8 +4,12 @@ from fpdf import FPDF, HTMLMixin
 from cgi import escape
 import xlwt
 
+class Struct:
+    def __init__(self, **entries): 
+        self.__dict__.update(entries)
+
 class HtmlFPDF(FPDF, HTMLMixin):
-        pass
+    pass
 
 def xls_response(parcels, name):
     xls = xlwt.Workbook()
@@ -45,13 +49,16 @@ def pdf_response(parcels, name, apn=False, address='mail', unique=False, format=
     results = []
     if unique:
         keys = []
-        for parcel in parcels:
+        for apn in parcels:
+            parcel = Struct(**parcels[apn]['properties'])
             key = "%s%s" % (parcel.owner,parcel.mail1)
             if not key in keys:
                 results.append(parcel)
                 keys.append(key)
     else:
-        results = parcels
+        for apn in parcels:
+            parcel = Struct(**parcels[apn]['properties'])
+            results.append(parcel)
     for parcel in results:
         if apn:
             apntxt = '%s' % (parcel.apn or '')

@@ -135,21 +135,21 @@ def get_map(id_or_slug):
 
 @login_required
 def labels(request):
-    data = json.loads(request.body)['data']
-    mapstate = data['mapstate']
-    parcels = mapstate['selected']
+    data = json.loads(request.POST['data'])
+    parcels = data['selected']
+    mapname = data.get('name', 'geonotice')
     kwargs = {}
-    if "apn" in data:
-        if data['apn'] == '1':
+    if "apn" in request.POST:
+        if request.POST['apn'] == '1':
             kwargs['apn'] = True
-    if "address" in data:
-        kwargs['address'] = data['address']
+    if "address" in request.POST:
+        kwargs['address'] =request.POST['address']
     if "type" in request.POST:
-        kwargs['type'] = data['type']
+        kwargs['type'] = request.POST['type']
     if "unique" in request.POST:
-        if data['unique'] == '1':
+        if request.POST['unique'] == '1':
             kwargs['unique'] = True
-    return pdf_response(parcels, slugify(mapstate['name']), **kwargs)
+    return pdf_response(parcels, slugify(mapname), **kwargs)
 
 @login_required
 def data(request):

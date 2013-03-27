@@ -384,4 +384,6 @@ function labelButtonClick() {
     $('#label-actions').show().siblings().hide()
     $('#lasso').removeClass('btn-primary');
     drawControl.handlers.polygon.disable();
+    $('input[id=data]').val(JSON.stringify(selectionMapState()));
+    $('input[id=csrf]').val(csrftoken);
 }
