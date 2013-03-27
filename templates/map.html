@@ -17,41 +17,50 @@
 <!--[if lt IE 8]>
     <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
 <![endif]-->
+<div id="topbar">
+    <a class="brand" href="/">GeoNotice</a>
+    <div class="pull-right">
+        Welcome
+    </div>
+</div>
+</div>
+</div>
+<div id="midbar">
    <div class="navbar navbar-inverse navbar-static-top hrow">
-    <div class="navbar-inner">
-        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </a>
-        <a class="brand" href="/">GeoNotice</a>
-            {% if bmap.name %}
-        <div id="map-title">
-            {{ bmap.name }}
-            {% else %}
-        <div id="no-title">
-            <a href="#" id="map-title-editable">(name this map to save it)<i class="icon-pencil fade"></i></a>
-            {% endif %}
-        </div>
-        <div class="nav-collapse collapse">
-          <div class="pull-right">
-            <ul class="nav pull-right">
-              <li><a id="nav-pick"> Pick </a></li>
-              <li><a id="nav-file"> File </a></li>
-              <li><a id="nav-output"> Output</a></li>
-              <form class="navbar-search" action="">
-                  <input type="text" class="search-query" placeholder="Search">
-              </form>
-              <li><a><i class="icon-question-sign icon-white"></i></a></li>
-              <li><a><i class="icon-cog icon-white"></i></a></li>
+        <div class="navbar-inner">
+            <ul class="nav pull-left">
+                <li>
+                <a id='nav-map'>Map</a>
+                </li>
+                <li>
+                <a id='nav-output'>Output</a>
+                </li>
             </ul>
+            {% if bmap.name %}
+            <div id="map-title">
+                {{ bmap.name }}
+            </div>
+                {% else %}
+            <div id="no-title">
+                <a href="#" id="map-title-editable">(name this map to save it)<i class="icon-pencil fade"></i></a>
+            </div>
+                {% endif %}
+            <div class="pull-right">
+                <ul class="nav pull-right">
+                      <form class="navbar-search" action="">
+                          <input type="text" class="search-query" placeholder="Search">
+                      </form>
+                      <li><a id="userguide">User Guide</a></li>
+                </ul>
           </div>
         </div>
-    </div>
+    </div>   
 </div>   
+<div class="container-fluid">
 <div id="map-area" >
     <div id="actions">
         <div id="map-actions" class="all-actions">
+            <span class="btn-header btn-block">Select</span>
             <a id="pick" class="btn btn-block">Single</a>
             <a id="lasso" class="btn btn-block ">Lasso</a>
             <a id="addbuffer" class="btn btn-block">Buffer &raquo;</a>
@@ -63,10 +72,10 @@
                     <button id="dobuffer" class="btn btn-danger" type="button">Run</button>
                 </div>
             </div>
-        </div>
-        <div id="file-actions" class="all-actions">
+            <span class="btn-header btn-block">Map</span>
+            <a id="newMap" class="btn btn-block">New Map</a>
             <a id="saveButton" class="btn btn-block">Save</i></a>
-            <a id="savedMapsButton" class="btn btn-block">Saved Maps</a>
+            <a href="/maps/" class="btn btn-block">Saved Maps</a>
             <a id="pdfMapsButton" class="btn btn-block">Save Map as PDF</a>
         </div>
         <div id="output-actions" class="all-actions">
@@ -76,7 +85,9 @@
             <a id="tableButton" class="btn btn-block">CSV</a>
         </div>
         <div id="label-actions" class="all-actions">
-            <a id="labelButton" class="btn btn-block">Labels</a>
+            <span class="btn-header btn-block">Label Options</span>
+            <a id="labelButton" class="btn btn-block">Get Labels</a>
+            <a id="backButton" class="btn btn-block">&laquo; Output</a>
         </div>
     </div>
     <div id="info-overlay"><span>...</span></div>
@@ -91,7 +102,8 @@
             </tr>
         </table>
     </div>
-    <div id="map"></div>
+    <div id="map" class="vstretch"></div>
+  </div>
 </div>
 {% endblock %}
 

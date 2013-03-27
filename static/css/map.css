@@ -1,16 +1,31 @@
-.fill {
-    position: absolute;
-    top:110px;
-    bottom: 25px;
-}
-
 .vstretch {
     height:100%;
 }
 
+#topbar {
+    position: absolute;
+    top: 0px;
+    left: 0;
+    right: 0;
+    height: 40px;
+    padding: 10px;
+}
+
+#topbar .brand {
+    font-size:20px;
+}
+
+#midbar {
+    position:absolute;
+    top: 40px;
+    left: 0;
+    right: 0;
+    height: 50px;
+}
+
 #map-area {
     position: absolute;
-    top:51px;
+    top:90px;
     left: 0;
     right: 0;
     bottom: 0;
@@ -19,10 +34,10 @@
 #data-table {
     display:none;
     position:absolute;
-    left: 200px;
+    left: 210px;
     top: 0px;
     bottom: 0px;
-    right: 0px;
+    right: 10px;
 }
 
 #data-table table {
@@ -30,7 +45,7 @@
 
 #map {
     position:absolute;
-    left: 200px;
+    left: 0px;
     top: 0px;
     bottom: 0px;
     right: 0px;
@@ -39,17 +54,25 @@
 #actions {
     width: 200px;
     left: 0px;
-    bottom:0px;
     top:0px;
-    background-color:#dfdfdf;
     position:absolute;
+    z-index: 10;
 }
+
 .all-actions {
     background-color:#dfdfdf;
-    padding-top:5px
+    padding-top:5px;
 }
 
 #map-actions {
+    display: none;
+}
+
+.btn-header {
+    text-align:center;
+    color: #333;
+    font-weight: bold;
+    text-decoration: underline;
 }
 
 #file-actions {

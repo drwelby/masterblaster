@@ -69,7 +69,7 @@ def site_login(request, error = None):
 def allmaps(request):
     ''' returns all maps belonging to a user '''
     # TODO paginate?
-    maps = request.user.sites.all()[0].maps.all()[20]
+    maps = request.user.sites.all()[0].maps.all()[:20]
     return render_to_response('all.html', {'maps':maps})
 
 @login_required

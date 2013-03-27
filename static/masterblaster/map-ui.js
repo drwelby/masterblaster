@@ -50,8 +50,7 @@ map.addControl(drawControl);
 
 
 //set up nav buttons
-$("#nav-pick").click(navPickButtonClick);
-$("#nav-file").click(navFileButtonClick);
+$("#nav-map").click(navMapButtonClick);
 $("#nav-output").click(navOutputButtonClick);
 
 //set up map buttons
@@ -362,15 +361,10 @@ function getPopup(e) {
     sendAction(data);
 }
 
-function navPickButtonClick() {
+function navMapButtonClick() {
     $('#map-actions').show().siblings().hide();
-    $('#map').show();
-    $('#data-table').hide();
-}
-
-function navFileButtonClick() {
-    $('#file-actions').show().siblings().hide();
-    $('#lasso').removeClass('btn-primary');
+    $('#lasso').removeClass('btn-primary'); //disables the tool
+    $('div.leaflet-top.leaflet-left').css('left','200px');
     $('#map').show();
     $('#data-table').hide();
     drawControl.handlers.polygon.disable();
@@ -379,6 +373,7 @@ function navFileButtonClick() {
 function navOutputButtonClick() {
     $('#output-actions').show().siblings().hide()
     $('#lasso').removeClass('btn-primary');
+    $('div.leaflet-top.leaflet-left').css('left','200px');
     updateTable();
     $('#map').hide();
     $('#data-table').show();
