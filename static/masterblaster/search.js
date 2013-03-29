@@ -1,5 +1,9 @@
 var searchMap, searchMatches
 
+$(document).on('mousedown', 'ul.typeahead', function(e) {
+        e.preventDefault();
+});
+
 $('#search').typeahead({
     source: function (query, process) {
         return $.ajax({

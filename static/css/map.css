@@ -1,5 +1,5 @@
 body {
-    font-family: Helvetica,Arial, sans-serif;
+    font-family: Helvetica, Arial, sans-serif;
 }
 
 .vstretch {
@@ -32,6 +32,7 @@ body {
     border-radius: 0;
     webkit-border-radius: 0;
     moz-border-radius: 0;
+    font-family: Helvetica, Arial, sans-serif;
 }
 
 .fornav {

@@ -83,7 +83,8 @@ def newmap(request):
 
 @login_required
 def get_feature(request):
-    ''' Given a lat and lon returns the containing parcel as json'''
+    ''' Given a lat and lon returns the containing parcel as json
+        used by get_feature and get_popup'''
     data = json.loads(request.body)['data']
     site = request.user.sites.all()[0] 
     lat = data['lat']
