@@ -48,7 +48,7 @@
             <div class="pull-right">
                 <ul class="nav pull-right">
                       <form class="navbar-search" action="">
-                          <input type="text" class="search-query" ><span class="fornav"><i class="icon-search"></i></span>
+                          <input autocomplete="off" type="text" id="search" class="search-query" data-link="/search/"><span class="fornav"><i class="icon-search"></i></span>
                       </form>
                       <li class="divider"></li>
                       <li><a id="userguide">User Guide</a></li>
@@ -139,5 +139,6 @@
 <script src="{{ STATIC_PREFIX }}leaflet.draw/leaflet.draw.js"></script>
 <script src="{{ STATIC_PREFIX }}bootstrap-editable/js/bootstrap-editable.js"></script>
 <script src="{{ STATIC_PREFIX }}masterblaster/map-ui.js"></script>
+<script src="{{ STATIC_PREFIX }}masterblaster/search.js"></script>
 {% endblock %}
 

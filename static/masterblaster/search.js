@@ -10,26 +10,30 @@ $('#search').typeahead({
             success: function(json) {
                 searchMap = {}
                 searchMatches = []
-
-                for (key in data.results) {
-                    matches.push(key);
-                });
-                return typeof json.options == 'undefined' ? false : process(json.options);
-                                                           }
-        });
- 
-    process(matches);
+                for (key in json.results) {
+                    searchMatches.push(key);
+                }
+                if (searchMatches.length > 0) {
+                    searchMap = json.results;
+                    process(searchMatches);
+                }
+            }
+            }); 
     },
     updater: function (item) {
-        // implementation
+        coords = searchMap[item];
+        searchPt = new L.LatLng(coords[1],coords[0]);
+        map.fireEvent('contextmenu', {latlng: searchPt});
+        map.panTo(searchPt);
     },
     matcher: function (item) {
-        // implementation
+        return true;
     },
     sorter: function (items) {
-        // implementation
+        return items;
     },
     highlighter: function (item) {
-       // implementation
-    },
+        return item;
+    }
+    
 });
