@@ -1,3 +1,7 @@
+body {
+    font-family: Helvetica,Arial, sans-serif;
+}
+
 .vstretch {
     height:100%;
 }
@@ -12,7 +16,7 @@
 }
 
 #topbar .brand {
-    font-size:20px;
+    font-size:24px;
 }
 
 #midbar {
@@ -21,6 +25,19 @@
     left: 0;
     right: 0;
     height: 50px;
+    font-size: 16px;
+}
+.navbar-inverse .navbar-search .search-query {
+    background: #fff;
+    border-radius: 0;
+    webkit-border-radius: 0;
+    moz-border-radius: 0;
+}
+
+.fornav {
+    position:relative;
+    margin-left:-22px;
+    z-index:2;
 }
 
 #map-area {
@@ -87,9 +104,12 @@
     display: none;
 }
 
-#label-actions form {
+form#label-actions {
     padding: 15px;
     margin-bottom:0;
+}
+form#dataform {
+    margin: 0;
 }
 
 input[type="text"].input-actions {

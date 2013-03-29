@@ -30,10 +30,10 @@
         <div class="navbar-inner">
             <ul class="nav pull-left">
                 <li>
-                <a id='nav-map'>Map</a>
+                <a id='nav-map'>Select Parcels</a>
                 </li>
                 <li>
-                <a id='nav-output'>Output</a>
+                <a id='nav-output'>Export</a>
                 </li>
             </ul>
             {% if bmap.name %}
@@ -48,8 +48,9 @@
             <div class="pull-right">
                 <ul class="nav pull-right">
                       <form class="navbar-search" action="">
-                          <input type="text" class="search-query" placeholder="Search">
+                          <input type="text" class="search-query" ><span class="fornav"><i class="icon-search"></i></span>
                       </form>
+                      <li class="divider"></li>
                       <li><a id="userguide">User Guide</a></li>
                 </ul>
           </div>
@@ -60,7 +61,6 @@
 <div id="map-area" >
     <div id="actions">
         <div id="map-actions" class="all-actions">
-            <span class="btn-header btn-block">Select</span>
             <a id="pick" class="btn btn-block">Single</a>
             <a id="lasso" class="btn btn-block ">Lasso</a>
             <a id="addbuffer" class="btn btn-block">Buffer &raquo;</a>
@@ -72,7 +72,6 @@
                     <button id="dobuffer" class="btn btn-danger" type="button">Run</button>
                 </div>
             </div>
-            <span class="btn-header btn-block">Map</span>
             <a id="newMap" class="btn btn-block">New Map</a>
             <a id="saveButton" class="btn btn-block">Save</i></a>
             <a href="/maps/" class="btn btn-block">Saved Maps</a>
@@ -85,36 +84,32 @@
                 <input type="hidden" id="filetype" name="filetype" />
             </form>
             <a id="labelButton" class="btn btn-block">Labels</a>
+                <form id="label-actions" method="post" action="/labels/" target="_blank">
+                    <label class="radio">
+                          <input type="radio" name="optionsRadios" id="optionsMail" value="mail" checked>
+                          Use Mailing Address&nbsp;&nbsp;
+                    </label>
+                    <label class="radio">
+                          <input type="radio" name="optionsRadios" id="optionsSitus" value="situs">
+                          Use Situs Address&nbsp;&nbsp;
+                    </label>
+                    <label class="radio">
+                          <input type="radio" name="optionsRadios" id="optionsBoth" value="both">
+                          Use Both (if different)
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" id="uniquebox">Skip Duplicate Mailing Addresses</input>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" id="apnbox" checked >Show APNs</input>
+                    </label>
+                    <input type="hidden" class="csrf" name="csrfmiddlewaretoken" value="">
+                    <input type="hidden" class="data" name="data" />
+                    <input type="submit" value="Get Labels" />
+                </form>
             <a id="tableButton" class="btn btn-block">Table</a>
             <a id="excelButton" class="btn btn-block">Excel</a>
             <a id="csvButton" class="btn btn-block">CSV</a>
-        </div>
-        <div id="label-actions" class="all-actions">
-            <span class="btn-header btn-block">Label Options</span>
-            <form method="post" action="/labels/" target="_blank">
-                <label class="radio">
-                      <input type="radio" name="optionsRadios" id="optionsMail" value="mail" checked>
-                      Use Mailing Address&nbsp;&nbsp;
-                </label>
-                <label class="radio">
-                      <input type="radio" name="optionsRadios" id="optionsSitus" value="situs">
-                      Use Situs Address&nbsp;&nbsp;
-                </label>
-                <label class="radio">
-                      <input type="radio" name="optionsRadios" id="optionsBoth" value="both">
-                      Use Both (if different)
-                </label>
-                <label class="checkbox">
-                    <input type="checkbox" id="uniquebox">Skip Duplicate Mailing Addresses</input>
-                </label>
-                <label class="checkbox">
-                    <input type="checkbox" id="apnbox" checked >Show APNs</input>
-                </label>
-                <input type="hidden" class="csrf" name="csrfmiddlewaretoken" value="">
-                <input type="hidden" class="data" name="data" />
-                <input type="submit" value="Get Labels" />
-            </form>
-            <a id="backButton" class="btn btn-block">&laquo; Output</a>
         </div>
     </div>
     <div id="info-overlay"><span>...</span></div>

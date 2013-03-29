@@ -378,7 +378,7 @@ function navOutputButtonClick() {
 }
 
 function labelButtonClick() {
-    $('#label-actions').show().siblings().hide()
+    $('#label-actions').toggle()
     $('#lasso').removeClass('btn-primary');
     drawControl.handlers.polygon.disable();
 }

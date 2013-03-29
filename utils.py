@@ -83,9 +83,10 @@ def pdf_response(parcels, name, apn=False, address='mail', unique=False, format=
 
 def pdf_table(parcels, name):
     pdf = HtmlFPDF(orientation='L',unit='mm',format='LETTER')
-    pdf.set_font('Arial','',8)
+    pdf.set_font('helvetica','',8)
+    pdf.font_face = 'helvetica'
     pdf.add_page()
-    html = "<table>"
+    html = "<font size=8 face='helvetica'><table>"
     html += "<thead><tr>"
     html += '<th width="10%">APN</th>'
     html += '<th width="30%">OWNER</th>'
@@ -105,7 +106,7 @@ def pdf_table(parcels, name):
         html += '<td>%s</td>' % (parcel.situs1 or " " )
         html += '<td>%s %s</td>' % (parcel.mail1 or "", parcel.mail2 or "")
         html += '</tr>'
-    html += '</tbody></table>'
+    html += '</tbody></table></font>'
         
     pdf.write_html(html)
     response = HttpResponse(mimetype='application/pdf')
