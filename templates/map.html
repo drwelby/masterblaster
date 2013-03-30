@@ -20,7 +20,7 @@
 <div id="topbar">
     <a class="brand" href="/">GeoNotice</a>
     <div class="pull-right">
-        Welcome
+        Welcome, {{site.name}}
     </div>
 </div>
 </div>
@@ -133,6 +133,7 @@
 {% block pagejs %}
 <script type="text/javascript">
     var mapstate = {{ bmap.state|safe }};
+    var sitebounds = {{ site.bounds.json|safe }};
 </script>
 <script src="//cdn.leafletjs.com/leaflet-0.4.5/leaflet.js"></script>
 <script src="{{ STATIC_PREFIX }}masterblaster/map-base.js"></script>

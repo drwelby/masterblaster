@@ -69,8 +69,9 @@ def site_login(request, error = None):
 def allmaps(request):
     ''' returns all maps belonging to a user '''
     # TODO paginate?
-    maps = request.user.sites.all()[0].maps.all()[:20]
-    return render_to_response('all.html', {'maps':maps})
+    site = request.user.sites.all()[0]
+    maps = site.maps.all()[:20]
+    return render_to_response('all.html', {'site':site, 'maps':maps})
 
 @login_required
 def newmap(request):
@@ -78,8 +79,8 @@ def newmap(request):
     site = request.user.sites.all()[0]
     bmap = Map()
     bmap.name = 'GeoNotice'
-    bmap.state = '{center:%s,zoom:%s,selected:{},selection:{},buffer:{}}' % ( list(site.center), int(site.maxzoom + 1))
-    return render_to_response('map.html', {'bmap':bmap})
+    bmap.state = '{center:%s,zoom:%s,selected:{},selection:{},buffer:{}}' % ( list(site.center), int(site.maxzoom))
+    return render_to_response('map.html', { 'site': site, 'bmap':bmap})
 
 @login_required
 def get_feature(request):
@@ -111,7 +112,7 @@ def name_map(request, id_or_slug):
     bmap = get_map(id_or_slug)
     site = request.user.sites.all()[0]
     if bmap and bmap.site == site:
-        return render_to_response('map.html', {'bmap':bmap})
+        return render_to_response('map.html', {'site':site, 'bmap':bmap})
     else:
         return render_to_response('missing.html', {'request':request})
 

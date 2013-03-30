@@ -20,6 +20,12 @@ var selectedStyle = {
     "weight": 2,
     "fillOpacity": 0.25
 };
+var siteBoundsStyle = {
+    "color": "#ffff00",
+    "opacity": 1,
+    "weight": 2,
+    "fillOpacity": 0
+};
 
 // Set up the map
 zoom = mapstate.zoom || 15;
@@ -43,7 +49,8 @@ L.tileLayer.wms('http://50.56.215.16:8888/geoserver/wms?', {
         format: 'image/png',
         transparent: true}).addTo(map);
 
-console.log(mapstate);
+siteBoundsLayer = L.geoJson(sitebounds, {style:siteBoundsStyle, onEachFeature: passClick});
+siteBoundsLayer.addTo(map);
 
 updateMapState();
 
