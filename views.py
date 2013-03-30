@@ -265,7 +265,7 @@ def buffer(request):
 def search(request):
     site = request.user.sites.all()[0] 
     q = ""
-    limit = 10
+    limit = 20
     if request.GET:
         q = request.GET['q']
         if 'limit' in request.GET:

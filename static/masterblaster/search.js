@@ -5,6 +5,8 @@ $(document).on('mousedown', 'ul.typeahead', function(e) {
 });
 
 $('#search').typeahead({
+    minLength: 3,
+    items: 20,
     source: function (query, process) {
         return $.ajax({
             url: $(this)[0].$element[0].dataset.link,
@@ -37,7 +39,9 @@ $('#search').typeahead({
         return items;
     },
     highlighter: function (item) {
-        return item;
+        var regex = new RegExp( '(' + this.query + ')', 'gi' );
+        return item.replace( regex, "<strong>$1</strong>" );
+        //return item;
     }
     
 });
