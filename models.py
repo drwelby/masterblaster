@@ -8,7 +8,19 @@ from django.forms.models import model_to_dict
 import json
 import math
 
+class Lazy(object):
+    ''' caches property calculations 
+        we use this to calculate the buffered boundary once'''
 
+    def __init__(self, calculate_function):
+        self._calculate = calculate_function
+
+    def __get__(self, obj, _=None):
+        if obj is None:
+            return self
+        value = self._calculate(obj)
+        setattr(obj, self._calculate.func_name, value)
+        return value
 
 class Site(models.Model):
     name = models.CharField(max_length=50)
@@ -37,6 +49,15 @@ class Site(models.Model):
         height = north - south
         angle = max(height,width)
         return round(math.log(960 * 360 / angle / GLOBE_WIDTH) / math.log(2)) -1
+
+
+    @Lazy
+    def safebounds(self):
+        boundsSPCS = self.bounds
+        boundsSPCS.transform(2225)
+        buffered = boundsSPCS.buffer(500)
+        buffered.transform(4326)
+        return buffered
 
     @property
     def panbounds(self):

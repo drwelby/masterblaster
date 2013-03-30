@@ -92,7 +92,7 @@ def get_feature(request):
     # should lat/lon return centroid of parcel?
     action = data['action']
     pt = Point(lon,lat)
-    if not site.bounds.prepared.contains(pt):
+    if not site.safebounds.prepared.contains(pt):
         return HttpResponse(json.dumps({action:{'lat':lat, 'lon':lon}}), mimetype="application/json")
     Parcel._meta.db_table = site.table
     parcel = Parcel.objects.filter(geom__contains=pt)[0]
@@ -197,7 +197,7 @@ def lasso(request):
     data = json.loads(request.body)['data']
     mapstate = data['mapstate']
     site = request.user.sites.all()[0] 
-    bounds = site.bounds.prepared
+    bounds = site.safebounds.prepared
     Parcel._meta.db_table = site.table
     newparcels = Parcel.objects.filter(geom__intersects=GEOSGeometry(data['lasso']))
     print "lasso-ed %s parcels" % (len(newparcels))
@@ -258,6 +258,7 @@ def buffer(request):
             else:
                 mapstate['selected'][parcel.apn] = parcel.to_pygeojson()
     # return json
+    #TODO filter parcels not in safe bounds?
     return HttpResponse(json.dumps({'mapstate':mapstate}), mimetype="application/json")
 
 # @gzip_page

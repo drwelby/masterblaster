@@ -4,7 +4,7 @@ from django.db.models import Q
 def simplesearch(term, site, limit=0):
     Parcel._meta.db_table = site.table
     # spatial match
-    q = Parcel.objects.filter( Q(geom__contained=site.bounds),
+    q = Parcel.objects.filter( Q(geom__contained=site.safebounds),
     # beginning of APN matches
     Q(apn__istartswith=term) |
     # or match in situs address
