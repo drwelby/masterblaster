@@ -8,19 +8,6 @@ from django.forms.models import model_to_dict
 import json
 import math
 
-class Lazy(object):
-    ''' caches property calculations 
-        we use this to calculate the buffered boundary once'''
-
-    def __init__(self, calculate_function):
-        self._calculate = calculate_function
-
-    def __get__(self, obj, _=None):
-        if obj is None:
-            return self
-        value = self._calculate(obj)
-        setattr(obj, self._calculate.func_name, value)
-        return value
 
 class Site(models.Model):
     name = models.CharField(max_length=50)
@@ -30,9 +17,7 @@ class Site(models.Model):
 
     objects = models.GeoManager()
 
-    @property
-    def srid(self):
-        return 2225
+    cache = {}
 
     @property
     def center(self):
@@ -51,12 +36,15 @@ class Site(models.Model):
         return round(math.log(960 * 360 / angle / GLOBE_WIDTH) / math.log(2)) -1
 
 
-    @Lazy
+    @property
     def safebounds(self):
+        if self.pk in Site.cache:
+            return Site.cache[self.pk]
         boundsSPCS = self.bounds
         boundsSPCS.transform(2225)
         buffered = boundsSPCS.buffer(500)
         buffered.transform(4326)
+        Site.cache[self.pk] = buffered
         return buffered
 
     @property
