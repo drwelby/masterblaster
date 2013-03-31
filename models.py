@@ -50,11 +50,12 @@ class Site(models.Model):
     @property
     def panbounds(self):
         (xmin, ymin, xmax, ymax) = self.bounds.extent
-        #5000 feet around 42.5 degrees N
-        xmin -= .0137
-        xmax += .0137
-        ymin -= .0185
-        ymax += .0185
+        # these values seem to work to restrict panning
+        # while still being able to zoom out to the whole boundary
+        xmin -= .04
+        xmax += .04
+        ymin -= .06
+        ymax += .06
         width = xmax-xmin
         height = ymax-ymin
         if width < height:
@@ -67,7 +68,7 @@ class Site(models.Model):
             bump = newheight - height
             ymax += bump/2
             ymin -= bump/2
-        return (xmin, ymin, xmax, ymax)  
+        return ([[ymin, xmin], [ymax, xmax]])  
 
 class Map(models.Model):
     name = models.CharField(max_length=100, blank=True, null=True)
