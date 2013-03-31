@@ -22,7 +22,7 @@ class Site(models.Model):
     @property
     def center(self):
         pt = self.bounds.centroid
-        return pt.coords
+        return (pt.coords[1],pt.coords[0])
 
     @property
     def maxzoom(self):
@@ -102,7 +102,6 @@ class Map(models.Model):
             except Map.DoesNotExist:
                 self.slug = slug
                 check = False
-        self.save()
 
     @models.permalink
     def get_absolute_url(self):

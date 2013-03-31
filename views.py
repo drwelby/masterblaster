@@ -177,17 +177,18 @@ def save(request):
     mapstate = json.loads(request.body)['data']['mapstate']
     name = mapstate['name']
     try:
+        #TODO also filter on site
         bmap = Map.objects.get(name=name)
     except ObjectDoesNotExist:
         bmap = Map()
         bmap.set_name(name)
-    bmap.state = request.POST['data']['mapstate']
-    bmap.site = request.user.sites.all()[0]
+    bmap.state = json.dumps(mapstate)
+    site = request.user.sites.all()[0]
+    bmap.site = site
     bmap.zoom = mapstate['zoom']
     bmap.center = Point(mapstate['center'])
     bmap.save()
-    # return value? 304 it?
-    return HttpResponse(json.dumps(mapstate), mimetype="application/json")
+    return HttpResponse(json.dumps({'save':{'success':'true'}}), mimetype="application/json")
 
 @login_required
 @gzip_page

@@ -28,15 +28,12 @@ var siteBoundsStyle = {
 };
 
 // Set up the map
-zoom = mapstate.zoom || 15;
-if (mapstate.lat) {
-    center = [mapstate.lat, mapstate.lon];
-}else{
-    center = [40.681,-122.364]; 
+if (mapstate.zoom && mapstate.center) {
+    console.log(mapstate.zoom);
+    console.log(mapstate.center);
+    map.setView(mapstate.center,mapstate.zoom);
 }
-
-map.setView(center,zoom);
-map.setMaxBounds(panbounds);
+//map.setMaxBounds(panbounds);
 
 L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/sat/{z}/{x}/{y}.jpg', {
     attribution: 'Tiles courtesy MapQuest, NASA/JPL-Caltech and USDA Farm Service Agency',

@@ -58,6 +58,7 @@ $("#pick").click(toggleButtonClick);
 $("#addbuffer").click(selectButtonClick);
 $("#dobuffer").click(bufferButtonClick);
 $("#lasso").click(lassoButtonClick);
+$("#saveButton").click(saveMap);
 
 //set up output buttons
 $("#labelButton").click(labelButtonClick);
@@ -104,7 +105,13 @@ map.on('mouseover', function(){
    $('#info-overlay').show().html('...');
 });
 map.on('contextmenu', getPopup);
-       
+map.on('move', updateBounds);
+
+function updateBounds() {
+    mapstate.zoom = map.getZoom();
+    center = map.getCenter();
+    mapstate.center = [center.lat,center.lng];
+}
 
 function hover(e) {
     if (e.latlng.equals(lastLatLng)) {
@@ -206,8 +213,8 @@ function handleAjax(data) {
         mapstate = data.mapstate;
         updatePageState();
     }
-    if (data.name_map) {
-        console.log(data.name_map.slug);
+    if (data.save) {
+        alert('Map saved');
     }
 }
 
@@ -378,6 +385,18 @@ function navOutputButtonClick() {
     $('input[class=csrf]').val(csrftoken);
     $('input[class=data]').val(JSON.stringify(selectionMapState()));
     drawControl.handlers.polygon.disable();
+}
+
+function saveMap(){
+    if (!mapstate.name){
+        alert('Please name this map first');
+        return;
+    }
+    var data = {
+        'action': 'save',
+        'mapstate': mapstate
+    };
+    sendAction(data);
 }
 
 function labelButtonClick() {
