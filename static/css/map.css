@@ -27,6 +27,34 @@ body {
     height: 50px;
     font-size: 16px;
 }
+
+#map-title {
+    text-align: center;
+}
+.editable-buttons{
+    display: none;
+}
+
+.editable-empty:hover {
+    color: #555;
+}
+
+.editable-click:hover {
+    color: #555;
+}
+.editable-click, a.editable-click, a.editable-click:hover {
+    border-bottom: 0;
+}
+.editable-empty, .editable-empty:hover {
+    font-style: inherit;
+}
+.editable-input input {
+    width: 350px;
+    margin-bottom: 5px;
+    position: relative;
+    bottom: 5px;
+}
+
 .navbar-inverse .navbar-search .search-query {
     background: #fff;
     border-radius: 0;

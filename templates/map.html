@@ -36,15 +36,6 @@
                 <a id='nav-output'>Export</a>
                 </li>
             </ul>
-            {% if bmap.name %}
-            <div id="map-title">
-                {{ bmap.name }}
-            </div>
-                {% else %}
-            <div id="no-title">
-                <a href="#" id="map-title-editable">(name this map to save it)<i class="icon-pencil fade"></i></a>
-            </div>
-                {% endif %}
             <div class="pull-right">
                 <ul class="nav pull-right">
                       <form class="navbar-search" action="">
@@ -54,6 +45,9 @@
                       <li><a id="userguide">User Guide</a></li>
                 </ul>
           </div>
+            <div id="map-title">
+                <a href="#" id="map-title-editable">{{ bmap.name|default:"" }}</a><i class="icon-pencil fade"></i>
+            </div>
         </div>
     </div>   
 </div>   

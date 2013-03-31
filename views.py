@@ -78,7 +78,7 @@ def newmap(request):
     ''' requests for unsaved/new maps '''
     site = request.user.sites.all()[0]
     bmap = Map()
-    bmap.name = 'GeoNotice'
+    #bmap.name = 'GeoNotice'
     bmap.state = '{center:%s,zoom:%s,selected:{},selection:{},buffer:{}}' % ( list(site.center), int(site.maxzoom))
     return render_to_response('map.html', { 'site': site, 'bmap':bmap})
 

@@ -73,17 +73,20 @@ $("#map-title-editable").editable({
     type:'text',
     placement:'bottom',
     mode:'inline',
+    onblur   : 'submit',
+    emptytext: "(click here to name this map)",
     url: function(params) {
-        var data = {'action': 'name_map', 'name': params.value};
-        sendAction(data);
+        mapstate.name = params.value;
+        return true;
     },
     value: ""
 });
 
 $("#map-title-editable").on('hidden', function(e,reason) {
-    if (reason == 'save') {
-        $('#no-title').html($("#map-title-editable").html()).attr('id', 'map-title');
-    }
+        $('i.fade').toggle();
+});
+$("#map-title-editable").on('shown', function(e,reason) {
+        $('i.fade').toggle();
 });
     
 updatePageState();
