@@ -231,7 +231,7 @@ function updateTable(){
 }
 
 function selectionMapState() {
-    msdata = jQuery.extend({},mapstate);
+    msdata = jQuery.extend(true,{},mapstate);
     delete msdata.selection;
     delete msdata.buffer;
     for (var apn in msdata.selected) {

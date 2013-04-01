@@ -84,6 +84,7 @@ body {
     top: 0px;
     bottom: 0px;
     right: 10px;
+    overflow:auto;
 }
 
 #data-table table {
