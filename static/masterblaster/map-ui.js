@@ -228,6 +228,10 @@ function handleAjax(data) {
 }
 
 function updateTable(){
+    $('#data-table table tbody tr').remove();
+    if (Object.keys(mapstate.selected).length == 0) {
+        $('#data-table table tbody').append('<tr><td>(No Parcels Selected)</td></tr>');
+    }
     for (var apn in mapstate.selected) {
         $('#data-table table tbody').append('<tr>');
         p = mapstate.selected[apn].properties;
