@@ -1,5 +1,6 @@
 var presstimer;
 var lastLatLng;
+var lastapn = "";
 
 var clickAction = function(e) {return};
 
@@ -158,11 +159,17 @@ function handleAjax(data) {
     if (data.get_feature) {
         if (data.get_feature.feature) {
             ftprop = data.get_feature.feature.properties;
-            msg = ftprop.owner + " - " + ftprop.situs1;
+            msg = ftprop.owner;
+            if (ftprop.situs1 != "No Data") {
+                msg += " - " + ftprop.situs1;
+            }
         } else {
             msg = "...";
         }
-        $('#info-overlay').html(msg);
+        if (ftprop.apn != lastapn) {
+            $('#info-overlay').html(msg).hide().fadeIn(200);
+            lastapn = ftprop.apn;
+        }
         return;
     }
     if (data.get_popup) {
@@ -177,10 +184,12 @@ function handleAjax(data) {
             pstr += "<tr><td><b>Mailing</b>: </td><td>" + (ftprop.mail1 || "") + "</td></tr>";
             pstr += "<tr><td></td><td>" + (ftprop.mail2 || "") + "</td></tr>";
             pstr += "<tr><td><b>Area(ac.)</b>: </td><td>" + (ftprop.area || "") + "</td></tr>";
+            pstr += "<tr><td><b>APN</b>: </td><td>" + (ftprop.apn || "") + "</td></tr>";
             pstr += "</table>";
-            pstr += '<a href="http://maps.google.com?q=loc:';
+            pstr += '<br><a href="http://maps.google.com?q=loc:';
             pstr += data.get_popup.lat + ',' + data.get_popup.lon;
-            pstr += '&z=18&t=h" target="_blank">View in Google Maps</a>';
+            pstr += '&z=' + map.getZoom();
+            pstr += '&t=h" target="_blank">View in Google Maps</a>';
             L.popup().setLatLng([lat, lon]).setContent(pstr).openOn(map);
         }
         return;
