@@ -80,4 +80,44 @@ a.action {
 .ital {
     font-style:italic;
 }
+body {
+    font-family: Helvetica, Arial, sans-serif;
+}
 
+.vstretch {
+    height:100%;
+}
+
+#topbar {
+    position: absolute;
+    top: 0px;
+    left: 0;
+    right: 0;
+    height: 40px;
+    padding: 10px;
+}
+
+#topbar .brand {
+    font-size:24px;
+}
+
+#midbar {
+    position:absolute;
+    top: 40px;
+    left: 0;
+    right: 0;
+    height: 50px;
+    font-size: 16px;
+}
+
+#map-title {
+    text-align: center;
+}
+
+#map-area {
+    position: absolute;
+    top:91px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
