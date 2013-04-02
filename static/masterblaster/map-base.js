@@ -33,7 +33,7 @@ if (mapstate.zoom && mapstate.center) {
     console.log(mapstate.center);
     map.setView(mapstate.center,mapstate.zoom);
 }
-//map.setMaxBounds(panbounds);
+map.setMaxBounds(panbounds);
 
 L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/sat/{z}/{x}/{y}.jpg', {
     attribution: 'Tiles courtesy MapQuest, NASA/JPL-Caltech and USDA Farm Service Agency',

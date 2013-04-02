@@ -1,11 +1,3 @@
-#overlay {
-  position: fixed;
-  height: 100%;
-  width: 100%;
-  z-index: 19;
-  background: url('link/to/semitransparent.png');
-}
-
 .editable-buttons{
     display: none;
 }
@@ -87,6 +79,10 @@
 
 #alerts div {
     display:none;
+}
+
+button#savenew, button#saveold {
+    margin: 10px 10px 0 0;
 }
 
 .all-actions {
