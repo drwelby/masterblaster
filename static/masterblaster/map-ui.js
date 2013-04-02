@@ -404,16 +404,15 @@ function navMapButtonClick() {
     $('#map-actions').toggle().siblings().hide();
     $('#lasso').removeClass('btn-primary'); //disables the tool
     $('div.leaflet-top.leaflet-left').toggleClass('leaflet-extra-left');
-    //$('div.leaflet-top.leaflet-left').css('left','200px');
     $('#map').show();
     $('#data-table').hide();
     drawControl.handlers.polygon.disable();
 }
 
 function navOutputButtonClick() {
-    $('#output-actions').show().siblings().hide()
+    $('#output-actions').show().siblings().hide();
+    $('div.leaflet-top.leaflet-left').removeClass('leaflet-extra-left');
     $('#lasso').removeClass('btn-primary');
-    //$('div.leaflet-top.leaflet-left').css('left','200px');
     updateTable();
     $('#map').hide();
     $('#data-table').show();
