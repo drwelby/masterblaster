@@ -1,6 +1,6 @@
 import json
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse, HttpResponseNotModified, HttpResponseServerError
+from django.http import HttpResponse, HttpResponseNotModified, HttpResponseServerError, Http404
 from django.shortcuts import render_to_response, redirect
 from django.contrib.gis.geos import Point, MultiPolygon, GEOSGeometry
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
@@ -104,12 +104,12 @@ def get_feature(request):
     return HttpResponse(json.dumps(data), mimetype="application/json")
 
 @login_required
-def name_map(request, id_or_slug):
+def name_map(request, id, slug):
     ''' returns a named map
         template will pull mapstate from map object
     '''
     #should urls include site name to avoid slug duplication?
-    bmap = get_map(id_or_slug)
+    bmap = get_map(id)
     site = request.user.sites.all()[0]
     if bmap and bmap.site == site:
         return render_to_response('map.html', {'site':site, 'bmap':bmap})
@@ -170,25 +170,34 @@ def data(request):
         return csv_response(parcels, slug)
 
 @login_required
+@gzip_page
 def save(request):
 
-    '''given a mapstate, saves a map'''
+    '''given a mapstate from an existing map, saves it'''
 
     mapstate = json.loads(request.body)['data']['mapstate']
-    name = mapstate['name']
-    try:
-        #TODO also filter on site
-        bmap = Map.objects.get(name=name)
-    except ObjectDoesNotExist:
+    if 'id' in mapstate: # existing map
+        id = mapstate['id']
+        try:
+            bmap = Map.objects.get(id=id)
+        except ObjectDoesNotExist:
+            raise Http404
+    else:
         bmap = Map()
-        bmap.set_name(name)
+        site = request.user.sites.all()[0]
+        bmap.site = site
+    bmap.set_name(mapstate['name'])
     bmap.state = json.dumps(mapstate)
-    site = request.user.sites.all()[0]
-    bmap.site = site
+    # do we need to store these in the model anymore?
     bmap.zoom = mapstate['zoom']
     bmap.center = Point(mapstate['center'])
     bmap.save()
-    return HttpResponse(json.dumps({'save':{'success':'true'}}), mimetype="application/json")
+    if 'id' not in mapstate: #add it
+        mapstate['id'] = bmap.id
+        bmap.state = json.dumps(mapstate)
+        bmap.save()
+    return HttpResponse(json.dumps({'save':{'success':'true', 'mapstate':mapstate}}), mimetype="application/json")
+
 
 @login_required
 @gzip_page

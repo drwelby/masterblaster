@@ -224,6 +224,7 @@ function handleAjax(data) {
     }
     if (data.save) {
         alert('Map saved');
+        mapstate = data.save.mapstate;
     }
 }
 

@@ -87,9 +87,12 @@ class Map(models.Model):
         super(Map, self).save(*args, **kwargs)
 
     def set_name(self, name):
-        ''' sets the name and calculates a unique slug'''
+        ''' sets the name and calculates a slug'''
 
         self.name = name
+        self.slug = slugify(self.name)
+        return
+        # don't need unique slugs anymore
         orig_slug = slug = slugify(self.name)
         index = 0
         check = True
@@ -105,7 +108,7 @@ class Map(models.Model):
 
     @models.permalink
     def get_absolute_url(self):
-        return ('masterblaster.views.map_handler', [str(self.id)])
+        return ('masterblaster.views.name_map', [str(self.id), self.slug])
 
     @property
     def contents(self):
