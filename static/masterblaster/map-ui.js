@@ -59,7 +59,7 @@ $("#pick").click(toggleButtonClick);
 $("#addbuffer").click(selectButtonClick);
 $("#dobuffer").click(bufferButtonClick);
 $("#lasso").click(lassoButtonClick);
-$("#saveButton").click(saveMap);
+$("#saveButton").click(saveClick);
 
 //set up output buttons
 $("#labelButton").click(labelButtonClick);
@@ -67,6 +67,23 @@ $("#tableButton").click(tableButtonClick);
 $("#excelButton").click(excelButtonClick);
 $("#csvButton").click(csvButtonClick);
 
+//set up alert buttons
+$('.alert .close').on('click', function () {
+    $(this).parent().hide();
+})
+$("#savenew").click(saveNewMap);
+$("#saveold").click(saveMap);
+
+//semi-modal behavior for the save confirmation
+$(function(){
+      $(document).click(function(e){  
+          if ($.inArray(e.target.id, ['saveButton','savenew','saveold']) == -1) {
+             $('div#save-confirm').hide();
+          }
+      });
+});
+
+// do we need this any more?
 $.fn.editableform.buttons = 
 '<button type="submit" class="btn btn-primary editable-submit btn-mini"><i class="icon-ok icon-white"></i></button>' +
 '<button type="button" class="btn editable-cancel btn-mini"><i class="icon-remove"></i></button>'; 
@@ -79,6 +96,7 @@ $("#map-title-editable").editable({
     emptytext: "(click here to name this map)",
     url: function(params) {
         mapstate.name = params.value;
+        $('div#save-needsname').fadeOut();
         return true;
     },
     value: ""
@@ -95,6 +113,7 @@ updatePageState();
 
 // Map Events
 map.on('click', onMapClick);
+map.on('click', function(e) { $('div#save-confirm').hide(); });
 map.on('mousemove', function(e) {
     lastLatLng = e.latlng;
     setTimeout(function(){hover(e)},300);
@@ -163,12 +182,13 @@ function handleAjax(data) {
             if (ftprop.situs1 != "No Data") {
                 msg += " - " + ftprop.situs1;
             }
+            if (ftprop.apn != lastapn) {
+                $('#info-overlay').html(msg).hide().fadeIn(200);
+                lastapn = ftprop.apn;
+        }
         } else {
             msg = "...";
-        }
-        if (ftprop.apn != lastapn) {
-            $('#info-overlay').html(msg).hide().fadeIn(200);
-            lastapn = ftprop.apn;
+            $('#info-overlay').html(msg);
         }
         return;
     }
@@ -223,7 +243,7 @@ function handleAjax(data) {
         updatePageState();
     }
     if (data.save) {
-        alert('Map saved');
+        $('div#save-success').fadeIn().delay(1500).fadeOut();
         mapstate = data.save.mapstate;
     }
 }
@@ -381,9 +401,10 @@ function getPopup(e) {
 }
 
 function navMapButtonClick() {
-    $('#map-actions').show().siblings().hide();
+    $('#map-actions').toggle().siblings().hide();
     $('#lasso').removeClass('btn-primary'); //disables the tool
-    $('div.leaflet-top.leaflet-left').css('left','200px');
+    $('div.leaflet-top.leaflet-left').toggleClass('leaflet-extra-left');
+    //$('div.leaflet-top.leaflet-left').css('left','200px');
     $('#map').show();
     $('#data-table').hide();
     drawControl.handlers.polygon.disable();
@@ -392,7 +413,7 @@ function navMapButtonClick() {
 function navOutputButtonClick() {
     $('#output-actions').show().siblings().hide()
     $('#lasso').removeClass('btn-primary');
-    $('div.leaflet-top.leaflet-left').css('left','200px');
+    //$('div.leaflet-top.leaflet-left').css('left','200px');
     updateTable();
     $('#map').hide();
     $('#data-table').show();
@@ -401,16 +422,32 @@ function navOutputButtonClick() {
     drawControl.handlers.polygon.disable();
 }
 
-function saveMap(){
+function saveClick(){
     if (!mapstate.name){
-        alert('Please name this map first');
+        $('div#save-needsname').fadeIn();
         return;
     }
+    if (mapstate.id){
+        $('div#save-confirm').fadeIn();
+    }else{
+        saveMap();
+    }
+}
+
+
+function saveNewMap(e){
+    delete mapstate.id;
+    saveMap();
+    $('div#save-confirm').hide();
+}
+
+function saveMap(){
     var data = {
         'action': 'save',
         'mapstate': mapstate
     };
     sendAction(data);
+    $('div#save-confirm').hide();
 }
 
 function labelButtonClick() {

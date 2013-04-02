@@ -107,6 +107,21 @@
             <a id="csvButton" class="btn btn-block">CSV</a>
         </div>
     </div>
+    <div id="alerts">
+        <div id="save-confirm" class="alert alert-info">
+            <button type="button" class="close">&times;</button>
+            This map already has been saved. Would like to save over the old map, or create a new one?
+            <button id="savenew">Save New Map</button><button id="saveold">Save Old Map</button>
+        </div>
+        <div id="save-needsname" class="alert alert-info">
+            <button type="button" class="close">&times;</button>
+            Please name this map before saving.
+        </div>
+        <div id="save-success" class="alert alert-success">
+            <button type="button" class="close">&times;</button>
+            Map Saved.
+        </div>
+    </div>
     <div id="info-overlay"><span>...</span></div>
     <div id="data-table">
         <h2 class="text-center">Data Preview</h2>

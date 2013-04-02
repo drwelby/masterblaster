@@ -1,3 +1,11 @@
+#overlay {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  z-index: 19;
+  background: url('link/to/semitransparent.png');
+}
+
 .editable-buttons{
     display: none;
 }
@@ -36,6 +44,9 @@
     z-index:2;
 }
 
+.leaflet-extra-left {
+    left: 200px;
+}
 
 #data-table {
     display:none;
@@ -64,6 +75,18 @@
     top:0px;
     position:absolute;
     z-index: 10;
+}
+
+#alerts {
+    position: absolute;
+    top: 10px;
+    z-index: 99;
+    left: 300px;
+    right: 300px;
+}
+
+#alerts div {
+    display:none;
 }
 
 .all-actions {
