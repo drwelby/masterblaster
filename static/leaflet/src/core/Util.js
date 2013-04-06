@@ -33,6 +33,21 @@ L.Util = {
 		};
 	}()),
 
+	invokeEach: function (obj, method, context) {
+		var i, args;
+
+		if (typeof obj === 'object') {
+			args = Array.prototype.slice.call(arguments, 3);
+
+			for (i in obj) {
+				method.apply(context, [i, obj[i]].concat(args));
+			}
+			return true;
+		}
+
+		return false;
+	},
+
 	limitExecByInterval: function (fn, time, context) {
 		var lock, execOnUnlock;
 
@@ -68,8 +83,12 @@ L.Util = {
 		return Math.round(num * pow) / pow;
 	},
 
+	trim: function (str) {
+		return str.trim ? str.trim() : str.replace(/^\s+|\s+$/g, '');
+	},
+
 	splitWords: function (str) {
-		return str.replace(/^\s+|\s+$/g, '').split(/\s+/);
+		return L.Util.trim(str).split(/\s+/);
 	},
 
 	setOptions: function (obj, options) {
@@ -80,9 +99,7 @@ L.Util = {
 	getParamString: function (obj, existingUrl) {
 		var params = [];
 		for (var i in obj) {
-			if (obj.hasOwnProperty(i)) {
-				params.push(i + '=' + obj[i]);
-			}
+			params.push(encodeURIComponent(i) + '=' + encodeURIComponent(obj[i]));
 		}
 		return ((!existingUrl || existingUrl.indexOf('?') === -1) ? '?' : '&') + params.join('&');
 	},
@@ -90,8 +107,10 @@ L.Util = {
 	template: function (str, data) {
 		return str.replace(/\{ *([\w_]+) *\}/g, function (str, key) {
 			var value = data[key];
-			if (!data.hasOwnProperty(key)) {
+			if (value === undefined) {
 				throw new Error('No value provided for variable ' + str);
+			} else if (typeof value === 'function') {
+				value = value(data);
 			}
 			return value;
 		});

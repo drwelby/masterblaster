@@ -113,6 +113,10 @@ button#savenew, button#saveold {
     display: none;
 }
 
+form#pdfform {
+    display:none;
+}
+
 form#label-actions {
     padding: 15px;
     margin-bottom:0;

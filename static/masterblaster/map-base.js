@@ -56,7 +56,7 @@ updateMapState();
 function updateMapState() {
     // redraw the layers in leaflet
     allLayers.clearLayers();
-    if (Object.keys(mapstate.selected).length > 0) {
+    if (mapstate.selected && Object.keys(mapstate.selected).length > 0) {
         selectedData = [];
         for (apn in mapstate.selected) {
             selectedData.push(mapstate.selected[apn]);
@@ -64,11 +64,11 @@ function updateMapState() {
         selectedLayer = L.geoJson(selectedData, {style:selectedStyle, onEachFeature: passClick});
         allLayers.addLayer(selectedLayer);
     }
-    if (mapstate.buffer.geometry) {
+    if (mapstate.buffer && mapstate.buffer.geometry) {
         bufferLayer = L.geoJson(mapstate.buffer, {style:bufferStyle, onEachFeature: passClick});
         allLayers.addLayer(bufferLayer);
     }
-    if (Object.keys(mapstate.selection).length > 0) {
+    if (mapstate.selection && Object.keys(mapstate.selection).length > 0) {
         selectionData = [];
         for (apn in mapstate.selection) {
             selectionData.push(mapstate.selection[apn]);
