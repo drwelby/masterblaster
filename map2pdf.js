@@ -9,7 +9,7 @@ address = system.args[1];
 payload = system.args[2];
 tempfile = system.args[3];
 
-page.viewportSize = { width: 1000, height: 800 }; 
+page.viewportSize = { width: 900, height: 650 }; 
 page.paperSize = {format: "Letter", orientation: "landscape", margin: '0.25in'};
 //page.zoomFactor = 0.5;
 
