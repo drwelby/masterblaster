@@ -163,6 +163,10 @@ textarea#id_notes {
 .leaflet-top .leaflet-control {
 }
 
+.leaflet-control-zoom a {
+    font-size:0;
+}
+
 .bump {
     margin-right:5px;
 }
