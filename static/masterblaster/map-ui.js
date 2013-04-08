@@ -278,8 +278,6 @@ function selectionMapState() {
 
 function pdfMapState() {
     msdata = jQuery.extend(true,{},mapstate);
-    delete msdata.selection;
-    delete msdata.buffer;
     for (var apn in msdata.selected) {
         delete msdata.selected[apn].properties
     }
