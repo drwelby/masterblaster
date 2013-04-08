@@ -80,7 +80,10 @@ function updateMapState() {
 }
 
 function passClick(feature, layer) {
-layer.on('click', function(e) {
-    map.fire('click', e);
-});
+    layer.on('click', function(e) {
+        map.fire('click', e);
+    });
+    layer.on('contextmenu', function(e) {
+        map.fire('contextmenu', e);
+    });
 }
