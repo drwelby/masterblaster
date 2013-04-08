@@ -147,6 +147,11 @@ input[type="text"].input-actions {
     font-weight: bold;
 }
 
+.leaflet-popup-content-wrapper {
+    border-radius: 0;
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
+}
 
 textarea#id_notes {
     width: 500px;

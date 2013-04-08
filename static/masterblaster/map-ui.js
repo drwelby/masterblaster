@@ -204,7 +204,7 @@ function handleAjax(data) {
             pstr += "<tr><td></td><td>" + (ftprop.situs2 || "") + "</td></tr>";
             pstr += "<tr><td><b>Mailing</b>: </td><td>" + (ftprop.mail1 || "") + "</td></tr>";
             pstr += "<tr><td></td><td>" + (ftprop.mail2 || "") + "</td></tr>";
-            pstr += "<tr><td><b>Area(ac.)</b>: </td><td>" + (ftprop.area || "") + "</td></tr>";
+            pstr += "<tr><td><b>Acres</b>: </td><td>" + (ftprop.area || "") + "</td></tr>";
             pstr += "<tr><td><b>APN</b>: </td><td>" + (ftprop.apn || "") + "</td></tr>";
             pstr += "</table>";
             pstr += '<br><a href="http://maps.google.com?q=loc:';
