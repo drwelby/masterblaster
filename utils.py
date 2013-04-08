@@ -87,12 +87,18 @@ def pdf_table(parcels, name):
     pdf.font_face = 'helvetica'
     pdf.add_page()
     html = "<font size=8 face='helvetica'><table>"
-    html += "<thead><tr>"
-    html += '<th width="10%">APN</th>'
-    html += '<th width="30%">OWNER</th>'
-    html += '<th width="20%">SITUS ADDRESS</th>'
-    html += '<th width="40%">MAILING ADDRESS</th>'
-    html += '</tr></thead><tbody>'
+    html += "<tbody><tr>"
+    html += '<th width="10%">GeoNotice</th>'
+    html += '<th width="30%"> </th>'
+    html += '<th width="20%"> </th>'
+    html += '<th width="40%"> </th>'
+    html += '</tr>'
+    html += "<tr>"
+    html += '<td><b>APN</b></td>'
+    html += '<td><b>OWNER</b></td>'
+    html += '<td><b>SITUS ADDRESS</b></td>'
+    html += '<td><b>MAILING ADDRESS</b></td>'
+    html += '</tr>'
     for apn in parcels:
         parcel = Struct(**parcels[apn]['properties'])
         # hack to make ampersands work in table
@@ -107,7 +113,7 @@ def pdf_table(parcels, name):
         html += '<td>%s %s</td>' % (parcel.mail1 or "", parcel.mail2 or "")
         html += '</tr>'
     html += '</tbody></table></font>'
-        
+    print html 
     pdf.write_html(html)
     response = HttpResponse(mimetype='application/pdf')
     # remove this header if you want the pdfs to open in the browser
