@@ -94,7 +94,7 @@ $("#map-title-editable").editable({
     placement:'bottom',
     mode:'inline',
     onblur   : 'submit',
-    emptytext: "(click here to name this map)",
+    emptytext: "name this project",
     url: function(params) {
         mapstate.name = params.value;
         $('div#save-needsname').fadeOut();
