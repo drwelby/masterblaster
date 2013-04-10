@@ -1,35 +1,74 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-<title>Geonotice | Sign In</title>
-<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-<style>
-body{
-    font-family:Arial,Helvetica,sans-serif;
-    font-size: 12px;
-}
-</style>
-</head>
-<body>
-    {% if error %}
-        {% if error == "inactive" %}
-            Sorry, that account is no longer active.
-        {% endif %}
-        {% if error == "invalid" %}
-            Sorry, that username or password was invalid.
-        {% endif %}
-    {% endif %}
-    <form action="{% url site_login %}" method="post">
-        {% csrf_token %}
-        {% if next %}
-        <input type="hidden" name="next" value="{{ next }}" />
-        {% endif %}
-        username:
-        <input type="text" name="username" value="" /><br />
-        password:
-        <input type="password" name="password" value="" /><br />
+﻿<!DOCTYPE html>
+<html lang="en" xml:lang="en" class="" xmlns="http://www.w3.org/1999/xhtml">
+    
+    <head>
+        <link href="/static/css/login.css" type="text/css" rel="stylesheet" />
+        <title>GeoNotice - Sign in</title>
+        <!--[if lte IE 8]>
+            <style>
+                .sick-input input[type=password] { padding-top: 7px !important; padding-bottom: 3px !important;                 } .sick-input.small input { padding-top: 4px !important; padding-bottom: 2px !important;                 } .sick-input.small input[type=password] { padding-top: 6px !important; padding-bottom: 0px !important;                 }
+            </style>
+        <![endif]-->
+        <!--[if lt IE 9]>
+            <script src="/static/javascript/external/html5shiv.js"></script>
+        <![endif]-->
+    </head>
+    
+    <body>
+        <div id="outer-frame">
+            <h1>
+                <font color="#0085DA">GeoNotice</font>
+            </h1>
+            <div style="background:#0085DA; height: 40px;"></div>
+            <div id="page-content">
+                <div id="login-and-register-container">
+                    <div id="login-container">
+                        <div class="splash">
+                            <div id="login_lhs">
+                                <img style="width:400px" src="/static/images/login.jpg" alt="The ENPLAN GeoNotice logo." />
+                                <div class="login_lhs_action"></div>
+                            </div>
+                        </div>
+                        <form action="{% url site_login %}" novalidate="novalidate" method="post">
+                            {% csrf_token %}
+                            {% if next %}
+                            <input type="hidden" name="next" value="{{ next }}" />
+                            {% endif %}
+                            <div class="title-text">Sign in</div>
+                                {% if error %}
+                                <div id="errors">
+                                    {% if error == "inactive" %}
+                                        Sorry, that account is no longer active.
+                                    {% endif %}
+                                    {% if error == "invalid" %}
+                                        Sorry, that username or password was invalid.
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                            <div id="login-partial">
+                                <div id="email-field" class="sick-input">
+                                    <span style="display:none;" class="error-bubble force-no-break">
+                                        <span class="error-bubble-arrow-border"></span>
+                                        <span class="error-bubble-arrow"></span>
+                                    </span>
+                                    <input placeholder="Username" id="login_email" type="text" name="username" tabindex="1" />
+                                </div>
+                                <div id="password-field" class="sick-input">
+                                    <span style="display:none;" class="error-bubble force-no-break">
+                                        <span class="error-bubble-arrow-border"></span>
+                                        <span class="error-bubble-arrow"></span>
+                                    </span>
+                                    <input placeholder="Password" type="password" id="login_password" name="password" tabindex="2" />
+                                </div>
+                                <div id="login-footer" class="clearfix">
+                                    <input type="submit" value="Sign In" />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
 
-        <input type="submit" value="Sign In" />
-    </form>
-</body>
 </html>
