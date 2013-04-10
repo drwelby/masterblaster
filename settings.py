@@ -162,3 +162,11 @@ LOGGING = {
         },
     }
 }
+
+PHANTOM_URL = "http://127.0.0.1:8080"
+PHANTOM = "/usr/bin/phantomjs" 
+
+try:
+    from local_settings import *
+except ImportError:
+    pass
