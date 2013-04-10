@@ -130,7 +130,6 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'django.contrib.gis',
     'masterblaster',
-    'slc',
 
 )
 
