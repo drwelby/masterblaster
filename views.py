@@ -1,5 +1,9 @@
 import json
+import subprocess
+import os
+import tempfile
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseNotModified, HttpResponseServerError, Http404
 from django.shortcuts import render_to_response, redirect
 from django.contrib.gis.geos import Point, MultiPolygon, GEOSGeometry
@@ -48,6 +52,10 @@ from masterblaster.simplesearch import simplesearch
         buffer: (buffer multipolygon) 
         }
 '''
+APP_ROOT = os.path.dirname(os.path.realpath(__file__))
+PHANTOM = "/usr/bin/phantomjs" 
+SCRIPT = os.path.join(APP_ROOT, 'map2pdf.js')
+
 def site_login(request, error = None):
     if request.POST:
         username = request.POST['username']
@@ -78,7 +86,6 @@ def newmap(request):
     ''' requests for unsaved/new maps '''
     site = request.user.sites.all()[0]
     bmap = Map()
-    #bmap.name = 'GeoNotice'
     bmap.state = '{center:%s,zoom:%s,selected:{},selection:{},buffer:{}}' % ( list(site.center), int(site.maxzoom))
     return render_to_response('map.html', { 'site': site, 'bmap':bmap})
 
@@ -116,13 +123,34 @@ def name_map(request, id, slug):
     else:
         return render_to_response('missing.html', {'request':request})
 
+
+@csrf_exempt # might work, csrf is there in payload
+def pdf_map(request):
+    ''' the map rendered in a simple page for phantomjs to pdf '''
+    mapstate = request.POST['data']
+    print request.body
+    siteid = request.POST['siteid']
+    site = Site.objects.get(pk=siteid)
+    bmap = Map()
+    bmap.state = mapstate
+    return render_to_response('print.html', {'site':site, 'bmap':bmap})
+
 @login_required
 def print_map(request):
-    mapstate = json.loads(request.body)['data']['mapstate']
-    bmap = Map()
-    bmap.name = mapstate.get('name', 'GeoNotice')
-    bmap.state = json.dumps(mapstate)
-    return render_to_response('print.html', {'bmap':bmap})
+    ''' the endpoint where the user requests a pdf '''
+    payload = request.body
+    path = reverse('pdf')
+    address = "http://127.0.0.1:8080" + path #?
+    temp = tempfile.NamedTemporaryFile(suffix=".pdf")
+    params = (PHANTOM, SCRIPT, address, payload, temp.name)
+    print params
+    exitcode = subprocess.call(params)
+    if exitcode == 0:
+        response = HttpResponse(mimetype='application/pdf')
+        response.write(temp.read())
+        return response
+    else:
+        return HttpResponseServerError
 
 def get_map(id_or_slug):
     try:
@@ -211,16 +239,13 @@ def lasso(request):
     bounds = site.safebounds.prepared
     Parcel._meta.db_table = site.table
     newparcels = Parcel.objects.filter(geom__intersects=GEOSGeometry(data['lasso']))
-    print "lasso-ed %s parcels" % (len(newparcels))
     for parcel in newparcels:
         if not bounds.covers(parcel.geom):
             continue
         if parcel.apn in mapstate['selected']:
             del mapstate['selected'][parcel.apn]
-            print 'toggling %s' % (parcel.apn)
         else:
             mapstate['selected'][parcel.apn] = parcel.to_pygeojson()
-            print 'adding %s' % (parcel.apn)
     return HttpResponse(json.dumps({'mapstate':mapstate}), mimetype="application/json")
 
 @login_required

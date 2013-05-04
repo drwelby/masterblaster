@@ -22,6 +22,8 @@ urlpatterns = patterns('',
     url(r'^labels/$', 'masterblaster.views.labels', name='labels'),
     url(r'^data/$', 'masterblaster.views.data', name='data'),
     url(r'^print/$', 'masterblaster.views.print_map', name='print'),
+    url(r'^pdf/$', 'masterblaster.views.pdf_map', name='pdf'),
+
     # url(r'^masterblaster/', include('masterblaster.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:

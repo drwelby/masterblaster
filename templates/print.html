@@ -20,9 +20,11 @@
 
 {% block pagejs %}
 <script type="text/javascript">
-    var mapstate = {{ bmap.state|safe }}['mapstate'];
+    var mapstate = {{ bmap.state|safe }};
+    var sitebounds = {{ site.bounds.json|safe }};
+    var panbounds = {{site.panbounds|safe }};
 </script>
-<script src="//cdn.leafletjs.com/leaflet-0.4.5/leaflet.js"></script>
+<script src="{{ STATIC_PREFIX }}leaflet/dist/leaflet.js"></script>
 <script src="{{ STATIC_PREFIX }}masterblaster/map-base.js"></script>
 {% endblock %}
 

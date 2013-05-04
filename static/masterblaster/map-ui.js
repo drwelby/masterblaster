@@ -60,6 +60,7 @@ $("#addbuffer").click(selectButtonClick);
 $("#dobuffer").click(bufferButtonClick);
 $("#lasso").click(lassoButtonClick);
 $("#saveButton").click(saveClick);
+$("#pdfMapButton").click(pdfMapClick);
 
 //set up output buttons
 $("#labelButton").click(labelButtonClick);
@@ -275,6 +276,18 @@ function selectionMapState() {
     return msdata;
 }
 
+function pdfMapState() {
+    msdata = jQuery.extend(true,{},mapstate);
+    delete msdata.selection;
+    delete msdata.buffer;
+    for (var apn in msdata.selected) {
+        delete msdata.selected[apn].properties
+    }
+    for (var apn in msdata.selection) {
+        delete msdata.selected[apn].properties
+    }
+    return msdata;
+}
 // button handlers
 
 function lassoButtonClick() {
@@ -470,4 +483,10 @@ function excelButtonClick() {
 function getData(filetype) {
     $('input[id=filetype]').val(filetype);
     $('form#dataform').submit();
+}
+
+function pdfMapClick() {
+    $('input[class=csrf]').val(csrftoken);
+    $('#pdfform input[class=data]').val(JSON.stringify(pdfMapState()));
+    $('form#pdfform').submit();
 }

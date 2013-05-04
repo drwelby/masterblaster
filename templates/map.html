@@ -70,7 +70,12 @@
             <a id="newMap" href="/" class="btn btn-block">New Map</a>
             <a id="saveButton" class="btn btn-block">Save</i></a>
             <a href="/maps/" class="btn btn-block">Saved Maps</a>
-            <a id="pdfMapsButton" class="btn btn-block">Save Map as PDF</a>
+            <form id="pdfform" method="post" action="/print/" target="_blank">
+                <input type="hidden" class="csrf" name="csrfmiddlewaretoken" value="">
+                <input type="hidden" class="data" name="data" />
+                <input type="hidden" name="siteid" value="{{site.pk}}" />
+            </form>
+            <a id="pdfMapButton" class="btn btn-block">Save Map as PDF</a>
         </div>
         <div id="output-actions" class="all-actions">
             <form id="dataform" method="post" action="/data/" target="_blank">
@@ -150,7 +155,7 @@
     var sitebounds = {{ site.bounds.json|safe }};
     var panbounds = {{site.panbounds|safe }};
 </script>
-<script src="//cdn.leafletjs.com/leaflet-0.4.5/leaflet.js"></script>
+<script src="{{ STATIC_PREFIX }}leaflet/dist/leaflet.js"></script>
 <script src="{{ STATIC_PREFIX }}masterblaster/map-base.js"></script>
 <script src="{{ STATIC_PREFIX }}leaflet.draw/leaflet.draw.js"></script>
 <script src="{{ STATIC_PREFIX }}bootstrap-editable/js/bootstrap-editable.js"></script>
