@@ -53,19 +53,6 @@
 #data-table table {
 }
 
-#printbox {
-    position: absolute;
-    margin: auto ;
-    height: 650px;
-    width: 900px;
-    border: 2px solid red;
-    z-index: 99;
-    left: 0px;
-    top: 0px;
-    bottom: 0px;
-    right: 0px;
-}
-
 #map {
     position:absolute;
     left: 0px;
