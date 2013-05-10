@@ -31,6 +31,7 @@ $('#search').typeahead({
         searchPt = new L.LatLng(coords[1],coords[0]);
         map.fireEvent('contextmenu', {latlng: searchPt});
         map.panTo(searchPt);
+        map.setZoom(17);
     },
     matcher: function (item) {
         return true;

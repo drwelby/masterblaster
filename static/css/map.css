@@ -29,6 +29,10 @@
     moz-border-radius: 0;
     font-family: Helvetica, Arial, sans-serif;
 }
+.typeahead {
+    right: 10px;
+    left: auto;
+}
 
 .fornav {
     position:relative;
@@ -147,6 +151,11 @@ input[type="text"].input-actions {
     font-weight: bold;
 }
 
+.leaflet-popup-content-wrapper {
+    border-radius: 0;
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
+}
 
 textarea#id_notes {
     width: 500px;
@@ -156,6 +165,10 @@ textarea#id_notes {
 .leaflet-control-draw {display:none;}
 
 .leaflet-top .leaflet-control {
+}
+
+.leaflet-control-zoom a {
+    font-size:0;
 }
 
 .bump {

@@ -16,7 +16,7 @@ from django.contrib.auth import authenticate, login
 from django.template.defaultfilters import slugify
 from masterblaster.utils import xls_response, pdf_response, csv_response, pdf_table
 from masterblaster.models import Map, Parcel, Site
-from masterblaster.simplesearch import simplesearch
+from masterblaster.simplesearch import keywordsearch as simplesearch
 
 ''' json responses:
 
@@ -186,7 +186,7 @@ def data(request):
     data = json.loads(request.POST['data'])
     parcels = data['selected']
     if 'name' in data:
-        slug = slugify(mapstate['name'])
+        slug = slugify(data['name'])
     else:
         slug = "geonotice"
     filetype = request.POST['filetype']
@@ -306,7 +306,6 @@ def search(request):
         q = request.GET['q']
         if 'limit' in request.GET:
             limit = int(request.GET['limit'])
-            print request.GET['limit']
     if request.POST:
         q = request.POST['q']
         if 'limit' in request.POST:
@@ -318,11 +317,14 @@ def search(request):
     for result in results:
         poly = GEOSGeometry(result['geom'].json)
         center = poly.centroid.coords
-        del result['geom']
+        #del result['geom']
+        '''
         for key in result:
             if result[key]:
                 if q.lower() in result[key].lower():
                     match = result[key]
+                    '''
+        match = "%s - %s - %s" %(result['apn'],result['owner'],result['situs1'])
         data[match] = center
     return HttpResponse(json.dumps({'results':data}), mimetype="application/json")
         
