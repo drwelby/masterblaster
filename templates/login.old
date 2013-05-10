@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>Geonotice | Sign In</title>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<style>
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    font-size: 12px;
+}
+</style>
+</head>
+<body>
+    {% if error %}
+        {% if error == "inactive" %}
+            Sorry, that account is no longer active.
+        {% endif %}
+        {% if error == "invalid" %}
+            Sorry, that username or password was invalid.
+        {% endif %}
+    {% endif %}
+    <form action="{% url site_login %}" method="post">
+        {% csrf_token %}
+        {% if next %}
+        <input type="hidden" name="next" value="{{ next }}" />
+        {% endif %}
+        username:
+        <input type="text" name="username" value="" /><br />
+        password:
+        <input type="password" name="password" value="" /><br />
+
+        <input type="submit" value="Sign In" />
+    </form>
+</body>
+</html>
