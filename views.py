@@ -17,6 +17,7 @@ from django.template.defaultfilters import slugify
 from masterblaster.utils import xls_response, pdf_response, csv_response, pdf_table
 from masterblaster.models import Map, Parcel, Site
 from masterblaster.simplesearch import keywordsearch as simplesearch
+from settings import PHANTOM, PHANTOM_URL
 
 ''' json responses:
 
@@ -53,7 +54,6 @@ from masterblaster.simplesearch import keywordsearch as simplesearch
         }
 '''
 APP_ROOT = os.path.dirname(os.path.realpath(__file__))
-PHANTOM = "/usr/bin/phantomjs" 
 SCRIPT = os.path.join(APP_ROOT, 'map2pdf.js')
 
 def site_login(request, error = None):
@@ -140,7 +140,7 @@ def print_map(request):
     ''' the endpoint where the user requests a pdf '''
     payload = request.body
     path = reverse('pdf')
-    address = "http://127.0.0.1:8080" + path #?
+    address = PHANTOM_URL + path #?
     temp = tempfile.NamedTemporaryFile(suffix=".pdf")
     params = (PHANTOM, SCRIPT, address, payload, temp.name)
     print params
