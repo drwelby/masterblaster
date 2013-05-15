@@ -51,22 +51,24 @@ map.addControl(drawControl);
 
 
 //set up nav buttons
-$("#nav-map").click(navMapButtonClick);
-$("#nav-output").click(navOutputButtonClick);
+$("#nav-tools").click(toolsClick);
 
-//set up map buttons
+//set up tools buttons
 $("#pick").click(toggleButtonClick);
 $("#addbuffer").click(selectButtonClick);
 $("#dobuffer").click(bufferButtonClick);
 $("#lasso").click(lassoButtonClick);
 $("#saveButton").click(saveClick);
+$("#shareButton").click(shareClick);
 $("#pdfMapButton").click(pdfMapClick);
+$("#exportButton").click(exportClick);
 
 //set up output buttons
 $("#labelButton").click(labelButtonClick);
 $("#tableButton").click(tableButtonClick);
 $("#excelButton").click(excelButtonClick);
 $("#csvButton").click(csvButtonClick);
+$("#getLabelButton").click(getLabelButtonClick);
 
 //set up alert buttons
 $('.alert .close').on('click', function () {
@@ -184,7 +186,7 @@ function handleAjax(data) {
                 msg += " - " + ftprop.situs1;
             }
             if (ftprop.apn != lastapn) {
-                $('#info-overlay').html(msg).hide().fadeIn(200);
+                $('#info-overlay').html(msg).hide().fadeIn(100);
                 lastapn = ftprop.apn;
         }
         } else {
@@ -411,21 +413,16 @@ function getPopup(e) {
     sendAction(data);
 }
 
-function navMapButtonClick() {
-    $('#map-actions').toggle().siblings().hide();
+function toolsClick() {
+    $('#map-actions').toggle();
     $('#lasso').removeClass('btn-primary'); //disables the tool
     $('div.leaflet-top.leaflet-left').toggleClass('leaflet-extra-left');
-    $('#map').show();
-    $('#data-table').hide();
     drawControl.handlers.polygon.disable();
 }
 
-function navOutputButtonClick() {
-    $('#output-actions').show().siblings().hide();
-    $('div.leaflet-top.leaflet-left').removeClass('leaflet-extra-left');
+function exportClick() {
     $('#lasso').removeClass('btn-primary');
     updateTable();
-    $('#map').hide();
     $('#data-table').show();
     $('input[class=csrf]').val(csrftoken);
     $('input[class=data]').val(JSON.stringify(selectionMapState()));
@@ -460,8 +457,18 @@ function saveMap(){
     $('div#save-confirm').hide();
 }
 
+function shareClick() {
+    return true;
+}
+
 function labelButtonClick() {
-    $('#label-actions').toggle()
+    hidden = $('#label-actions').toggle().is(":hidden")
+    formh = $('form#label-actions').height() + 10;
+    if (!hidden) {
+        $('#table-container').css('margin-top', formh + "px")
+    }else{
+        $('#table-container').css('margin-top', "0px")
+    }
     $('#lasso').removeClass('btn-primary');
     drawControl.handlers.polygon.disable();
 }
@@ -481,6 +488,10 @@ function excelButtonClick() {
 function getData(filetype) {
     $('input[id=filetype]').val(filetype);
     $('form#dataform').submit();
+}
+
+function getLabelButtonClick() {
+    $('form#label-actions').submit();
 }
 
 function pdfMapClick() {

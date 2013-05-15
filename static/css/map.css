@@ -22,6 +22,12 @@
     bottom: 5px;
 }
 
+.downcaret {
+    font-size: 10px;
+    position: relative;
+    top: -1px;
+}
+
 .navbar-inverse .navbar-search .search-query {
     background: #fff;
     border-radius: 0;
@@ -30,7 +36,7 @@
     font-family: Helvetica, Arial, sans-serif;
 }
 .typeahead {
-    right: 10px;
+    right: 19px;
     left: auto;
 }
 
@@ -41,20 +47,32 @@
 }
 
 .leaflet-extra-left {
-    left: 200px;
+    left: 120px;
 }
 
 #data-table {
     display:none;
+    padding: 10px;
+    background-color:white;
+    z-index: 99;
     position:absolute;
-    left: 210px;
-    top: 0px;
-    bottom: 0px;
-    right: 10px;
+    left: 190px;
+    top: 12px;
+    bottom: 50px;
+    right: 50px;
     overflow:auto;
 }
 
 #data-table table {
+}
+
+#table-container {
+    position: absolute;
+    top: 50px;
+    left:10px;
+    right:10px;
+    bottom:10px;
+    overflow:auto;
 }
 
 #map {
@@ -66,11 +84,15 @@
 }
 
 #actions {
-    width: 200px;
+    width: 120px;
     left: 0px;
     top:0px;
     position:absolute;
     z-index: 10;
+}
+
+.btn-break {
+    border-top: 1px dotted rgb(180, 180, 180);
 }
 
 #alerts {
@@ -217,6 +239,16 @@ div#rightbuttons {
 
 #fullbuffer {
     display:none;
+    margin-bottom:0px;
+    margin-top:5px;
+}
+
+#buffer {
+    width:120px;
+}
+
+#buffer-options {
+    display: inline;
 }
 
 .button-background {
