@@ -100,10 +100,10 @@ def get_feature(request):
     # should lat/lon return centroid of parcel?
     action = data['action']
     pt = Point(lon,lat)
-    if not site.safebounds.prepared.contains(pt):
-        return HttpResponse(json.dumps({action:{'lat':lat, 'lon':lon}}), mimetype="application/json")
     Parcel._meta.db_table = site.table
     parcel = Parcel.objects.filter(geom__contains=pt)[0]
+    if not site.safebounds.prepared.intersects(parcel.geom):
+        return HttpResponse(json.dumps({action:{'lat':lat, 'lon':lon}}), mimetype="application/json")
     if parcel and parcel.owner:
         data = {action: {'lat':lat, 'lon':lon, 'feature': parcel.to_pygeojson() }}
     else:
