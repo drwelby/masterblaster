@@ -21,7 +21,7 @@
 <div id="topbar">
     <a class="brand" href="/">GeoNotice</a>
     <div class="pull-right">
-        {{site.name}}
+        {{site.name}} <a id="userguide"><i class="icon-cog"></i></a>
     </div>
 </div>
 </div>
@@ -31,10 +31,7 @@
         <div class="navbar-inner">
             <ul class="nav pull-left">
                 <li>
-                <a id='nav-map'>Select Parcels</a>
-                </li>
-                <li>
-                <a id='nav-output'>Export</a>
+                <a id='nav-tools'>Tools <span class="downcaret">&#9660;</span></a>
                 </li>
             </ul>
             <div class="pull-right">
@@ -42,8 +39,6 @@
                       <form class="navbar-search" action="">
                           <input placeholder="search" autocomplete="off" type="text" id="search" class="search-query input-xlarge" data-link="/search/"><span class="fornav"><i class="icon-search"></i></span>
                       </form>
-                      <li class="divider"></li>
-                      <li><a id="userguide">User Guide</a></li>
                 </ul>
           </div>
             <div id="map-title">
@@ -58,58 +53,28 @@
         <div id="map-actions" class="all-actions">
             <a id="pick" class="btn btn-block">Single</a>
             <a id="lasso" class="btn btn-block ">Lasso</a>
-            <a id="addbuffer" class="btn btn-block">Buffer &raquo;</a>
-            <div id="fullbuffer" class="btn-block">
-                <button id="buffer" class="btn btn-block btn-primary" type="button">Buffer</button>
-                <div class="input-append btn-block">
+            <a id="addbuffer" class="btn btn-block">Buffer</a>
+            <div id="fullbuffer" class="input-append">
+                <button id="buffer" class="btn btn-primary" type="button">Buffer</button>
+                <div id="buffer-options" >
                     <input id="bufferdist" class="hideright input-actions" id="appendedInputButtons"
                     type="text" placeholder="300"> <span class="add-on bgwhite ital">feet&nbsp;</span>
-                    <button id="dobuffer" class="btn btn-danger" type="button">Run</button>
+                    <button id="dobuffer" class="btn btn-success" type="button">Run</button>
                 </div>
             </div>
-            <a id="newMap" href="/" class="btn btn-block">New Map</a>
-            <a id="saveButton" class="btn btn-block">Save</i></a>
+            <a id="saveButton" class="btn btn-block btn-break">Save Map</i></a>
+            <a id="" class="btn btn-block">Share</i></a>
+            <a id="newMap" href="/" class="btn btn-block">New</a>
             <a href="/maps/" class="btn btn-block">Saved Maps</a>
             <form id="pdfform" method="post" action="/print/" target="_blank">
                 <input type="hidden" class="csrf" name="csrfmiddlewaretoken" value="">
                 <input type="hidden" class="data" name="data" />
                 <input type="hidden" name="siteid" value="{{site.pk}}" />
             </form>
-            <a id="pdfMapButton" class="btn btn-block">Save Map as PDF</a>
+            <a id="pdfMapButton" class="btn btn-block btn-break">PDF</a>
+            <a id="exportButton" class="btn btn-block">Export</a>
         </div>
         <div id="output-actions" class="all-actions">
-            <form id="dataform" method="post" action="/data/" target="_blank">
-                <input type="hidden" class="csrf" name="csrfmiddlewaretoken" value="">
-                <input type="hidden" class="data" name="data" />
-                <input type="hidden" id="filetype" name="filetype" />
-            </form>
-            <a id="labelButton" class="btn btn-block">Labels</a>
-                <form id="label-actions" method="post" action="/labels/" target="_blank">
-                    <label class="radio">
-                          <input type="radio" name="optionsRadios" id="optionsMail" value="mail" checked>
-                          Use Mailing Address&nbsp;&nbsp;
-                    </label>
-                    <label class="radio">
-                          <input type="radio" name="optionsRadios" id="optionsSitus" value="situs">
-                          Use Situs Address&nbsp;&nbsp;
-                    </label>
-                    <label class="radio">
-                          <input type="radio" name="optionsRadios" id="optionsBoth" value="both">
-                          Use Both (if different)
-                    </label>
-                    <label class="checkbox">
-                        <input type="checkbox" id="uniquebox">Skip Duplicate Mailing Addresses</input>
-                    </label>
-                    <label class="checkbox">
-                        <input type="checkbox" id="apnbox" checked >Show APNs</input>
-                    </label>
-                    <input type="hidden" class="csrf" name="csrfmiddlewaretoken" value="">
-                    <input type="hidden" class="data" name="data" />
-                    <input type="submit" value="Get Labels" />
-                </form>
-            <a id="tableButton" class="btn btn-block">Table</a>
-            <a id="excelButton" class="btn btn-block">Excel</a>
-            <a id="csvButton" class="btn btn-block">CSV</a>
         </div>
     </div>
     <div id="alerts">
@@ -129,19 +94,52 @@
     </div>
     <div id="info-overlay"><span>...</span></div>
     <div id="data-table">
-        <h2 class="text-center">Data Preview</h2>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th class="span2">APN</th>
-                    <th>Owner</th>
-                    <th>Situs Address</th>
-                    <th>Mailing Address</th>
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
+        <form id="dataform" method="post" action="/data/" target="_blank">
+            <input type="hidden" class="csrf" name="csrfmiddlewaretoken" value="">
+            <input type="hidden" class="data" name="data" />
+            <input type="hidden" id="filetype" name="filetype" />
+        </form>
+        <a id="labelButton" class="btn">Labels</a>
+        <a id="tableButton" class="btn">Table</a>
+        <a id="excelButton" class="btn">Excel</a>
+        <a id="csvButton" class="btn">CSV</a>
+        <form id="label-actions" method="post" action="/labels/" target="_blank">
+            <label class="radio inline">
+                  <input type="radio" name="optionsRadios" id="optionsMail" value="mail" checked>
+                  Use Mailing Address&nbsp;&nbsp;
+            </label>
+            <label class="radio inline">
+                  <input type="radio" name="optionsRadios" id="optionsSitus" value="situs">
+                  Use Situs Address&nbsp;&nbsp;
+            </label>
+            <label class="radio inline">
+                  <input type="radio" name="optionsRadios" id="optionsBoth" value="both">
+                  Use Both (if different)
+            </label>
+            <label class="checkbox">
+                <input type="checkbox" id="uniquebox">Skip Duplicate Mailing Addresses</input>
+            </label>
+            <label class="checkbox">
+                <input type="checkbox" id="apnbox" checked >Show APNs</input>
+            </label>
+            <input type="hidden" class="csrf" name="csrfmiddlewaretoken" value="">
+            <input type="hidden" class="data" name="data" />
+            <button class="btn" id="getLabelButton">Get Labels</button>
+        </form>
+        <div id="table-container">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th class="span2">APN</th>
+                        <th>Owner</th>
+                        <th>Situs Address</th>
+                        <th>Mailing Address</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
     </div>
     <div id="map" class="vstretch"></div>
   </div>

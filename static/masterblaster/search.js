@@ -30,8 +30,7 @@ $('#search').typeahead({
         coords = searchMap[item];
         searchPt = new L.LatLng(coords[1],coords[0]);
         map.fireEvent('contextmenu', {latlng: searchPt});
-        map.panTo(searchPt);
-        map.setZoom(17);
+        map.setView(searchPt, 17, true);
     },
     matcher: function (item) {
         return true;
