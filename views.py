@@ -86,7 +86,7 @@ def newmap(request):
     ''' requests for unsaved/new maps '''
     site = request.user.sites.all()[0]
     bmap = Map()
-    bmap.state = '{center:%s,zoom:%s,selected:{},selection:{},buffer:{}}' % ( list(site.center), int(site.maxzoom))
+    bmap.state = '{selected:{},selection:{},buffer:{}}'
     return render_to_response('map.html', { 'site': site, 'bmap':bmap})
 
 @login_required

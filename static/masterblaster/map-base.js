@@ -28,27 +28,29 @@ var siteBoundsStyle = {
 };
 
 // Set up the map
-if (mapstate.zoom && mapstate.center) {
-    console.log(mapstate.zoom);
-    console.log(mapstate.center);
-    map.setView(mapstate.center,mapstate.zoom);
-}
-map.setMaxBounds(panbounds);
 
 L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/sat/{z}/{x}/{y}.jpg', {
     attribution: 'Tiles courtesy MapQuest, NASA/JPL-Caltech and USDA Farm Service Agency',
-    opacity: 0.8,
+    opacity: 1,
     zIndex:-1,
     subdomains: "1234"
 }).addTo(map);
 
-L.tileLayer.wms('http://50.56.215.16:8888/geoserver/wms?', {
+L.tileLayer.wms('http://50.56.215.16:8888/geoserver/wms?tile=true', {
         layers: 'counties:shastaco_parcels_owners',
         format: 'image/png',
         transparent: true}).addTo(map);
 
 siteBoundsLayer = L.geoJson(sitebounds, {style:siteBoundsStyle, onEachFeature: passClick});
 siteBoundsLayer.addTo(map);
+
+if (mapstate.zoom && mapstate.center) {
+    map.setView(mapstate.center,mapstate.zoom);
+}else{
+    map.fitBounds(siteBoundsLayer.getBounds());
+}
+
+map.setMaxBounds(panbounds);
 
 updateMapState();
 

@@ -20,23 +20,6 @@ class Site(models.Model):
     cache = {}
 
     @property
-    def center(self):
-        pt = self.bounds.centroid
-        return (pt.coords[1],pt.coords[0])
-
-    @property
-    def maxzoom(self):
-        GLOBE_WIDTH = 256
-        (west, south, east, north) = self.bounds.extent
-        width = east - west;
-        if width < 0:
-            width += 360;
-        height = north - south
-        angle = max(height,width)
-        return round(math.log(960 * 360 / angle / GLOBE_WIDTH) / math.log(2)) -1
-
-
-    @property
     def safebounds(self):
         if self.pk in Site.cache:
             return Site.cache[self.pk]
@@ -68,7 +51,7 @@ class Site(models.Model):
             bump = newheight - height
             ymax += bump/2
             ymin -= bump/2
-        return ([[ymin, xmin], [ymax, xmax]])  
+        return ([[ymin, xmin], [ymax, xmax]])
 
 class Map(models.Model):
     name = models.CharField(max_length=100, blank=True, null=True)
