@@ -69,7 +69,7 @@ $("#tableButton").click(tableButtonClick);
 $("#excelButton").click(excelButtonClick);
 $("#csvButton").click(csvButtonClick);
 $("#getLabelButton").click(getLabelButtonClick);
-$("#data-table .close").click(closeDataTable);
+$("#data-table .closer").click(closeDataTable);
 
 //set up alert buttons
 $('.alert .close').on('click', function () {

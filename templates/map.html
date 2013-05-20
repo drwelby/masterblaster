@@ -94,7 +94,7 @@
     </div>
     <div id="info-overlay"><span>...</span></div>
     <div id="data-table">
-        <button type="button" class="close">&times;</button>
+        <a class="btn closer">&laquo;Back</a>
         <form id="dataform" method="post" action="/data/" target="_blank">
             <input type="hidden" class="csrf" name="csrfmiddlewaretoken" value="">
             <input type="hidden" class="data" name="data" />
@@ -125,7 +125,7 @@
             </label>
             <input type="hidden" class="csrf" name="csrfmiddlewaretoken" value="">
             <input type="hidden" class="data" name="data" />
-            <button class="btn" id="getLabelButton">Get Labels</button>
+            <button class="btn" id="getLabelButton">Make Labels</button>
         </form>
         <div id="table-container">
             <table class="table table-striped">
