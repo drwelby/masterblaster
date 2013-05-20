@@ -69,6 +69,7 @@ $("#tableButton").click(tableButtonClick);
 $("#excelButton").click(excelButtonClick);
 $("#csvButton").click(csvButtonClick);
 $("#getLabelButton").click(getLabelButtonClick);
+$("#data-table .close").click(closeDataTable);
 
 //set up alert buttons
 $('.alert .close').on('click', function () {
@@ -192,6 +193,7 @@ function handleAjax(data) {
         } else {
             msg = "...";
             $('#info-overlay').html(msg);
+            lastapn = "";
         }
         return;
     }
@@ -428,6 +430,11 @@ function exportClick() {
     $('input[class=data]').val(JSON.stringify(selectionMapState()));
     drawControl.handlers.polygon.disable();
 }
+
+function closeDataTable() {
+    $('#data-table').hide();
+}
+
 
 function saveClick(){
     if (!mapstate.name){

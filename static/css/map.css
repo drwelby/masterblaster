@@ -66,6 +66,10 @@
 #data-table table {
 }
 
+#data-table .close {
+    float:right;
+}
+
 #table-container {
     position: absolute;
     top: 50px;
