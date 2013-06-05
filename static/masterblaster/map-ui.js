@@ -59,6 +59,7 @@ $("#addbuffer").click(selectButtonClick);
 $("#dobuffer").click(bufferButtonClick);
 $("#lasso").click(lassoButtonClick);
 $("#saveButton").click(saveClick);
+$("#clearMap").click(clearMap);
 $("#shareButton").click(shareClick);
 $("#pdfMapButton").click(pdfMapClick);
 $("#exportButton").click(exportClick);
@@ -388,13 +389,11 @@ map.on('drawing-disabled', function(){
         }
 });
 
-function mapRefresh() {
-    if (confirm("Reset the map and delete all parcels and buffers?")) {
-        var data = {
-            'action': 'reset',
-        };
-        sendAction(data);
-    }
+function clearMap() {
+    mapstate.selected = {};
+    mapstate.selection = {};
+    mapstate.buffer = {};
+    updatePageState();
 }
 
 function infoClick(e) {

@@ -25,7 +25,7 @@ class Site(models.Model):
             return Site.cache[self.pk]
         boundsSPCS = self.bounds
         boundsSPCS.transform(2225)
-        buffered = boundsSPCS.buffer(500)
+        buffered = boundsSPCS.buffer(1000)
         buffered.transform(4326)
         Site.cache[self.pk] = buffered
         return buffered

@@ -2,6 +2,7 @@ var map = L.map('map');
 var selectedLayer, selectionLayer, bufferLayer;
 var allLayers = L.layerGroup();
 
+
 var bufferStyle = {
     "color": "#ff0000",
     "weight": 3,
@@ -29,11 +30,12 @@ var siteBoundsStyle = {
 
 // Set up the map
 
-L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/sat/{z}/{x}/{y}.jpg', {
-    attribution: 'Tiles courtesy MapQuest, NASA/JPL-Caltech and USDA Farm Service Agency',
+L.tileLayer('http://mapport.net/geonotice/01-ENPLAN%20Tiles/{z}/{x}/{y}.jpg', {
+    attribution: 'Imagery &copy; ENPLAN 2010',
+    maxZoom: 20,
+    tms: true,
     opacity: 1,
     zIndex:-1,
-    subdomains: "1234"
 }).addTo(map);
 
 L.tileLayer.wms('http://50.56.215.16:8888/geoserver/wms?tile=true', {
