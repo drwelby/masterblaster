@@ -20,11 +20,11 @@ p#desc {
 }
 #map-title{
     font-size: 22px;
-    padding: 15px 20px 8px;
+    padding: 10px 8px 0 0;
     color: #000;
 }
 
-#no-title{
+#WAS-no-title{
     float:left;
     margin-left:20%;
     font-size: 15px;
@@ -98,11 +98,15 @@ input, button, select, textarea {
     left: 0;
     right: 0;
     height: 40px;
-    padding: 10px;
 }
 
-#topbar .brand {
-    font-size:24px;
+#topbar-inner {
+    padding: 10px 10px 0 10px;
+}
+
+#topbar-inner .brand {
+    font-size:17px;
+    color: #0085DA;
 }
 
 #midbar {
@@ -110,7 +114,7 @@ input, button, select, textarea {
     top: 40px;
     left: 0;
     right: 0;
-    height: 50px;
+    height: 40px;
     font-size: 16px;
 }
 
@@ -120,7 +124,7 @@ input, button, select, textarea {
 
 #map-area {
     position: absolute;
-    top:91px;
+    top:80px;
     left: 0;
     right: 0;
     bottom: 0;

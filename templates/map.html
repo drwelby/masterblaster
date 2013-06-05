@@ -19,9 +19,11 @@
     <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
 <![endif]-->
 <div id="topbar">
-    <a class="brand" href="/">GeoNotice</a>
-    <div class="pull-right">
-        {{site.name}} <a id="userguide"><i class="icon-cog"></i></a>
+    <div id="topbar-inner">
+        <a class="brand" href="/">GeoNotice</a>
+        <div class="pull-right">
+            {{site.name}} <a id="userguide"><i class="icon-cog"></i></a>
+        </div>
     </div>
 </div>
 </div>
@@ -118,7 +120,7 @@
                   Use Both (if different)
             </label>
             <label class="checkbox">
-                <input type="checkbox" id="uniquebox">Skip Duplicate Mailing Addresses</input>
+                <input type="checkbox" id="uniquebox">Skip Duplicates</input>
             </label>
             <label class="checkbox">
                 <input type="checkbox" id="apnbox" checked >Show APNs</input>
