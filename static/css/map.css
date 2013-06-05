@@ -39,6 +39,10 @@ a#nav-tools {
     moz-border-radius: 0;
     font-family: Helvetica, Arial, sans-serif;
 }
+.navbar-inverse .navbar-inner {
+    background-color: #0085DA;
+}
+
 .typeahead {
     right: 19px;
     left: auto;

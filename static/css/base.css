@@ -19,7 +19,7 @@ p#desc {
     margin-top:15px;
 }
 #map-title{
-    font-size: 24px;
+    font-size: 22px;
     padding: 15px 20px 8px;
     color: #000;
 }
@@ -45,7 +45,7 @@ p#desc {
 
 .editable-click, a.editable-click {
     border-bottom: 0;
-    color: #000;
+    color: #FFF;
 }
 
 
