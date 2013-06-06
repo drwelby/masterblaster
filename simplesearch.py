@@ -18,7 +18,7 @@ def exactsearch(term, site, limit=0):
 def keywordsearch(term, site, limit=0):
     Parcel._meta.db_table = site.table
     # spatial match
-    parcels = Parcel.objects.filter(geom__contained=site.safebounds)
+    parcels = Parcel.objects.filter(geom__intersects=site.safebounds)
 
     keywords = term.split(' ')
 

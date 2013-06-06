@@ -102,8 +102,13 @@ def get_feature(request):
     pt = Point(lon,lat)
     Parcel._meta.db_table = site.table
     parcel = Parcel.objects.filter(geom__contains=pt)[0]
-    if not site.safebounds.prepared.intersects(parcel.geom):
-        return HttpResponse(json.dumps({action:{'lat':lat, 'lon':lon}}), mimetype="application/json")
+    if action == 'select':
+        print action
+        if not site.bounds.prepared.intersects(parcel.geom.point_on_surface):
+            return HttpResponse(json.dumps({action:{'lat':lat, 'lon':lon}}), mimetype="application/json")
+    else:
+        if not site.safebounds.prepared.intersects(parcel.geom):
+            return HttpResponse(json.dumps({action:{'lat':lat, 'lon':lon}}), mimetype="application/json")
     if parcel and parcel.owner:
         data = {action: {'lat':lat, 'lon':lon, 'feature': parcel.to_pygeojson() }}
     else:
@@ -240,7 +245,7 @@ def lasso(request):
     Parcel._meta.db_table = site.table
     newparcels = Parcel.objects.filter(geom__intersects=GEOSGeometry(data['lasso']))
     for parcel in newparcels:
-        if not bounds.covers(parcel.geom):
+        if not bounds.intersects(parcel.geom):
             continue
         if parcel.apn in mapstate['selected']:
             del mapstate['selected'][parcel.apn]
@@ -284,8 +289,7 @@ def buffer(request):
         buffered.transform(4326)
         mapstate['buffer'] = {'type':'Feature', 'geometry':json.loads(buffered.json)}
         # select new parcels
-        newparcels = Parcel.objects.filter(geom__intersects=buffered)
-        newparcels.filter(geom__intersects=site.bounds)
+        newparcels = Parcel.objects.filter(geom__intersects=buffered).filter(geom__intersects=site.safebounds)
         for parcel in newparcels:
             if not parcel.owner:
                 continue
