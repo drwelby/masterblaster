@@ -64,10 +64,8 @@
                     <button id="dobuffer" class="btn btn-success" type="button">Run</button>
                 </div>
             </div>
-            <a id="saveButton" class="btn btn-block btn-break">Save Map</i></a>
-            <a id="" class="btn btn-block">Share</i></a>
+            <a id="saveButton" class="btn btn-block btn-break">Snapshot</i></a>
             <a id="clearMap" class="btn btn-block">Clear</a>
-            <a href="/maps/" class="btn btn-block">Saved Maps</a>
             <form id="pdfform" method="post" action="/print/" target="_blank">
                 <input type="hidden" class="csrf" name="csrfmiddlewaretoken" value="">
                 <input type="hidden" class="data" name="data" />
@@ -80,18 +78,10 @@
         </div>
     </div>
     <div id="alerts">
-        <div id="save-confirm" class="alert alert-info">
-            <button type="button" class="close">&times;</button>
-            This map already has been saved. Would like to save over this map, or create a new one?
-            <button id="saveold">Save over this map</button><button id="savenew">Save as a new map</button>
-        </div>
-        <div id="save-needsname" class="alert alert-info">
-            <button type="button" class="close">&times;</button>
-            Please name this map before saving.
-        </div>
         <div id="save-success" class="alert alert-success">
             <button type="button" class="close">&times;</button>
-            Map Saved.
+            Snapshot saved at this link: <a id="snapshot-link">URL</a> (bookmark this page to save)<br>
+            Click <a id='snapshot-mailto'>here</a> to email this snapshot
         </div>
     </div>
     <div id="info-overlay"><span>...</span></div>

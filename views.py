@@ -103,7 +103,6 @@ def get_feature(request):
     Parcel._meta.db_table = site.table
     parcel = Parcel.objects.filter(geom__contains=pt)[0]
     if action == 'select':
-        print action
         if not site.bounds.prepared.intersects(parcel.geom.point_on_surface):
             return HttpResponse(json.dumps({action:{'lat':lat, 'lon':lon}}), mimetype="application/json")
     else:
@@ -116,7 +115,7 @@ def get_feature(request):
     return HttpResponse(json.dumps(data), mimetype="application/json")
 
 @login_required
-def name_map(request, id, slug):
+def name_map(request, id, slug=''):
     ''' returns a named map
         template will pull mapstate from map object
     '''
@@ -209,26 +208,15 @@ def save(request):
     '''given a mapstate from an existing map, saves it'''
 
     mapstate = json.loads(request.body)['data']['mapstate']
-    if 'id' in mapstate: # existing map
-        id = mapstate['id']
-        try:
-            bmap = Map.objects.get(id=id)
-        except ObjectDoesNotExist:
-            raise Http404
-    else:
-        bmap = Map()
-        site = request.user.sites.all()[0]
-        bmap.site = site
-    bmap.set_name(mapstate['name'])
-    bmap.state = json.dumps(mapstate)
-    # do we need to store these in the model anymore?
-    bmap.zoom = mapstate['zoom']
-    bmap.center = Point(mapstate['center'])
+    bmap = Map()
+    site = request.user.sites.all()[0]
+    bmap.site = site
+    bmap.set_name(mapstate.get('name',''))
     bmap.save()
-    if 'id' not in mapstate: #add it
-        mapstate['id'] = bmap.id
-        bmap.state = json.dumps(mapstate)
-        bmap.save()
+    mapstate['id'] = bmap.id
+    mapstate['slug'] = bmap.slug
+    bmap.state = json.dumps(mapstate)
+    bmap.save()
     return HttpResponse(json.dumps({'save':{'success':'true', 'mapstate':mapstate}}), mimetype="application/json")
 
 

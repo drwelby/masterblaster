@@ -59,8 +59,8 @@ class Map(models.Model):
     slug = models.SlugField()
     edit_date = models.DateTimeField()
     site = models.ForeignKey(Site, related_name='maps')
-    zoom = models.IntegerField()
-    center = models.PointField()
+    #zoom = models.IntegerField()
+    #center = models.PointField()
 
     objects = models.GeoManager()
 
@@ -75,19 +75,6 @@ class Map(models.Model):
         self.name = name
         self.slug = slugify(self.name)
         return
-        # don't need unique slugs anymore
-        orig_slug = slug = slugify(self.name)
-        index = 0
-        check = True
-        while check:
-            try:
-                Map.objects.get(slug=slug)
-                index += 1
-                slug = orig_slug + '-' + str(index)
-                print slug
-            except Map.DoesNotExist:
-                self.slug = slug
-                check = False
 
     @models.permalink
     def get_absolute_url(self):

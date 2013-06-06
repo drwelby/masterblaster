@@ -75,18 +75,11 @@ $("#data-table .closer").click(closeDataTable);
 //set up alert buttons
 $('.alert .close').on('click', function () {
     $(this).parent().hide();
-})
-$("#savenew").click(saveNewMap);
-$("#saveold").click(saveMap);
+    history.replaceState(null,'GeoNotice',window.location.origin);
+    document.title = 'GeoNotice';
 
-//semi-modal behavior for the save confirmation
-$(function(){
-      $(document).click(function(e){  
-          if ($.inArray(e.target.id, ['saveButton','savenew','saveold']) == -1) {
-             $('div#save-confirm').hide();
-          }
-      });
-});
+})
+
 
 // do we need this any more?
 $.fn.editableform.buttons = 
@@ -101,6 +94,7 @@ $("#map-title-editable").editable({
     emptytext: "name this project",
     url: function(params) {
         mapstate.name = params.value;
+        console.log(params);
         $('div#save-needsname').fadeOut();
         return true;
     },
@@ -130,7 +124,8 @@ map.on('mouseover', function(){
    $('#info-overlay').show().html('...');
 });
 map.on('contextmenu', getPopup);
-map.on('move', updateBounds);
+map.on('popupclose', function(){delete mapstate.popup});
+map.on('moveend', updateBounds);
 
 function updateBounds() {
     mapstate.zoom = map.getZoom();
@@ -202,6 +197,7 @@ function handleAjax(data) {
         if (data.get_popup.feature) {
             lat = parseFloat(data.get_popup.lat);
             lon = parseFloat(data.get_popup.lon);
+            mapstate.popup = [lat,lon];
             ftprop = data.get_popup.feature.properties;
             pstr = "<table class='popup-table'>";
             pstr += "<tr><td><b>Owner</b>: </td><td>" + (ftprop.owner || "") + "</td></tr>";
@@ -249,8 +245,24 @@ function handleAjax(data) {
         updatePageState();
     }
     if (data.save) {
-        $('div#save-success').fadeIn().delay(1500).fadeOut();
         mapstate = data.save.mapstate;
+        snapshotLink = window.location.origin + "/snapshot/" +  mapstate.id;
+        if (mapstate.slug.length > 0) {
+            snapshotLink += "/" + mapstate.slug;
+        }
+        snapshotTitle = "GeoNotice Snapshot " + mapstate.id;
+        if (mapstate.name && mapstate.name.length > 0) {
+            snapshotTitle += " - " + mapstate.name;
+        }
+        mailTo = 'mailto:' + escape("<Insert Recipients Here>") 
+            +"?subject=" +escape("<Insert Subject Here>") 
+            +"&body=" +escape(snapshotLink);
+        $('a#snapshot-link').attr('href', snapshotLink);
+        $('a#snapshot-mailto').attr('href', mailTo);
+        $('a#snapshot-link').text(snapshotLink);
+        history.replaceState(null,snapshotTitle,snapshotLink);
+        document.title = snapshotTitle;
+        $('div#save-success').fadeIn();
     }
 }
 
@@ -434,33 +446,12 @@ function closeDataTable() {
     $('#data-table').hide();
 }
 
-
 function saveClick(){
-    if (!mapstate.name){
-        $('div#save-needsname').fadeIn();
-        return;
-    }
-    if (mapstate.id){
-        $('div#save-confirm').fadeIn();
-    }else{
-        saveMap();
-    }
-}
-
-
-function saveNewMap(e){
-    delete mapstate.id;
-    saveMap();
-    $('div#save-confirm').hide();
-}
-
-function saveMap(){
     var data = {
         'action': 'save',
         'mapstate': mapstate
     };
     sendAction(data);
-    $('div#save-confirm').hide();
 }
 
 function shareClick() {
