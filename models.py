@@ -57,17 +57,12 @@ class Map(models.Model):
     name = models.CharField(max_length=100, blank=True, null=True)
     state = models.TextField(blank=True, null=True)
     slug = models.SlugField()
-    edit_date = models.DateTimeField()
+    edit_date = models.DateTimeField(auto_now=True)
     site = models.ForeignKey(Site, related_name='maps')
     #zoom = models.IntegerField()
     #center = models.PointField()
 
     objects = models.GeoManager()
-
-    def save(self, *args, **kwargs):
-        ''' saves the map, updating the edit date '''
-        self.edit_date = datetime.now()
-        super(Map, self).save(*args, **kwargs)
 
     def set_name(self, name):
         ''' sets the name and calculates a slug'''
