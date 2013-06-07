@@ -22,9 +22,9 @@ var selectedStyle = {
     "fillOpacity": 0.25
 };
 var siteBoundsStyle = {
-    "color": "#ffff00",
+    "color": "#ff8c00",
     "opacity": 1,
-    "weight": 2,
+    "weight": 3,
     "fillOpacity": 0
 };
 
