@@ -40,6 +40,7 @@ L.tileLayer('http://mapport.net/geonotice/01-ENPLAN%20Tiles/{z}/{x}/{y}.jpg', {
 
 L.tileLayer.wms('http://50.56.215.16:8888/geoserver/wms?tile=true', {
         layers: 'counties:shastaco_parcels_owners',
+        maxZoom: 20,
         format: 'image/png',
         transparent: true}).addTo(map);
 
