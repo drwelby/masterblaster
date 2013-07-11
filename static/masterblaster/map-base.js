@@ -22,7 +22,7 @@ var selectedStyle = {
     "fillOpacity": 0.25
 };
 var siteBoundsStyle = {
-    "color": "#ff8c00",
+    "color": "#ffff00",
     "opacity": 1,
     "weight": 3,
     "fillOpacity": 0
@@ -30,11 +30,12 @@ var siteBoundsStyle = {
 
 // Set up the map
 
-L.tileLayer('http://mapport.net/geonotice/01-ENPLAN%20Tiles/{z}/{x}/{y}.jpg', {
+L.tileLayer('http://{s}.mapport.net/geonotice/01-ENPLAN%20Tiles/{z}/{x}/{y}.jpg', {
     attribution: 'Imagery &copy; ENPLAN 2010',
     maxZoom: 20,
     tms: true,
     opacity: 1,
+    subdomains: "1234",
     zIndex:-1,
 }).addTo(map);
 
