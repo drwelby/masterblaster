@@ -1,9 +1,3 @@
-var presstimer;
-var lastLatLng;
-var lastapn = "";
-
-var clickAction = function(e) {return};
-
 function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie != '') {
@@ -35,32 +29,12 @@ $.ajaxSetup({
     }
 });
 
-var drawControl = new L.Control.Draw({
-        polygon: {
-            allowIntersection: false,
-            shapeOptions: {
-                color: '#ff0000'
-            },
-        circle:false,
-        marker:false,
-        polyline:false,
-        rectangle:false
-        }
-    });
-map.addControl(drawControl);
-
 
 //set up nav buttons
 $("#nav-tools").click(toolsClick);
 
 //set up tools buttons
-$("#pick").click(toggleButtonClick);
-$("#addbuffer").click(selectButtonClick);
-$("#dobuffer").click(bufferButtonClick);
-$("#lasso").click(lassoButtonClick);
-$("#saveButton").click(saveClick);
 $("#clearMap").click(clearMap);
-$("#shareButton").click(shareClick);
 $("#pdfMapButton").click(pdfMapClick);
 $("#exportButton").click(exportClick);
 
@@ -71,14 +45,7 @@ $("#excelButton").click(excelButtonClick);
 $("#csvButton").click(csvButtonClick);
 $("#getLabelButton").click(getLabelButtonClick);
 $("#data-table .closer").click(closeDataTable);
-
-//set up alert buttons
-$('.alert .close').on('click', function () {
-    $(this).parent().hide();
-    history.replaceState(null,'GeoNotice',window.location.origin);
-    document.title = 'GeoNotice';
-
-})
+$('#data-container').click(closeDataTable);
 
 
 // do we need this any more?
@@ -111,40 +78,13 @@ $("#map-title-editable").on('shown', function(e,reason) {
 updatePageState();
 
 // Map Events
-map.on('click', onMapClick);
 map.on('click', function(e) { $('div#save-confirm').hide(); });
-map.on('mousemove', function(e) {
-    lastLatLng = e.latlng;
-    setTimeout(function(){hover(e)},300);
-});
-map.on('mouseout', function(){
-   $('#info-overlay').hide();
-});
-map.on('mouseover', function(){
-   $('#info-overlay').show().html('...');
-});
-map.on('contextmenu', getPopup);
-map.on('popupclose', function(){delete mapstate.popup});
 map.on('moveend', updateBounds);
 
 function updateBounds() {
     mapstate.zoom = map.getZoom();
     center = map.getCenter();
     mapstate.center = [center.lat,center.lng];
-}
-
-function hover(e) {
-    if (e.latlng.equals(lastLatLng)) {
-        infoClick(e);
-    }
-}
-
-function onMapClick(e) {
-    if (e.originalEvent.altKey) {
-        infoClick(e);
-    }else{
-        clickAction(e);
-    }
 }
 
 function updatePageState() {
@@ -156,115 +96,6 @@ function updatePageState() {
     }
 }
 
-
-// api handler
-function sendAction(data){
-    $.ajax({
-        type: "POST",
-        url: "/" + data.action + "/",
-        // The key needs to match your method's input parameter (case-sensitive).
-        data: JSON.stringify({ data: data }),
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        statusCode: {
-            200: function(data, textStatus, jqXHR) {handleAjax(data)},
-            304: function(data, textStatus, jqXHR) {console.log('pan')},
-            404: function() {alert('Server Error')}
-        }
-    });
-}
-
-function handleAjax(data) {
-    if (data.get_feature) {
-        if (data.get_feature.feature) {
-            ftprop = data.get_feature.feature.properties;
-            msg = ftprop.owner;
-            if (ftprop.situs1 != "No Data") {
-                msg += " - " + ftprop.situs1;
-            }
-            if (ftprop.apn != lastapn) {
-                $('#info-overlay').html(msg).hide().fadeIn(100);
-                lastapn = ftprop.apn;
-        }
-        } else {
-            msg = "...";
-            $('#info-overlay').html(msg);
-            lastapn = "";
-        }
-        return;
-    }
-    if (data.get_popup) {
-        if (data.get_popup.feature) {
-            lat = parseFloat(data.get_popup.lat);
-            lon = parseFloat(data.get_popup.lon);
-            mapstate.popup = [lat,lon];
-            ftprop = data.get_popup.feature.properties;
-            pstr = "<table class='popup-table'>";
-            pstr += "<tr><td><b>Owner</b>: </td><td>" + (ftprop.owner || "") + "</td></tr>";
-            pstr += "<tr><td><b>Situs</b>: </td><td>" + (ftprop.situs1 || "") + "</td></tr>";
-            pstr += "<tr><td></td><td>" + (ftprop.situs2 || "") + "</td></tr>";
-            pstr += "<tr><td><b>Mailing</b>: </td><td>" + (ftprop.mail1 || "") + "</td></tr>";
-            pstr += "<tr><td></td><td>" + (ftprop.mail2 || "") + "</td></tr>";
-            pstr += "<tr><td><b>Acres</b>: </td><td>" + (ftprop.area || "") + "</td></tr>";
-            pstr += "<tr><td><b>APN</b>: </td><td>" + (ftprop.apn || "") + "</td></tr>";
-            pstr += "</table>";
-            pstr += '<br><a href="http://maps.google.com?q=loc:';
-            pstr += data.get_popup.lat + ',' + data.get_popup.lon;
-            pstr += '&z=' + map.getZoom();
-            pstr += '&t=h" target="_blank">View in Google Maps</a>';
-            L.popup().setLatLng([lat, lon]).setContent(pstr).openOn(map);
-        }
-        return;
-    }
-    if (data.toggle) {
-        if (data.toggle.feature) {
-            apn = data.toggle.feature.properties.apn;
-            if (mapstate.selected[apn]) {
-                delete mapstate.selected[apn];
-            }else{
-                mapstate.selected[apn] = data.toggle.feature;
-            }
-            updatePageState();
-        }
-        return;
-    }
-    if (data.select) {
-        if (data.select.feature) {
-            apn = data.select.feature.properties.apn;
-            if (mapstate.selection[apn]) {
-                delete mapstate.selection[apn];
-            }else{
-                mapstate.selection[apn] = data.select.feature;
-            }
-            updatePageState();
-        }
-        return;
-    }
-    if (data.mapstate) {
-        mapstate = data.mapstate;
-        updatePageState();
-    }
-    if (data.save) {
-        mapstate = data.save.mapstate;
-        snapshotLink = window.location.origin + "/snapshot/" +  mapstate.id;
-        if (mapstate.slug.length > 0) {
-            snapshotLink += "/" + mapstate.slug;
-        }
-        snapshotTitle = "GeoNotice Snapshot " + mapstate.id;
-        if (mapstate.name && mapstate.name.length > 0) {
-            snapshotTitle += " - " + mapstate.name;
-        }
-        mailTo = 'mailto:' + escape("<Insert Recipients Here>") 
-            +"?subject=" +escape("<Insert Subject Here>") 
-            +"&body=" +escape(snapshotLink);
-        $('a#snapshot-link').attr('href', snapshotLink);
-        $('a#snapshot-mailto').attr('href', mailTo);
-        $('a#snapshot-link').text(snapshotLink);
-        history.replaceState(null,snapshotTitle,snapshotLink);
-        document.title = snapshotTitle;
-        $('div#save-success').fadeIn();
-    }
-}
 
 function updateTable(){
     $('#data-table table tbody tr').remove();
@@ -303,103 +134,6 @@ function pdfMapState() {
     }
     return msdata;
 }
-// button handlers
-
-function lassoButtonClick() {
-    clickAction = lassoClick;
-    drawControl.handlers.polygon.enable();
-    $('#lasso').addClass('btn-primary');
-    $('#pick').removeClass('btn-primary');
-    $('#addbuffer').show();
-    $('#fullbuffer').hide();
-}
-
-function toggleButtonClick() {
-    clickAction = toggleClick;
-    $('#pick').addClass('btn-primary');
-    $('#lasso').removeClass('btn-primary');
-    $('#addbuffer').show();
-    $('#fullbuffer').hide();
-    drawControl.handlers.polygon.disable();
-}
-
-function selectButtonClick() {
-    $('#pick').removeClass('btn-primary');
-    $('#lasso').removeClass('btn-primary');
-    $('#addbuffer').hide();
-    $('#fullbuffer').css('display', 'inline-block');
-    clickAction = selectClick;
-    drawControl.handlers.polygon.disable();
-}
-
-function bufferButtonClick() {
-    clickAction = selectClick;
-    drawControl.handlers.polygon.disable();
-    var data = {
-        'action': 'buffer',
-        'dist': $('#bufferdist').val() || '300',
-        'mapstate': mapstate
-    }
-    sendAction(data); //reset
-    return;
-
-}
-
-// map click handlers
-
-function selectClick(e) {
-    var data = {
-        'action': 'select',
-        'lat': e.latlng.lat,
-        'lon': e.latlng.lng
-    }
-    sendAction(data)
-}
-
-function toggleClick(e) {
-    var data = {
-        'action': 'toggle',
-        'lat': e.latlng.lat,
-        'lon': e.latlng.lng
-    };
-    sendAction(data)
-}
-
-function lassoClick(e) {
-    return false;
-}
-
-map.on('draw:poly-created', function(e){
-    lpoly = e.poly.getLatLngs();
-    geojson = '{ "type": "Polygon", "coordinates": [[';
-    points = [];
-    for (var i=0; i < lpoly.length; i++) {
-        point = "[" + lpoly[i].lng;
-        point += ", " + lpoly[i].lat;
-        point += "]";
-        points.push(point);
-    }
-    lastpoint = "[" + lpoly[0].lng;
-    lastpoint += ", " + lpoly[0].lat;
-    lastpoint += "]";
-    points.push(lastpoint);
-    geojson += points.join(',');
-    geojson += ']]}';
-    console.log(geojson)
-    drawControl.handlers.polygon.enable();
-    var data = {
-        'action': 'lasso',
-        'lasso': geojson,
-        'mapstate': mapstate
-    };
-    sendAction(data);
-});
-
-map.on('drawing-disabled', function(){
-    if ($('#lasso').hasClass('btn-primary')) {
-            drawControl.handlers.polygon.enable();
-        }
-});
 
 function clearMap() {
     mapstate.selected = {};
@@ -408,41 +142,23 @@ function clearMap() {
     updatePageState();
 }
 
-function infoClick(e) {
-    var data = {
-        'action': 'get_feature',
-        'lat': e.latlng.lat,
-        'lon': e.latlng.lng
-    };
-    sendAction(data)
-}
-
-function getPopup(e) {
-    var data = {
-        'action': 'get_popup',
-        'lat': e.latlng.lat,
-        'lon': e.latlng.lng
-    };
-    sendAction(data);
-}
-
 function toolsClick() {
     $('#map-actions').toggle();
-    $('#lasso').removeClass('btn-primary'); //disables the tool
+    masterblaster.tools.resetActive();
     $('div.leaflet-top.leaflet-left').toggleClass('leaflet-extra-left');
-    drawControl.handlers.polygon.disable();
 }
 
 function exportClick() {
-    $('#lasso').removeClass('btn-primary');
     updateTable();
+    masterblaster.tools.resetActive();
+    $('#data-container').show();
     $('#data-table').show();
     $('input[class=csrf]').val(csrftoken);
     $('input[class=data]').val(JSON.stringify(selectionMapState()));
-    drawControl.handlers.polygon.disable();
 }
 
 function closeDataTable() {
+    $('#data-container').hide();
     $('#data-table').hide();
 }
 
@@ -454,9 +170,6 @@ function saveClick(){
     sendAction(data);
 }
 
-function shareClick() {
-    return true;
-}
 
 function labelButtonClick() {
     hidden = $('#label-actions').toggle().is(":hidden")
@@ -467,7 +180,6 @@ function labelButtonClick() {
         $('#table-container').css('margin-top', "0px")
     }
     $('#lasso').removeClass('btn-primary');
-    drawControl.handlers.polygon.disable();
 }
 
 function tableButtonClick(){

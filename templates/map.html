@@ -7,6 +7,7 @@
 {% block pagecss %}
 <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4.5/leaflet.css" />
 <link rel="stylesheet" href="{{ STATIC_PREFIX }}leaflet.draw/leaflet.draw.css" />
+<link rel="stylesheet" href="{{ STATIC_PREFIX }}leaflet.measure/leaflet.measure.css" />
 <link href="{{ STATIC_PREFIX }}bootstrap-editable/css/bootstrap-editable.css" rel="stylesheet">
 <!--[if lte IE 8]><link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4.5/leaflet.ie.css" /><![endif]-->
 <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4.5/leaflet.css" />
@@ -57,13 +58,14 @@
             <a id="lasso" class="btn btn-block ">Lasso</a>
             <a id="addbuffer" class="btn btn-block">Buffer</a>
             <div id="fullbuffer" class="input-append">
-                <button id="buffer" class="btn btn-primary" type="button">Buffer</button>
+                <button id="hidebuffer" class="btn btn-primary" type="button">Buffer</button>
                 <div id="buffer-options" >
                     <input id="bufferdist" class="hideright input-actions" id="appendedInputButtons"
                     type="text" placeholder="300"> <span class="add-on bgwhite ital">feet&nbsp;</span>
                     <button id="dobuffer" class="btn btn-success" type="button">Run</button>
                 </div>
             </div>
+            <a id="measure" class="btn btn-block btn-break">Measure</a>
             <a id="clearMap" class="btn btn-block">Clear</a>
             <a id="saveButton" class="btn btn-block btn-break">Snapshot</i></a>
             <form id="pdfform" method="post" action="/print/" target="_blank">
@@ -85,6 +87,8 @@
         </div>
     </div>
     <div id="info-overlay"><span>...</span></div>
+    <div id="data-container">
+    </div>
     <div id="data-table">
         <a class="btn closer">&laquo;Back</a>
         <form id="dataform" method="post" action="/data/" target="_blank">
@@ -149,8 +153,16 @@
 <script src="{{ STATIC_PREFIX }}leaflet/dist/leaflet.js"></script>
 <script src="{{ STATIC_PREFIX }}masterblaster/map-base.js"></script>
 <script src="{{ STATIC_PREFIX }}leaflet.draw/leaflet.draw.js"></script>
+<script src="{{ STATIC_PREFIX }}leaflet.measure/leaflet.measure.js"></script>
 <script src="{{ STATIC_PREFIX }}bootstrap-editable/js/bootstrap-editable.js"></script>
 <script src="{{ STATIC_PREFIX }}masterblaster/map-ui.js"></script>
+<script src="{{ STATIC_PREFIX }}masterblaster/map-tools.js"></script>
+<script src="{{ STATIC_PREFIX }}masterblaster/measure.js"></script>
 <script src="{{ STATIC_PREFIX }}masterblaster/search.js"></script>
+<script src="{{ STATIC_PREFIX }}masterblaster/single.js"></script>
+<script src="{{ STATIC_PREFIX }}masterblaster/lasso.js"></script>
+<script src="{{ STATIC_PREFIX }}masterblaster/buffer.js"></script>
+<script src="{{ STATIC_PREFIX }}masterblaster/info.js"></script>
+<script src="{{ STATIC_PREFIX }}masterblaster/save.js"></script>
 {% endblock %}
 

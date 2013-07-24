@@ -4,6 +4,11 @@ $(document).on('mousedown', 'ul.typeahead', function(e) {
         e.preventDefault();
 });
 
+$("form.navbar-search").bind('submit',function(){
+    console.log("eating form submit")
+    return false;
+});
+
 $('#search').typeahead({
     minLength: 3,
     items: 20,
