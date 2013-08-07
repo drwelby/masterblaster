@@ -233,6 +233,8 @@ def lasso(request):
     Parcel._meta.db_table = site.table
     newparcels = Parcel.objects.filter(geom__intersects=GEOSGeometry(data['lasso']))
     for parcel in newparcels:
+        if not parcel.owner:
+            continue
         if not bounds.intersects(parcel.geom):
             continue
         if parcel.apn in mapstate['selected']:
