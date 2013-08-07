@@ -174,14 +174,12 @@ def labels(request):
     mapname = data.get('name', 'geonotice')
     kwargs = {}
     if "apn" in request.POST:
-        if request.POST['apn'] == '1':
+        if request.POST['apn'] == 'on':
             kwargs['apn'] = True
     if "address" in request.POST:
         kwargs['address'] =request.POST['address']
-    if "type" in request.POST:
-        kwargs['type'] = request.POST['type']
     if "unique" in request.POST:
-        if request.POST['unique'] == '1':
+        if request.POST['unique'] == 'on':
             kwargs['unique'] = True
     return pdf_response(parcels, slugify(mapname), **kwargs)
 

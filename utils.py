@@ -51,15 +51,15 @@ def pdf_response(parcels, name, apn=False, address='mail', unique=False, format=
     results = []
     if unique:
         keys = []
-        for apn in parcels:
-            parcel = Struct(**parcels[apn]['properties'])
+        for apnum in parcels:
+            parcel = Struct(**parcels[apnum]['properties'])
             key = "%s%s" % (parcel.owner,parcel.mail1)
             if not key in keys:
                 results.append(parcel)
                 keys.append(key)
     else:
-        for apn in parcels:
-            parcel = Struct(**parcels[apn]['properties'])
+        for apnum in parcels:
+            parcel = Struct(**parcels[apnum]['properties'])
             results.append(parcel)
     for parcel in results:
         if apn:

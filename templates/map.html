@@ -102,22 +102,22 @@
         <a id="csvButton" class="btn">CSV</a>
         <form id="label-actions" method="post" action="/labels/" target="_blank">
             <label class="radio inline">
-                  <input type="radio" name="optionsRadios" id="optionsMail" value="mail" checked>
+                  <input type="radio" name="address" id="optionsMail" value="mail" checked>
                   Use Mailing Address&nbsp;&nbsp;
             </label>
             <label class="radio inline">
-                  <input type="radio" name="optionsRadios" id="optionsSitus" value="situs">
+                  <input type="radio" name="address" id="optionsSitus" value="situs">
                   Use Situs Address&nbsp;&nbsp;
             </label>
             <label class="radio inline">
-                  <input type="radio" name="optionsRadios" id="optionsBoth" value="both">
+                  <input type="radio" name="address" id="optionsBoth" value="both">
                   Use Both (if different)
             </label>
             <label class="checkbox">
-                <input type="checkbox" id="uniquebox">Skip Duplicates</input>
+                <input type="checkbox" id="uniquebox" name="unique">Skip Duplicates</input>
             </label>
             <label class="checkbox">
-                <input type="checkbox" id="apnbox" checked >Show APNs</input>
+                <input type="checkbox" id="apnbox" name="apn" checked >Show APNs</input>
             </label>
             <input type="hidden" class="csrf" name="csrfmiddlewaretoken" value="">
             <input type="hidden" class="data" name="data" />
