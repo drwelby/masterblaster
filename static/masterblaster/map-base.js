@@ -30,7 +30,7 @@ var siteBoundsStyle = {
 
 // Set up the map
 
-L.tileLayer('http://{s}.mapport.net/geonotice/01-ENPLAN%20Tiles/{z}/{x}/{y}.jpg', {
+L.tileLayer('http://{s}.mapport.net/tiles/ortho.php?z={z}&x={x}&y={y}', {
     attribution: 'Imagery &copy; ENPLAN 2010',
     maxZoom: 20,
     tms: true,
@@ -39,10 +39,11 @@ L.tileLayer('http://{s}.mapport.net/geonotice/01-ENPLAN%20Tiles/{z}/{x}/{y}.jpg'
     zIndex:-1,
 }).addTo(map);
 
-L.tileLayer.wms('http://50.56.215.16:8888/geoserver/wms?tiled=true', {
+L.tileLayer.wms('http://{s}.mapport.net/tiles/wms.php', {
         layers: 'counties:shastaco_parcels_owners',
         maxZoom: 20,
         format: 'image/png',
+	subdomains: '1234',
         transparent: true}).addTo(map);
 
 siteBoundsLayer = L.geoJson(sitebounds, {style:siteBoundsStyle, onEachFeature: passClick});
