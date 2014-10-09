@@ -30,12 +30,12 @@ var siteBoundsStyle = {
 
 // Set up the map
 
-L.tileLayer('http://{s}.tiles.mapbox.com/v3/enplan.hok3chhf/${z}/${x}/${y}.jpg?access_token=pk.eyJ1IjoiZW5wbGFuIiwiYSI6InBKSG9jWUUifQ.VB6R5pUsOD0qrWXScOs3pw', {
+L.tileLayer('http://{s}.tiles.mapbox.com/v4/enplan.hok3chhf/${z}/${x}/${y}.jpg?access_token=pk.eyJ1IjoiZW5wbGFuIiwiYSI6InBKSG9jWUUifQ.VB6R5pUsOD0qrWXScOs3pw', {
     attribution: 'Imagery &copy; ENPLAN 2010',
     maxZoom: 20,
     tms: true,
     opacity: 1,
-    subdomains: "1234",
+    subdomains: "abcd",
     zIndex:-1,
 }).addTo(map);
 
