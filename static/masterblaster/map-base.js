@@ -30,7 +30,7 @@ var siteBoundsStyle = {
 
 // Set up the map
 
-L.tileLayer('http://{s}.mapport.net/tiles/ortho.php?z={z}&x={x}&y={y}', {
+L.tileLayer('http://{s}.tiles.mapbox.com/v3/enplan.hok3chhf/${z}/${x}/${y}.jpg?access_token=pk.eyJ1IjoiZW5wbGFuIiwiYSI6InBKSG9jWUUifQ.VB6R5pUsOD0qrWXScOs3pw', {
     attribution: 'Imagery &copy; ENPLAN 2010',
     maxZoom: 20,
     tms: true,
